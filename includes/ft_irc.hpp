@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/19 19:32:05 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/19 19:38:27 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <cstdlib>
 #include <cerrno>
 #include <string>
+#include <stdio.h>
+#include <sstream>
 
 #include <sys/socket.h> // socket, setsockopt, getsockname, bind, connect, listen, accept, send, recv
 #include <sys/types.h> // getaddrinfo
