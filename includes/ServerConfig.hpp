@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:10 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/19 18:28:43 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/20 01:43:20 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,36 @@
 
 #include "ft_irc.hpp"
 
-class ServerConfig {
+namespace ft {
+	class ServerConfig {
 
-	private:
-		int port;
-		std::string password;
+		private:
+			int port;
+			std::string password;
 
 
-	public :
-		ServerConfig() : port(-1), password("") {}
+		public :
+			ServerConfig() : port(-1), password("") {}
 
-		ServerConfig(int& port, std::string& password) : port(port), password(password) {}
+			ServerConfig(int& port, std::string& password) : port(port), password(password) {}
 
-		ServerConfig& operator=(const ServerConfig& x)
-		{
-			this->setPassword(x.getPassword());
-			this->setPort(x.getPort());
-			return *this;
-		}
+			ServerConfig& operator=(const ServerConfig& x)
+			{
+				this->setPassword(x.getPassword());
+				this->setPort(x.getPort());
+				return *this;
+			}
 
-		~ServerConfig() {}
+			~ServerConfig() {}
 
-		const int& getPort() const;
+			const int& getPort() const;
 
-		bool setPort(const int& port);
+			bool setPort(const int& port);
 
-		const std::string& getPassword() const;
+			bool setPort(const char *port);
 
-		bool setPassword(const std::string& password);
-};
+			const std::string& getPassword() const;
+
+			bool setPassword(const std::string& password);
+	};
+}
