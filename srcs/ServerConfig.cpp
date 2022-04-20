@@ -6,15 +6,26 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/20 01:46:23 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/20 21:41:45 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ServerConfig.hpp"
 
 namespace ft {
-	const int& ServerConfig::getPort() const {
-		return this->port;
+
+	bool ServerConfig::set(const int ac, const char *av[]) {
+		if (ac < 3) {
+			std::cerr << C_RED << "Usage > " << av[0] << " <port> <password>" << C_RESET << std::endl;
+			return false;
+		} else if (!this->setPort(av[1])) {
+			std::cerr << ERROR << "Port should be between 0-65535" << C_RESET << std::endl;
+			return false;
+		} else if (!this->setPassword(av[2])) {
+			std::cerr << ERROR << "Password not valid" << C_RESET << std::endl;
+			return false;
+		}
+		return true;
 	}
 
 	bool ServerConfig::setPort(const char* port) {
@@ -31,12 +42,16 @@ namespace ft {
 		return true;
 	}
 
-	const std::string& ServerConfig::getPassword() const {
-		return this->password;
-	}
-
 	bool ServerConfig::setPassword(const std::string& password) {
 		this->password = password;
 		return true;
+	}
+
+	const std::string& ServerConfig::getPassword() const {
+		return this->password;
+	}	
+
+	const int& ServerConfig::getPort() const {
+		return this->port;
 	}
 }

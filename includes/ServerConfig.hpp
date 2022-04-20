@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:10 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/20 01:43:20 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/20 21:45:33 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ namespace ft {
 			int port;
 			std::string password;
 
-
 		public :
 			ServerConfig() : port(-1), password("") {}
 
@@ -35,6 +34,8 @@ namespace ft {
 			}
 
 			~ServerConfig() {}
+
+			bool set(const int ac, const char *av[]);
 
 			const int& getPort() const;
 
