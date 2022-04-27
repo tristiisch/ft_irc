@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/27 15:47:14 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/27 16:01:42 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
 #include <sstream>
 #include <cstring>
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 
 #include <winsock2.h> 
 
-#elif defined (linux)
+#elif defined (linux) || defined(_POSIX_VERSION) || __unix__  || __linux__ || defined(_POSIX_VERSION) || __APPLE__
 
 # include <sys/socket.h> // socket, setsockopt, getsockname, bind, connect, listen, accept, send, recv
 # include <sys/types.h> // getaddrinfo
@@ -47,6 +47,9 @@ typedef struct in_addr IN_ADDR;
 # define INVALID_SOCKET -1
 # define SOCKET_ERROR -1
 # define closesocket(s) close(s)
+
+#else
+# error "Unknown compiler"
 
 #endif
 
