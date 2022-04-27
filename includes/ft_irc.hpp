@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/20 21:55:20 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/27 15:47:14 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,36 @@
 #include <stdio.h>
 #include <string.h>
 #include <sstream>
+#include <cstring>
 
-#include <sys/socket.h> // socket, setsockopt, getsockname, bind, connect, listen, accept, send, recv
-#include <sys/types.h> // getaddrinfo
-#include <netdb.h> // getprotobyname, gethostbyname, getaddrinfo, freeaddrinfo
-#include <arpa/inet.h> // htons, htonl, ntohs, ntohl, inet_addr, inet_ntoa
-#include <signal.h> // signal
-#include <unistd.h> // lseek
-#include <sys/stat.h> // fstat
-#include <fcntl.h> // fcntl
-#include <poll.h> // poll
+#ifdef WIN32
 
-#include <netinet/in.h>
+#include <winsock2.h> 
+
+#elif defined (linux)
+
+# include <sys/socket.h> // socket, setsockopt, getsockname, bind, connect, listen, accept, send, recv
+# include <sys/types.h> // getaddrinfo
+# include <netdb.h> // getprotobyname, gethostbyname, getaddrinfo, freeaddrinfo
+# include <arpa/inet.h> // htons, htonl, ntohs, ntohl, inet_addr, inet_ntoa
+# include <signal.h> // signal
+# include <unistd.h> // lseek
+# include <sys/stat.h> // fstat
+# include <fcntl.h> // fcntl
+# include <poll.h> // poll
+
+# include <netinet/in.h>
 
 typedef int SOCKET;
 typedef struct sockaddr_in SOCKADDR_IN;
 typedef struct sockaddr SOCKADDR;
 typedef struct in_addr IN_ADDR;
 
-#define INVALID_SOCKET -1
-#define SOCKET_ERROR -1
-#define closesocket(s) close(s)
+# define INVALID_SOCKET -1
+# define SOCKET_ERROR -1
+# define closesocket(s) close(s)
+
+#endif
 
 #define C_RED "\033[0;31m"
 #define C_YELLOW "\033[33m"
@@ -72,10 +81,9 @@ namespace ft {
 		if (ret == -1) {
 			std::cerr << C_RED;
 			if (arg != NULL) {
-				std::cerr << msg << " ";
-				perror(toPChar(*arg));
+				std::cerr << msg << " " << toString(*arg) << ": " << std::strerror(errno) << std::endl;
 			} else
-				perror(msg);
+				std::cerr << msg << ": " << std::strerror(errno) << std::endl;
 			std::cerr << C_RESET;
 			return errno;
 		}
