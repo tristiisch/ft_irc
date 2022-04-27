@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:53:17 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/27 18:13:18 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/28 01:16:37 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ int main(const int ac, const char *av[]) {
 	if (!server.start())
 		return 1;
 
-	server.task();
+	int i = 3;
+	while (i--) {
+		server.task();
+	}
 
 	server.stop();
 

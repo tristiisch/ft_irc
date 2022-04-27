@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/27 18:22:15 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/28 01:19:43 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 namespace ft {
 
+	std::ostream &operator<<(std::ostream &outputFile, SOCKADDR_IN &csin)
+	{
+		outputFile << inet_ntoa(csin.sin_addr) << ":" << csin.sin_port;
+		return outputFile;
+	}
+	
 	bool ServerIRC::start() {
 		SOCKADDR_IN sin;
 		int ret;
@@ -22,16 +28,16 @@ namespace ft {
 		sin.sin_family = PF_INET;
 		sin.sin_port = htons(config.getPort());
 
-		sock = socket(PF_INET, SOCK_STREAM, 0);
-		if (ft::checkError(sock, "Error with socket creation", (char*) NULL))
+		serverSock = socket(PF_INET, SOCK_STREAM, 0);
+		if (ft::checkError(serverSock, "Error with socket creation", (char*) NULL))
 			return false;
 		this->enabled = true;
-		ret = bind(sock, (SOCKADDR *)&sin, sizeof(sin));
+		ret = bind(serverSock, (SOCKADDR *)&sin, sizeof(sin));
 		if (ft::checkError(ret, "Error while binding port", &config.getPort())) {
 			stop();
 			return false;
 		}
-		ret = listen(sock, 0);
+		ret = listen(serverSock, 42); // 42 because bircd is set to 42
 		if (ft::checkError(ret, "Error while listen port", &config.getPort())) {
 			stop();
 			return false;
@@ -45,7 +51,8 @@ namespace ft {
 			std::cerr << WARN << "Can't stop server IRC, he is not enabled." << C_RESET << std::endl;
 			return false;
 		}
-		closesocket(sock);
+        std::for_each(clientSock.begin(), clientSock.end(), &close);
+		closesocket(serverSock);
 		this->enabled = false;
 		std::cout << C_RED << "ft_irc stopped" << C_RESET << std::endl;
 		return true;
@@ -55,12 +62,17 @@ namespace ft {
 		SOCKADDR_IN csin;
     	SOCKET csock;
 		socklen_t sinsize = sizeof(csin);
+		int ret;
 		char msg[] = "Hello world!\r\n";
 	
-		csock = accept(sock, (SOCKADDR *)&csin, &sinsize); // This will block current thread
+		csock = accept(serverSock, (SOCKADDR *)&csin, &sinsize); // This will block current thread
 		if (csock != INVALID_SOCKET) {
-			std::cout << C_BLUE << "A client logged in, we said 'Hello world'." << C_RESET << std::endl;
-			send(csock, msg, std::strlen(msg), 0);
+			
+			ret = send(csock, msg, std::strlen(msg), 0) == -1;
+			if (!ft::checkError(ret, "Error while sending Hello world msg to ", &csin)) {
+				std::cout << C_BLUE << "A client " << csin << " logged in, we said 'Hello world'." << C_RESET << std::endl;
+			}
+			clientSock.push_back(csock); // vector to close FDs at end of server csock (when ServerIRC::stop)
 		}
 	}
 

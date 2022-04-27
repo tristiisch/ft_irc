@@ -2,7 +2,7 @@ CXX					=	c++
 CXXFLAGS			=	-Wall -Wextra -std=c++98
 #CXXFLAGS			=	-Wall -Wextra -Werror -std=c++98
 NAME				=	ircserv
-LIB_FLAGS			=	-lc
+LIB_FLAGS			=
 INCLUDE_DIR			=	includes
 SRCS_DIR			=	srcs
 OBJS_DIR			=	.objs

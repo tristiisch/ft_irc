@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/20 21:46:24 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/28 01:14:43 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ namespace ft {
 		private:
 			bool enabled;
 			ServerConfig config;
-			SOCKET sock;
+			SOCKET serverSock;
+			std::vector<SOCKET> clientSock;
+			// SOCKET sock;
 
 		public :
 			ServerIRC() : enabled(false) {}
@@ -35,7 +37,10 @@ namespace ft {
 				return *this;
 			}
 
-			~ServerIRC() {}
+			~ServerIRC() {
+				if (enabled)
+					stop();
+			}
 
 			const ServerConfig& getConfig() const;
 
@@ -49,4 +54,5 @@ namespace ft {
 
 			bool stop();
 	};
+
 }

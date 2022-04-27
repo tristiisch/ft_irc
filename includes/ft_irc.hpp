@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/27 18:05:47 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/28 00:49:25 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@
 #include <cerrno>
 #include <string>
 #include <stdio.h>
-#include <string.h>
 #include <sstream>
 #include <cstring>
+#include <vector>
+#include <algorithm>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 
