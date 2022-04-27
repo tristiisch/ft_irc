@@ -1,12 +1,21 @@
 #!/bin/bash
-# Script Linux & Mac pour lancer un main de tests, et vérifie si :
-# - il n'y a pas de leaks dessus
-# - si le programme return bien 0 (pas de segfault ou sigabort)
-# - [LINUX] Vérifie les invalid read/write et autre erreur invisible
-# - Compare le resultat de la sortie standard avec la STL (le main doit gérer le #define IS_STL)
 
 EXEC=ircserv
-ERROR_CMD=("" "9426" "-1" "not_a_port" "0 password" "1 password" "2147483647 password" "-2147483648 password" "2147483648 password" "2147483649 password" "2147499999 password"  "-2147499999 password")
+ERROR_ARGS=(''
+	'9426'
+	'-1'
+	'not_a_port'
+	'0 password'
+	'1 password'
+	'2147483647 password'
+	'-2147483648 password'
+	'2147483648 password'
+	'2147483649 password'
+	'2147499999 password'
+	'-2147499999 password'
+)
+
+GOOD_ARGS="6667 password"
 
 VALGRIND_FLAGS="--leak-check=full --error-exitcode=1 --show-leak-kinds=definite --track-origins=yes"
 DIFF_VERSION=`diff --version | head -n 1 | sed 's/|/ /' | awk '{print $4}' | sed -e 's/\./000/g' -e 's/000/\./1'`
@@ -59,24 +68,45 @@ function memory_check {
 compile $1
 
 OK=1
-printf '[⬜] Testing bad arguments ...'
-for failCmd in ${ERROR_CMD[@]}
+# printf '[⬜] Testing bad arguments ...'
+for failArg in ${ERROR_ARGS[@]}
 do
-	./$EXEC $failCmd &> /dev/null
+	printf '[⬜] Test %s ...' "$failArg"
+	./$EXEC $failArg &> /dev/null
 	if [ $? == 0 ]; then
 		OK=0
-		printf '\r[🟥] Arguments %s return code %d\n' $failCmd $?
-		printf '[⬜] Testing bad arguments ...'
+		printf '\r[🟥] Test %s return code %d\n' "$failArg" $?
 	elif [ $? == 139 ]; then
 		OK=0
-		printf '\r[🟥] Arguments %s make a SegFault\n' $failCmd
-		printf '[⬜] Testing bad arguments ...'
+		printf '\r[🟥] Test %s make a SegFault\n' "$failArg"
+	else
+		printf '\r[🟩] Test %s ... done\n' "$failArg"
 	fi
 done
 if [ $OK == 1 ]; then
 	printf '\r[🟩] Testing bad arguments ... done\n'
 else
 	printf '\r[🟧] Testing bad arguments ... done\n'
+fi
+
+# for goodArg in $GOOD_ARGS
+# do
+	printf '[⬜] Test %s (max 120 sec) ...' "$GOOD_ARGS"
+	timeout 120 ./$EXEC $GOOD_ARGS &> log.txt
+	if [ $? != 0 ]; then
+		OK=0
+		printf '\r[🟥] Test %s return code %d\n' "$GOOD_ARGS" $?
+	elif [ $? == 139 ]; then
+		OK=0
+		printf '\r[🟥] Test %s make a SegFault\n' "$GOOD_ARGS"
+	else
+		printf '\r[🟩] Test %s ... done                                 \n' "$GOOD_ARGS"
+	fi
+# done
+if [ $OK == 1 ]; then
+	printf '\r[🟩] Testing good arguments ... done\n'
+else
+	printf '\r[🟧] Testing good arguments ... done\n'
 fi
 
 #memory_check

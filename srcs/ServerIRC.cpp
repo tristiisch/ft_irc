@@ -6,19 +6,13 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/28 01:19:43 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/28 01:21:19 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ServerIRC.hpp"
 
 namespace ft {
-
-	std::ostream &operator<<(std::ostream &outputFile, SOCKADDR_IN &csin)
-	{
-		outputFile << inet_ntoa(csin.sin_addr) << ":" << csin.sin_port;
-		return outputFile;
-	}
 	
 	bool ServerIRC::start() {
 		SOCKADDR_IN sin;
