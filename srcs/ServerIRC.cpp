@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/27 15:26:51 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/27 18:22:15 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ namespace ft {
 			stop();
 			return false;
 		}
+		std::cout << C_GREEN << "ft_irc started on port " << config.getPort() << C_RESET << std::endl;
 		return true;
 	}
 
@@ -46,20 +47,20 @@ namespace ft {
 		}
 		closesocket(sock);
 		this->enabled = false;
+		std::cout << C_RED << "ft_irc stopped" << C_RESET << std::endl;
 		return true;
 	}
 
 	void ServerIRC::task() {
 		SOCKADDR_IN csin;
     	SOCKET csock;
-		while (1)
-		{
-			socklen_t sinsize = sizeof(csin);
-			if ((csock = accept(sock, (SOCKADDR *)&csin, &sinsize)) != INVALID_SOCKET) {
-				std::cout << C_BLUE << "A client logged in, we said 'Hello world'." << C_RESET << std::endl;
-				send(csock, "Hello world!\r\n", 14, 0);
-				break;
-			}
+		socklen_t sinsize = sizeof(csin);
+		char msg[] = "Hello world!\r\n";
+	
+		csock = accept(sock, (SOCKADDR *)&csin, &sinsize); // This will block current thread
+		if (csock != INVALID_SOCKET) {
+			std::cout << C_BLUE << "A client logged in, we said 'Hello world'." << C_RESET << std::endl;
+			send(csock, msg, std::strlen(msg), 0);
 		}
 	}
 

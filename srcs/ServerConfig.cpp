@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/20 21:41:45 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/27 18:16:24 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace ft {
 
 	bool ServerConfig::setPort(const char* port) {
 		int intPort = std::atoi(port);
-		if (strspn(port, "0123456789") != strlen(port))
+		if (std::strspn(port, "0123456789") != strlen(port))
 			return false;
 		return setPort(intPort);
 	}

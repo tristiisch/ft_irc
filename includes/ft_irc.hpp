@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/27 16:01:42 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/27 18:05:47 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ typedef struct in_addr IN_ADDR;
 
 #else
 # error "Unknown compiler"
-
 #endif
 
-#define C_RED "\033[0;31m"
+#define C_RED "\033[31m"
+#define C_GREEN "\033[32m"
 #define C_YELLOW "\033[33m"
 #define C_BLUE "\033[1;34m"
 #define C_RESET "\033[0m"
@@ -79,13 +79,13 @@ namespace ft {
 		return toString(obj).c_str();
 	}
 
-	template <class A>
-	int checkError(const int ret, const char *msg, A *arg) {
+	template <class T>
+	int checkError(const int ret, const char *msg, T *arg) {
 		if (ret == -1) {
 			std::cerr << C_RED;
-			if (arg != NULL) {
+			if (arg != NULL)
 				std::cerr << msg << " " << toString(*arg) << ": " << std::strerror(errno) << std::endl;
-			} else
+			else
 				std::cerr << msg << ": " << std::strerror(errno) << std::endl;
 			std::cerr << C_RESET;
 			return errno;
