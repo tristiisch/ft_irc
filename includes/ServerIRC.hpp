@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/28 01:14:43 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/04/29 16:57:45 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ namespace ft {
 			ServerConfig config;
 			SOCKET serverSock;
 			std::vector<SOCKET> clientSock;
-			// SOCKET sock;
+			int nfds; // Last Client Id
 
 		public :
-			ServerIRC() : enabled(false) {}
+			ServerIRC() : enabled(false), nfds(1) {}
 
-			ServerIRC(ServerConfig& config) : enabled(false), config(config) {}
+			ServerIRC(ServerConfig& config) : enabled(false), config(config), nfds(1) {}
 
 			ServerIRC& operator=(const ServerIRC& x)
 			{
