@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/29 16:57:45 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 16:43:17 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ namespace ft {
 		private:
 			bool enabled;
 			ServerConfig config;
-			SOCKET serverSock;
-			std::vector<SOCKET> clientSock;
+			SOCKET serverSocket;
+			std::vector<SOCKET> clientsSockets;
 			int nfds; // Last Client Id
 
 		public :
@@ -54,5 +54,4 @@ namespace ft {
 
 			bool stop();
 	};
-
 }

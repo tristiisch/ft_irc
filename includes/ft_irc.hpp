@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/04/28 02:03:17 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 14:54:22 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ namespace ft {
 
 	template <class T>
 	int checkError(const int ret, const char *msg, T *arg) {
-		if (ret == -1) {
+		if (ret <= -1) {
 			std::cerr << C_RED;
 			if (arg != NULL)
 				std::cerr << msg << " " << toString(*arg) << ": " << std::strerror(errno) << std::endl;
