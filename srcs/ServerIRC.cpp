@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/04 17:00:04 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 18:04:19 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ namespace ft {
 
 	void ServerIRC::task() {
 		//pollfd pfds[2];
-		ClientIRC client;
+		ClientIRC *client;
 		SOCKADDR_IN csin;
     	SOCKET clientSocket;
 		socklen_t sinsize = sizeof(csin);
 		int ret, receiveByte;
 		char msg[] = "Hello world!\r\n";
-		char receiveMsg[256];
+		char receiveMsg[512];
 	
 		/*pfds[0].fd = STDIN_FILENO;
 		pfds[0].events = POLLIN;
@@ -92,20 +92,21 @@ namespace ft {
 			closesocket(clientSocket);
 			return;
 		}
-		client = ClientIRC(1, csin, clientSocket);
+		client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
 
 		receiveByte = read(clientSocket, receiveMsg, sizeof(receiveMsg)); // This will block current thread
 		if (ft::checkError(receiveByte, "Error while read connection", &csin)) {
 			closesocket(clientSocket);
 			return;
 		}
+		// VALGRIND: Conditional jump or move depends on uninitialised value(s)
 		std::cout << C_BLUE << "Message receive from " << csin << ": '" C_YELLOW << receiveMsg << C_BLUE << "'." << C_RESET << std::endl;
 
 		ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
 		if (!ft::checkError(ret, "Error while sending Hello world msg to ", &csin)) {
 			std::cout << C_BLUE << "A client " << csin << " logged in, we said 'Hello world'." << C_RESET << std::endl;
 		}
-		clientsSockets.push_back(clientSocket); // vector to close FDs at end of server csock (when ServerIRC::stop)
+		clients.insert(std::pair<int, ClientIRC*>(client->getId(), client));
 		//closesocket(clientSocket);
 	}
 
@@ -114,11 +115,21 @@ namespace ft {
 			std::cerr << WARN << "Can't stop server IRC, he is not enabled." << C_RESET << std::endl;
 			return false;
 		}
-        std::for_each(clientsSockets.begin(), clientsSockets.end(), &close);
+        //std::for_each(clients.begin(), clients.end(), &ServerIRC::deleteClient);
+		std::map<int, ClientIRC*>::iterator it;
+		for (it = clients.begin(); it != clients.end(); it++) {
+			//deleteClient(it->second);
+			delete it->second;
+		}
+		clients.clear();
 		closesocket(serverSocket);
 		this->enabled = false;
 		std::cout << C_RED << "ft_irc stopped" << C_RESET << std::endl;
 		return true;
+	}
+
+	int ServerIRC::getNewClientId() {
+		return nfds++;
 	}
 
 	bool ServerIRC::isEnabled() const {

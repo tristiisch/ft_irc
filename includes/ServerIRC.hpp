@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/04 16:43:17 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 18:00:44 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "ft_irc.hpp"
 #include "ServerConfig.hpp"
+#include "ClientIRC.hpp"
 
 namespace ft {
 	class ServerIRC {
@@ -23,7 +24,7 @@ namespace ft {
 			bool enabled;
 			ServerConfig config;
 			SOCKET serverSocket;
-			std::vector<SOCKET> clientsSockets;
+			std::map<int, ClientIRC*> clients;
 			int nfds; // Last Client Id
 
 		public :
@@ -31,8 +32,7 @@ namespace ft {
 
 			ServerIRC(ServerConfig& config) : enabled(false), config(config), nfds(1) {}
 
-			ServerIRC& operator=(const ServerIRC& x)
-			{
+			ServerIRC& operator=(const ServerIRC& x) {
 				this->setConfig(x.getConfig());
 				return *this;
 			}
@@ -53,5 +53,7 @@ namespace ft {
 			void task();
 
 			bool stop();
+
+			int getNewClientId();
 	};
 }

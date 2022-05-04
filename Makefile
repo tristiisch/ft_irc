@@ -1,5 +1,6 @@
 CXX					=	c++
-CXXFLAGS			=	-Wall -Wextra -std=c++98
+CXXFLAGS			=	-Wall -Wextra -std=c++98 -g3
+#CXXFLAGS			=	-Wall -Wextra -std=c++98 -g3 -fsanitize=address
 #CXXFLAGS			=	-Wall -Wextra -Werror -std=c++98
 NAME				=	ircserv
 LIB_FLAGS			=

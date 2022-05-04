@@ -6,14 +6,13 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/04 16:55:55 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/04 17:49:54 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "ft_irc.hpp"
-#include <cstddef>
 
 namespace ft {
 	class ClientIRC {
@@ -27,7 +26,7 @@ namespace ft {
 		public :
 			ClientIRC() : id(-1) {}
 
-			ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket) {}
+			ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick("") {}
 
 			ClientIRC& operator=(const ClientIRC& x)
 			{
@@ -37,7 +36,10 @@ namespace ft {
 				return *this;
 			}
 
-			~ClientIRC() {}
+			~ClientIRC()
+			{
+				closesocket(clientSocket);
+			}
 
 			const int& getId() const;
 
