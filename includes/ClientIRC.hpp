@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/04 17:49:54 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 20:01:01 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,9 @@ namespace ft {
 			void setSocket(SOCKET& clientSocket);
 
 			void setNick(std::string& nick);
+
+			void executeCmds(std::string bufferCmds);
+
+			void executeCmd(std::string fullCmd);
 	};
 }

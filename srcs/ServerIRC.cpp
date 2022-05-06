@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/04 18:04:19 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/06 21:10:42 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,32 @@ namespace ft {
 	}
 
 	void ServerIRC::task() {
-		//pollfd pfds[2];
 		ClientIRC *client;
 		SOCKADDR_IN csin;
     	SOCKET clientSocket;
 		socklen_t sinsize = sizeof(csin);
 		int ret, receiveByte;
 		char msg[] = "Hello world!\r\n";
-		char receiveMsg[512];
 	
-		/*pfds[0].fd = STDIN_FILENO;
-		pfds[0].events = POLLIN;
-		pfds[1].fd = serverSocket;
-		pfds[1].events = POLLIN;
+		if (!isEnabled())
+			exit(0);
+
+		clientSocket = accept(serverSocket, (SOCKADDR *)&csin, &sinsize); // This will block current thread
+		if (ft::checkError(clientSocket, "Error while accept connection", &csin)) {
+			closesocket(clientSocket);
+			return;
+		}
+		std::cout << C_BLUE << "A client " << csin << " logged in." << C_RESET << std::endl;
+		client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
 
 		std::cout << C_BLUE << "Poll start." << C_RESET << std::endl;
-		while (poll(pfds, nfds++, 60) != -1) {
+		while (poll(pfds, 2, 60) != -1) {
+			//std::cout << C_BLUE << "Polllllllllll." << C_RESET << std::endl;
 			if (pfds[0].revents & POLLIN) {
 				// read data from stdin and send it over the socket
 				//read(STDIN_FILENO, ...);
 				
-				ret = send(serverSock, msg, std::strlen(msg), 0) == -1;
+				ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
 				if (!ft::checkError(ret, "Error while sending Hello world msg to ", &csin)) {
 					std::cout << C_BLUE << "A client logged in, we said 'Hello world'." << C_RESET << std::endl;
 				}
@@ -75,37 +80,40 @@ namespace ft {
 				//recv(socket, ...)
 			}
 			if (pfds[1].revents & (POLLERR | POLLHUP)) {
+				std::cout << C_RED << "sock close." << C_RESET << std::endl;
 				// socket was closed
 			}
 		}
 
 		std::cout << C_BLUE << "Poll end." << C_RESET << std::endl;
-		pollfd pollfd;
+		/*pollfd pollfd;
 		pollfd.fd = serverSocket;
 		pollfd.events = POLLIN;
 		ret = poll(&pollfd, nfds++, 60);
 		ft::checkError(ret, "Error while using poll ", (char*) NULL);
 		std::cout << "poll " << pollfd.revents << std::endl;*/
 
-		clientSocket = accept(serverSocket, (SOCKADDR *)&csin, &sinsize); // This will block current thread
-		if (ft::checkError(clientSocket, "Error while accept connection", &csin)) {
-			closesocket(clientSocket);
-			return;
-		}
-		client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
+		/*while (true) {
+			char *receiveMsg;
+			receiveMsg = (char*) std::calloc(512, 1);
+			receiveByte = recv(clientSocket, receiveMsg, 512, 0); // This will block current thread
+			if (receiveByte == 0)
+				break;
+			if (ft::checkError(receiveByte, "Error while read connection", &csin)) {
+				closesocket(clientSocket);
+				return;
+			}
 
-		receiveByte = read(clientSocket, receiveMsg, sizeof(receiveMsg)); // This will block current thread
-		if (ft::checkError(receiveByte, "Error while read connection", &csin)) {
-			closesocket(clientSocket);
-			return;
-		}
-		// VALGRIND: Conditional jump or move depends on uninitialised value(s)
-		std::cout << C_BLUE << "Message receive from " << csin << ": '" C_YELLOW << receiveMsg << C_BLUE << "'." << C_RESET << std::endl;
+			// VALGRIND: Conditional jump or move depends on uninitialised value(s)
+			//std::cout << C_BLUE << "Message receive from " << csin << ": '" C_YELLOW << receiveMsg << C_BLUE << "'." << C_RESET << std::endl;
+			client->executeCmd(receiveMsg);
+			free(receiveMsg);
+		}*/
 
-		ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
+		/*ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
 		if (!ft::checkError(ret, "Error while sending Hello world msg to ", &csin)) {
-			std::cout << C_BLUE << "A client " << csin << " logged in, we said 'Hello world'." << C_RESET << std::endl;
-		}
+			std::cout << C_BLUE << "'Hello world' >> " << csin << "." << C_RESET << std::endl;
+		}*/
 		clients.insert(std::pair<int, ClientIRC*>(client->getId(), client));
 		//closesocket(clientSocket);
 	}
