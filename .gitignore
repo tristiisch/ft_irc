@@ -1,0 +1,4 @@
+*.o
+bircd/bircd
+ircserv
+output
