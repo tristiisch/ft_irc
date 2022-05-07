@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 19:44:39 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 20:52:27 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,10 @@ namespace ft {
 			SOCKET serverSocket;
 			std::map<int, ClientIRC*> clients;
 			int clientIdCounter; // Last Client Id
-			pollfd pfds[2];
+			std::vector<pollfd> pfds;
 
 		public :
 			ServerIRC();
-
-			//ServerIRC(ServerConfig& config) : enabled(false), config(config), nfds(1) {}
 
 			ServerIRC& operator=(const ServerIRC& x);
 
@@ -40,6 +38,10 @@ namespace ft {
 			bool start();
 
 			void task();
+
+			void acceptClient();
+
+			bool readClient(ClientIRC *client);
 
 			bool stop();
 			
