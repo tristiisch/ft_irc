@@ -17,13 +17,13 @@ OBJS_DEBUG			=	$(SRCS:$(SRCS_DIR)/%.cpp=$(OBJS_DIR_DEBUG)/%.o)
 all: $(NAME)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.cpp $(INCLUDES)
-	@printf '\r[⚪] Compile %s ...' $(basename $@)
+	@printf '\r[⚪] Compile %s ... ' $(basename $@)
 	@mkdir -p $(dir $@)
 	@$(CXX) $(CXXFLAGS) -c -o $@ $< -I $(INCLUDE_DIR)
 	@printf '\r[🟢] Compile %s\n' $(basename $@)
 
 $(OBJS_DIR_DEBUG)/%.o: $(SRCS_DIR)/%.cpp $(INCLUDES)
-	@printf '\r[⬜] Compile %s DEBUG ...' $(basename $@)
+	@printf '\r[⬜] Compile %s DEBUG ... ' $(basename $@)
 	@mkdir -p $(dir $@)
 	@$(CXX) $(CXXFLAGS) -c -o $@ $< -I $(INCLUDE_DIR) -D DEBUG=1
 	@printf '\r[🟪] Compile %s DEBUG\n' $(basename $@)
@@ -39,12 +39,12 @@ debug: $(OBJS_DEBUG) $(INCLUDES)
 	@printf '\r[🟪] Link %s DEBUG\n' $(NAME)
 
 clean:
-	@printf '\r[⚪] Delete *.o ...'
+	@printf '\r[⚪] Delete *.o ... '
 	@$(RM) $(OBJS) $(OBJS_DEBUG)
 	@printf '\r[🟢] Delete *.o\n'
 
 fclean: clean
-	@printf '\r[⚪] Delete %s ..' $(NAME)
+	@printf '\r[⚪] Delete %s ... ' $(NAME)
 	@$(RM) -r $(NAME)
 	@printf '\r[🟢] Delete %s\n' $(NAME)
 

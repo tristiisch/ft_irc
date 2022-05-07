@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 16:53:37 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 19:44:39 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,23 @@ namespace ft {
 
 			~ServerIRC();
 
-			const ServerConfig& getConfig() const;
-
-			bool isEnabled() const;
-
-			bool setConfig(const ServerConfig& config);
-
 			bool start();
 
 			void task();
 
 			bool stop();
+			
+			void executeCmds(ClientIRC *client, std::string bufferCmds);
+
+			void executeCmd(ClientIRC *client, const std::string& fullCmd);
+
+			bool isGoodPassword(std::string& password);
+
+			const ServerConfig& getConfig() const;
+
+			bool isEnabled() const;
+
+			bool setConfig(const ServerConfig& config);
 
 			int getNewClientId();
 	};

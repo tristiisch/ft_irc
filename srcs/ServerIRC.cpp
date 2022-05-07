@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 19:00:25 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 19:45:31 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ namespace ft {
     	SOCKET clientSocket;
 		socklen_t sinsize = sizeof(csin);
 		int ret, receiveByte;
-		char msg[] = "Hello world!\r\n";
+		//char msg[] = "Hello world!\r\n";
 
 		if (!isEnabled())
 			exit(0);
@@ -112,9 +112,14 @@ namespace ft {
 				client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
 				clients.insert(std::pair<int, ClientIRC*>(client->getId(), client));
 
+				/*ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
+				if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
+					break;
+				}*/
+
 				// chat data received
 				//recv(socket, ...)
-				//while (true) {
+				while (true) {
 					char *receiveMsg;
 					receiveMsg = (char*) std::calloc(512, 1);
 					receiveByte = recv(clientSocket, receiveMsg, 512, 0); // This will block current thread
@@ -127,9 +132,9 @@ namespace ft {
 
 					// VALGRIND: Conditional jump or move depends on uninitialised value(s)
 					//std::cout << C_BLUE << "Message receive from " << csin << ": '" C_YELLOW << receiveMsg << C_BLUE << "'." << C_RESET << std::endl;
-					client->executeCmd(receiveMsg);
+					this->executeCmds(client, receiveMsg);
 					free(receiveMsg);
-				//}
+				}
 			}
 			if (pfds[1].revents & POLLPRI) {
 				std::cout << C_BLUE << "POLLRI receive." << C_RESET << std::endl;
@@ -195,6 +200,49 @@ namespace ft {
 		this->enabled = false;
 		std::cout << C_RED << "ft_irc stopped" << C_RESET << std::endl;
 		return true;
+	}
+
+	void ServerIRC::executeCmds(ClientIRC *client, std::string bufferCmds) {
+		std::string token1;
+		std::string delim = "\n";
+		size_t pos = 0;
+			while ((pos = bufferCmds.find(delim)) != std::string::npos)
+		{
+			token1 = bufferCmds.substr(0, pos - 1);
+			executeCmd(client, token1);
+			bufferCmds.erase(0, pos + delim.length());
+		}
+		if (!bufferCmds.empty())
+			executeCmd(client, token1);
+	}
+
+	void ServerIRC::executeCmd(ClientIRC *client, const std::string& fullCmd) {
+		size_t index = fullCmd.find(" ");
+		if (index == std::string::npos)
+			return;
+
+		std::string cmd = fullCmd.substr(0, index);
+		std::string args = fullCmd.substr(index + 1, fullCmd.size());
+		std::cout << C_BLUE << "Message receive from " << client->getSockAddr() << ": '" C_YELLOW << cmd << " " << args << C_BLUE << "'." << C_RESET << std::endl;
+
+		if (cmd == "NICK") {
+			client->setNick(args);
+			std::cout << C_YELLOW << "Nick of " << client->getSockAddr() << " is now '" C_YELLOW << args << C_BLUE << "'." << C_RESET << std::endl;
+		} else if (cmd == "PASS") {
+			if (!isGoodPassword(args)) {
+				std::cout << C_RED << "Password '" << args << "' send by " << client->getSockAddr() << " is not server password ." << C_RESET << std::endl;
+				return;
+			}
+			client->setAuthorized(true);
+			std::cout << C_YELLOW << "Client " << client->getSockAddr() << " has good server password." << C_RESET << std::endl;
+		}
+	}
+
+	bool ServerIRC::isGoodPassword(std::string& password) {
+		std::string serverPassword = this->getConfig().getPassword();
+		if (serverPassword.empty() || serverPassword == password) 
+			return true;
+		return false;
 	}
 
 	int ServerIRC::getNewClientId() {

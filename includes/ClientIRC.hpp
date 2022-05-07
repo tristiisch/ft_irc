@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/06 20:01:01 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 19:32:47 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ namespace ft {
 			SOCKADDR_IN sockAddr;
 			SOCKET clientSocket;
 			std::string nick;
+			bool authorized;
 
-		public :
 			ClientIRC() : id(-1) {}
 
-			ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick("") {}
+		public :
+
+			ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick(""), authorized(false) {}
 
 			ClientIRC& operator=(const ClientIRC& x)
 			{
@@ -53,12 +55,13 @@ namespace ft {
 
 			const std::string& getNick() const;
 
+			const bool& isAuthorized() const;
+
 			void setSocket(SOCKET& clientSocket);
 
 			void setNick(std::string& nick);
 
-			void executeCmds(std::string bufferCmds);
+			void setAuthorized(const bool& authorized);
 
-			void executeCmd(std::string fullCmd);
 	};
 }
