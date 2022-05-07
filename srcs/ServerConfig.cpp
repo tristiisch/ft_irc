@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/04 16:52:27 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 16:47:58 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ namespace ft {
 
 	const std::string& ServerConfig::getPassword() const {
 		return this->password;
-	}	
-
+	}
 	const int& ServerConfig::getPort() const {
 		return this->port;
 	}

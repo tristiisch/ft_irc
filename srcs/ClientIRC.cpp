@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/06 20:09:59 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 16:47:58 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ namespace ft {
 		std::string token1;
 		std::string delim = "\n";
 		size_t pos = 0;
-		
-		while ((pos = bufferCmds.find(delim)) != std::string::npos)
+			while ((pos = bufferCmds.find(delim)) != std::string::npos)
 		{
 			token1 = bufferCmds.substr(0, pos - 1);
 			executeCmd(token1);

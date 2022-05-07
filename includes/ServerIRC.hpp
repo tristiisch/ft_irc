@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/06 21:02:16 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 16:53:37 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,17 @@ namespace ft {
 			ServerConfig config;
 			SOCKET serverSocket;
 			std::map<int, ClientIRC*> clients;
-			int nfds; // Last Client Id
+			int clientIdCounter; // Last Client Id
 			pollfd pfds[2];
 
 		public :
-			ServerIRC() : enabled(false), nfds(1) {
-				pfds[0].fd = STDIN_FILENO;
-				pfds[0].events = POLLIN;
-				pfds[1].fd = serverSocket;
-				pfds[1].events = POLLIN;
-			}
+			ServerIRC();
 
 			//ServerIRC(ServerConfig& config) : enabled(false), config(config), nfds(1) {}
 
-			ServerIRC& operator=(const ServerIRC& x) {
-				this->setConfig(x.getConfig());
-				return *this;
-			}
+			ServerIRC& operator=(const ServerIRC& x);
 
-			~ServerIRC() {
-				if (enabled)
-					stop();
-			}
+			~ServerIRC();
 
 			const ServerConfig& getConfig() const;
 
