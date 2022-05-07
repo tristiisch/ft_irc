@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 19:00:25 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/07 19:01:32 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ namespace ft {
 
 		std::cout << C_BLUE << "Poll start." << C_RESET << std::endl;
 		while ((ret = poll(pfds, 2, 1 * 1000)) != -1) { 
-			std::cout << C_YELLOW << "FD " << pfds[1].fd << " Event " << pfds[1].revents << " receive. Poll ret " << ret << C_RESET << std::endl;
+			//std::cout << C_YELLOW << "FD " << pfds[1].fd << " Event " << pfds[1].revents << " receive. Poll ret " << ret << C_RESET << std::endl;
 			//std::cout << C_BLUE << "Polllllllllll." << C_RESET << std::endl;
 			if (pfds[0].revents & POLLIN) {
 				char *receiveMsg;
@@ -114,7 +114,7 @@ namespace ft {
 
 				// chat data received
 				//recv(socket, ...)
-				//while (true) {
+				while (true) {
 					char *receiveMsg;
 					receiveMsg = (char*) std::calloc(512, 1);
 					receiveByte = recv(clientSocket, receiveMsg, 512, 0); // This will block current thread
@@ -129,7 +129,7 @@ namespace ft {
 					//std::cout << C_BLUE << "Message receive from " << csin << ": '" C_YELLOW << receiveMsg << C_BLUE << "'." << C_RESET << std::endl;
 					client->executeCmd(receiveMsg);
 					free(receiveMsg);
-				//}
+				}
 			}
 			if (pfds[1].revents & POLLPRI) {
 				std::cout << C_BLUE << "POLLRI receive." << C_RESET << std::endl;
