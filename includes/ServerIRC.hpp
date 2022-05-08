@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/08 18:36:07 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/08 19:10:35 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ namespace ft {
 			bool readClient(ClientIRC *client);
 
 			bool stop();
-			
+
+			void deleteClient(ClientIRC *client);
+
 			void executeCmds(ClientIRC *client, std::string bufferCmds);
 
 			void executeCmd(ClientIRC *client, const std::string& fullCmd);

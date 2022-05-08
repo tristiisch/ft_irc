@@ -6,12 +6,15 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/08 18:41:37 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/08 20:24:24 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ServerIRC.hpp"
 #include "../includes/ClientIRC.hpp"
+#include "../includes/commands/ClientCommand.hpp"
+#include "../includes/commands/QuitCommand.hpp"
+#include "../includes/commands/CapCommand.hpp"
 #include <cerrno>
 #include <sys/errno.h>
 
@@ -112,10 +115,10 @@ namespace ft {
 			if (pfds[0].revents == POLLIN)
 				acceptClient();
 			else
-				for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) {
-					if ((*it).fd == 0)
+				for (std::vector<pollfd>::iterator it = pfds.begin() + 1; it != pfds.end(); ++it) {
+					if (it->fd == 0)
 						continue;
-					if ((*it).revents == POLLIN) {
+					if (it->revents == POLLIN) {
 						readClient(this->clients[(*it).fd]);
 						//this->clients[(*it).fd]->receive(this);
 					}
@@ -258,17 +261,8 @@ namespace ft {
 		}
         //std::for_each(clients.begin(), clients.end(), &ServerIRC::deleteClient);
 
-		std::map<int, ClientIRC*>::iterator it;
-		ClientIRC *client;
-		for (it = clients.begin(); it != clients.end(); it++) {
-			client = it->second;
-			for (std::vector<pollfd>::iterator it_pfd = pfds.begin(); it_pfd != pfds.end(); ++it_pfd) {
-				if ((*it_pfd).fd == client->getSocket()) {
-					pfds.erase(it_pfd);
-					break;
-				}
-			}
-			delete client;
+		for (std::map<int, ClientIRC*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+			deleteClient(it->second);
 		}
 		clients.clear();
 		closesocket(serverSocket);
@@ -277,14 +271,24 @@ namespace ft {
 		return true;
 	}
 
+	void ServerIRC::deleteClient(ClientIRC *client) {
+		for (std::vector<pollfd>::iterator it = pfds.begin() + 1; it != pfds.end(); ++it) {
+			if (it->fd == client->getSocket()) {
+				// pfds.erase(it);
+				break;
+			}
+		}
+		clients.erase(client->getSocket());
+		delete client;
+	}
+
 	void ServerIRC::executeCmds(ClientIRC *client, std::string bufferCmds) {
 		std::string token1;
 		std::string delim = "\n";
 		size_t pos = 0;
 
-		while ((pos = bufferCmds.find(delim)) != std::string::npos)
-		{
-			token1 = bufferCmds.substr(0, pos - 1);
+		while ((pos = bufferCmds.find(delim)) != std::string::npos) {
+			token1 = bufferCmds.substr(0, pos);
 			executeCmd(client, token1);
 			bufferCmds.erase(0, pos + delim.length());
 		}
@@ -293,6 +297,9 @@ namespace ft {
 	}
 
 	void ServerIRC::executeCmd(ClientIRC *client, const std::string& fullCmd) {
+		static ClientCommand *clientCommand[] = {new QuitCommand(), new CapCommand()};
+		int length = sizeof(clientCommand) / sizeof(*clientCommand);
+
 		size_t index = fullCmd.find(" ");
 		if (index == std::string::npos)
 			return;
@@ -300,12 +307,18 @@ namespace ft {
 		std::string cmd = fullCmd.substr(0, index);
 		std::string args = fullCmd.substr(index + 1, fullCmd.size());
 
+		for (int i = 0; i < length; ++i) {
+			if (clientCommand[i]->getName() == cmd) {
+				clientCommand[i]->execute(*this, client, cmd, args);
+				return;
+			}
+		}
 		if (cmd == "NICK") {
 			client->setNick(args);
 			std::cout << C_YELLOW << "Nick of " << client->getSockAddr() << " is now '" C_YELLOW << args << C_BLUE << "'." << C_RESET << std::endl;
 		} else if (cmd == "PASS") {
 			if (!isGoodPassword(args)) {
-				std::cout << C_RED << "Password '" << args << "' send by " << client->getSockAddr() << " is not server password ." << C_RESET << std::endl;
+				std::cout << C_RED << "Password '" << args << "' send by " << client->getSockAddr() << " is not server password." << C_RESET << std::endl;
 				return;
 			}
 			client->setAuthorized(true);

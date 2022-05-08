@@ -1,6 +1,6 @@
 CXX					=	c++
-CXXFLAGS			=	-Wall -Wextra -std=c++98 -g3
-# CXXFLAGS			=	-Wall -Wextra -std=c++98 -g3 -fsanitize=address
+#CXXFLAGS			=	-Wall -Wextra -std=c++98 -g3
+CXXFLAGS			=	-Wall -Wextra -std=c++98 -g3 -fsanitize=address
 #CXXFLAGS			=	-Wall -Wextra -Werror -std=c++98
 NAME				=	ircserv
 LIB_FLAGS			=
@@ -38,6 +38,13 @@ debug: $(OBJS_DEBUG) $(INCLUDES)
 	@$(CXX) $(CXXFLAGS) $(OBJS_DEBUG) $(LIB_FLAGS) -o $(NAME)
 	@printf '\r[🟪] Link %s DEBUG\n' $(NAME)
 
+kill:
+	@printf '[⚪] Kill PID ...\n'
+	@kill "$(pidof ircserv)"
+	@netstat -anp|grep 6667
+	@sudo fuser -k 6667/tcp 
+	@printf '[🟢] Kill PID \n'
+
 clean:
 	@printf '\r[⚪] Delete *.o ... '
 	@$(RM) $(OBJS) $(OBJS_DEBUG)
@@ -50,4 +57,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: fclean all re debug
+.PHONY: fclean all re debug kill
