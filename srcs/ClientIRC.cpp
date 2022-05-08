@@ -6,13 +6,27 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 19:32:16 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/08 18:36:38 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ClientIRC.hpp"
 
 namespace ft {
+
+	ClientIRC::ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick(""), authorized(false) {}
+
+	ClientIRC& ClientIRC::operator=(const ClientIRC& x)
+	{
+		this->id = x.getId();
+		this->sockAddr = x.getSockAddr();
+		this->clientSocket = x.getSocket();
+		return *this;
+	}
+
+	ClientIRC::~ClientIRC() {
+		closesocket(clientSocket);
+	}
 
 	const int& ClientIRC::getId() const {
 		return this->id;

@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 19:32:47 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/08 18:34:31 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,11 @@ namespace ft {
 
 		public :
 
-			ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick(""), authorized(false) {}
+			ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket);
 
-			ClientIRC& operator=(const ClientIRC& x)
-			{
-				this->id = x.getId();
-				this->sockAddr = x.getSockAddr();
-				this->clientSocket = x.getSocket();
-				return *this;
-			}
+			ClientIRC& operator=(const ClientIRC& x);
 
-			~ClientIRC()
-			{
-				closesocket(clientSocket);
-			}
+			~ClientIRC();
 
 			const int& getId() const;
 

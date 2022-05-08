@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 20:41:47 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/08 18:40:44 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,19 +101,5 @@ namespace ft {
 			return errno;
 		}
 		return 0;
-	}
-
-	inline void split(std::string str, std::string delimt, void (*f)(std::string)) {
-		std::string tmp;
-		size_t pos = 0;
-
-		while ((pos = str.find(delimt)) != std::string::npos)
-		{
-			tmp = str.substr(0, pos - 1);
-			f(tmp);
-			str.erase(0, pos + delimt.length());
-		}
-		if (!str.empty())
-			f(str);
 	}
 }

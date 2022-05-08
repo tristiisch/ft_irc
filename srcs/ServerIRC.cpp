@@ -6,12 +6,13 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 21:14:18 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/08 18:41:37 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ServerIRC.hpp"
 #include "../includes/ClientIRC.hpp"
+#include <cerrno>
 #include <sys/errno.h>
 
 namespace ft {
@@ -73,19 +74,20 @@ namespace ft {
 	}
 
 	void ServerIRC::task() {
-		ClientIRC *client;
-		SOCKADDR_IN csin;
-    	SOCKET clientSocket;
-		socklen_t sinsize = sizeof(csin);
-		int ret, receiveByte;
+		// ClientIRC *client;
+		// SOCKADDR_IN csin;
+    	// SOCKET clientSocket;
+		// socklen_t sinsize = sizeof(csin);
+		// int receiveByte;
 		//char msg[] = "Hello world!\r\n";
+		int ret;
 
 		if (!isEnabled())
 			exit(0);
 
 		std::cout << C_BLUE << "Poll start." << C_RESET << std::endl;
-		while ((ret = poll(&pfds[0], pfds.size(), 1 * 1000)) != -1) { 
-			std::cout << C_YELLOW << "Poll ret " << ret << C_RESET << std::endl;
+		while ((ret = poll(&pfds[0], pfds.size(), 1 * 1000)) != -1 && isEnabled()) {
+			//std::cout << C_BLUE << "Poll ret " << ret << " (size " << pfds.size() << ")" << C_RESET << std::endl;
 			//std::cout << C_BLUE << "Polllllllllll." << C_RESET << std::endl;
 			/*if (pfds[0].revents & POLLIN) {
 				char *receiveMsg;
@@ -112,6 +114,7 @@ namespace ft {
 			else
 				for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) {
 					if ((*it).fd == 0)
+						continue;
 					if ((*it).revents == POLLIN) {
 						readClient(this->clients[(*it).fd]);
 						//this->clients[(*it).fd]->receive(this);
@@ -155,9 +158,13 @@ namespace ft {
 				// socket was closed
 			}*/
 		}
-
 		std::cout << C_BLUE << "Poll end." << C_RESET << std::endl;
-
+		if (ret == -1) {
+			if (errno == EINTR) {
+				exit(1);
+			}
+			ft::checkError(ret, "Error while using POLL", &errno);
+		}
 
 		/*pollfd pollfd;
 		pollfd.fd = serverSocket;
@@ -196,17 +203,15 @@ namespace ft {
 		SOCKADDR_IN csin;
     	SOCKET clientSocket;
 		socklen_t sinsize = sizeof(csin);
-		int ret;
 
 		clientSocket = accept(serverSocket, (SOCKADDR *)&csin, &sinsize); // This will block current thread
 		if (ft::checkError(clientSocket, "Error while accept connection", &csin)) {
 			closesocket(clientSocket);
 			return;
 		}
-		std::cout << C_BLUE << "A client " << csin << " logged in." << C_RESET << std::endl;
+		std::cout << C_BLUE << "A client " << csin << " fd:" << clientSocket << " logged in." << C_RESET << std::endl;
 		client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
 		clients.insert(std::pair<int, ClientIRC*>(clientSocket, client));
-
 
 		pfds.push_back(pollfd());
 		pfds.back().events = POLLIN;
@@ -223,16 +228,16 @@ namespace ft {
 
 		char *receiveMsg;
 		receiveMsg = (char*) std::calloc(512, 1);
-		receiveByte = recv(serverSocket, receiveMsg, 512, 0); // This will block current thread
+		receiveByte = recv(client->getSocket(), receiveMsg, 512, 0); // This will block current thread
 		if (receiveByte == 0) {
 			free(receiveMsg);
 			return false;
 		}
 		if (receiveByte == -1 && errno == EAGAIN) {
 			free(receiveMsg);
-			return true;
+			return false;
 		}
-		if (ft::checkError(receiveByte, "Error while read connection", &client->getSockAddr())) {
+		if (ft::checkError(receiveByte, "Error while read socket", &client->getSocket())) {
 			std::cout << C_RED << errno << C_RESET << std::endl;
 			//closesocket(clientSocket);
 			free(receiveMsg);
