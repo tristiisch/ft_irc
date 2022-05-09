@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 04:14:05 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/09 20:24:10 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,16 +89,16 @@ namespace ft {
 
 		for (std::map<int, ClientIRC*>::iterator it = clients.begin(); it != clients.end(); ++it) {
 			client = it->second;
-			closesocket(client->getSocket());
+			client->closeSocket();
 			delete client;
 			clients.erase(it);
 		}
 		closesocket(serverSocket);
 		// clients.clear();
-		for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) {
+		// for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) {
 			// pfds.erase(it);
 			// delete *it;
-		}
+		// }
 		pfds.clear();
 		std::cout << C_RED << "ft_irc stopped" << C_RESET << std::endl;
 		return true;
@@ -112,13 +112,19 @@ namespace ft {
 			exit(0);
 
 		std::cout << C_BLUE << "Poll start with " << pfds.size() << "." << C_RESET << std::endl;
-		while (this->enabled && ((ret = poll(&pfds[0], pfds.size(), 1 * 1000)) != -1)) {
-			if (pfds[0].revents == POLLIN)
+		while (this->enabled && ((ret = poll(&(pfds[0]), pfds.size(), 1 * 1000)) != -1)) {
+			if (pfds[0].revents & POLLIN)
 				acceptClient();
 			else {
 				for (std::vector<pollfd>::iterator it = pfds.begin() + 1; it != pfds.end(); ++it) {
 					pollfd poll = *it;
+					if (clients.find(poll.fd) == clients.end()) {
+						std::cout << C_BLUE << "Poll deleted " << poll.fd << "." << C_RESET << std::endl;
+						pfds.erase(it);
+						continue;
+					}
 					if (poll.revents & POLLIN) {
+						std::cout << C_BLUE << "Poll receive " << poll.fd << "." << C_RESET << std::endl;
 						readClient(this->clients[poll.fd]);
 						ret = send(poll.fd, msg, std::strlen(msg), 0) == -1;
 						ft::checkError(ret, "Error while sending Hello world msg to ", &this->clients[poll.fd]);
@@ -127,10 +133,9 @@ namespace ft {
 					if (poll.revents & POLLPRI) {
 						std::cout << C_BLUE << "Socket " << poll.fd << " > POLLRI receive." << C_RESET << std::endl;
 					}
-					if (poll.revents & POLLNVAL) {
-						std::cout << C_BLUE << "Socket " << poll.fd <<  " > Invalid request from" << C_RESET << std::endl;
-						break;
-					}
+					// if (poll.revents & POLLNVAL) {
+					// 	std::cout << C_BLUE << "Socket " << poll.fd <<  " > Invalid request from" << C_RESET << std::endl;
+					// }
 					if (poll.revents & (POLLERR | POLLHUP)) {
 						// socket was closed
 						std::cout << C_RED << "Socket " << poll.fd <<  " > close." << C_RESET << std::endl;
@@ -170,6 +175,7 @@ namespace ft {
 		pfds.back().events = POLLIN;
 		pfds.back().fd = clientSocket;
 		client->setPoll(pfds.back());
+		std::cout << "this1 " << this << std::endl;
 
 		/*ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
@@ -183,8 +189,8 @@ namespace ft {
 		int receiveByte;
 		char *receiveMsg;
 
-		if (client != NULL || client->getSocket() < 0)
-			return false;
+		// if (client != NULL || client->getSocket() < 0)
+			// return false;
 		receiveMsg = (char*) std::calloc(512, 1);
 		receiveByte = recv(client->getSocket(), receiveMsg, 512, 0);
 		if (receiveByte == 0) {
@@ -207,6 +213,7 @@ namespace ft {
 	}
 
 	void ServerIRC::deleteClient(ClientIRC *client) {
+		std::cout << "this2 " << this << std::endl;
 		if (!pfds.empty()) {
 			for (std::vector<pollfd>::iterator it = pfds.begin() + 1; it != pfds.end(); ++it) {
 				std::cout << "test " << it->fd << " vs " << client->getPoll().fd << std::endl;
@@ -218,8 +225,8 @@ namespace ft {
 				}
 			}
 		}
-		closesocket(client->getSocket());
-		clients.erase(client->getSocket());
+		std::cout << "Delete client " << clients.erase(client->getSocket()) << std::endl;
+		// client->closeSocket();
 		delete client;
 	}
 

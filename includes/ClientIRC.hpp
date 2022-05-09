@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 03:44:40 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/09 16:21:52 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ namespace ft {
 			ClientIRC& operator=(const ClientIRC& x);
 			~ClientIRC();
 
+			bool closeSocket();
 			const int& getId() const;
 			const in_port_t& getPort() const;
 			const in_addr& getAddress() const;

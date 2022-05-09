@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:53:17 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 03:20:56 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/09 20:23:15 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../includes/ServerConfig.hpp"
 #include "../includes/ServerIRC.hpp"
 
-ft::ServerIRC server;
+static ft::ServerIRC server;
 
 void close_handler(int signal) {
 	(void)signal;
