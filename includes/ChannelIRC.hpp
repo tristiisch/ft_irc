@@ -16,12 +16,24 @@
 #include "ServerIRC.hpp"
 
 namespace ft {
+
+	struct cl_info
+	{
+
+		ClientIRC *user;
+		int banned;
+		int ope;
+
+		cl_info();
+		cl_info(ClientIRC *to_add);
+		~cl_info();
+	};
+
 	class ChannelIRC {
 
 		private:
 		std::string name;
-		std::vector<ClientIRC *> client_list;
-		std::vector<ClientIRC *> ban_list;
+		std::vector<cl_info> client_list;
 		int size;
 
 		public :
@@ -31,8 +43,7 @@ namespace ft {
 
 			std::string getName();
 			int			getSize();
-			std::vector<ClientIRC * > getClientList();
-			std::vector<ClientIRC * > getBanList();
+			std::vector<cl_info> getClientList();
 
 			void	setName(const char *name);
 
