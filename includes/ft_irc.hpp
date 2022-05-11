@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/11 12:17:06 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/11 19:10:46 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,12 @@ typedef struct in_addr IN_ADDR;
 
 #define ERROR C_RED << "ERROR > "
 #define WARN C_YELLOW << "WARN > "
+
+
+#define MSG_DELIMITER "\r\n"
+//il faut encore faire des define sur les messages d'erreur.
+
+
 
 #ifndef DEBUG
 # define DEBUG 0

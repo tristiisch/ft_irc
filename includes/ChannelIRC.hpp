@@ -25,21 +25,22 @@ namespace ft {
 		int ope;
 
 		cl_info();
-		cl_info(ClientIRC *to_add);
+		cl_info(ClientIRC *const &to_add);
 		~cl_info();
 	};
 
 	class ChannelIRC {
 
 		private:
-		std::string name;
-		std::vector<cl_info> client_list;
-		int size;
-		int max_size;
+		std::string _name;
+		std::vector<cl_info> _client_list;
+		int _size;
+		int _max_size;
 
 		public :
 			ChannelIRC();
-			ChannelIRC(const char *name);
+			ChannelIRC(const char *name, ClientIRC *const &first_client);
+			ChannelIRC(const char *name, ClientIRC *const &first_client, int const &max_size);
 			~ChannelIRC();
 
 			std::string getName();
@@ -56,7 +57,12 @@ namespace ft {
 			void	removeOperator(ClientIRC *const &to_remove);
 			void	unbanUser(ClientIRC *const &to_unban);
 
+			void	sendMessage(ClientIRC *const &sender, std::string const &message);
+
 
 
 	};
+
+	bool							clientExists(ClientIRC *const &to_add, std::vector<cl_info> &to_check);
+	std::vector<cl_info>::iterator 	clientSearch (std::vector<cl_info> cl_list, ClientIRC *const &to_search);
 }
