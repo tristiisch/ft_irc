@@ -6,7 +6,7 @@
 /*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/10 23:55:15 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/11 12:22:00 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,26 @@ namespace ft
 		}
 		cl_info nclient(to_add);
 		this->client_list.push_back(nclient);
-		this->size++;
+		if (size < max_size)
+			this->size++;
+		else
+		{
+			std::cout << "The User " << to_add->getNick() << "cannot be added to a full channel." << std::endl;
+			// send au client ce qu' il faut
+		}
+
 	}
 
 	void	ChannelIRC::addBannedUser(ClientIRC *const &to_add)
 	{
-		if (clientExists(to_add, this->client_list) == true)
+		std::vector<cl_info>::iterator ite  = clientSearch(this->client_list, to_add);
+		if (ite == this->client_list.end() || ite->banned == 1)
 		{
 			std::cout << "The User " << to_add->getNick() << "is already banned from the channel." << std::endl;
 			//envoyer l'info au client avec le bon code
 			return;
 		}
-		//il faut search l'user ici
-
+		ite->banned = 1;
 	}
 
 	void	ChannelIRC::removeUser(ClientIRC *const &to_remove)
@@ -108,19 +115,22 @@ namespace ft
 
 	void	ChannelIRC::unbanUser(ClientIRC *const &to_unban)
 	{
-		if (clientExists(to_unban, this->client_list) == false)
+		std::vector<cl_info>::iterator ite  = clientSearch(this->client_list, to_unban);
+		if (ite == this->client_list.end() || ite->banned == 0)
 		{
-			std::cout << "The User " << to_unban->getNick() << "is not banned in this channel." << std::endl;
+			std::cout << "The User " << to_unban->getNick() << "is not banned from the channel." << std::endl;
 			//envoyer l'info au client avec le bon code
 			return;
 		}
-		//Il faut search l'user ici
-
+		ite->banned = 0;
 	}
 
-	std::vector<cl_info>::iterator search_client()
+	std::vector<cl_info>::iterator clientSearch
+	(std::vector<cl_info> cl_list, ClientIRC *const &to_search)
 	{
-		// fonction de recherche de l'user
+		std::vector<cl_info>::iterator ite = cl_list.begin();
+		while (ite->user->getId() != to_search->getId())
+			ite++;
 	}
 
 	bool	clientExists(ClientIRC *const &to_add, std::vector<cl_info> &to_check)

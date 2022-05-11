@@ -35,6 +35,7 @@ namespace ft {
 		std::string name;
 		std::vector<cl_info> client_list;
 		int size;
+		int max_size;
 
 		public :
 			ChannelIRC();
@@ -43,13 +44,16 @@ namespace ft {
 
 			std::string getName();
 			int			getSize();
+			int			getMaxSize();
 			std::vector<cl_info> getClientList();
 
 			void	setName(const char *name);
 
 			void	addUser(ClientIRC *const &to_add);
+			void	addOperator(ClientIRC *const &to_add);
 			void	addBannedUser(ClientIRC *const &to_add);
 			void	removeUser(ClientIRC *const &to_remove);
+			void	removeOperator(ClientIRC *const &to_remove);
 			void	unbanUser(ClientIRC *const &to_unban);
 
 
