@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/11 19:16:54 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/12 06:37:04 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
-
-#pragma once
 
 #include "../includes/ChannelIRC.hpp"
 
@@ -30,13 +28,15 @@ namespace ft
 		ope(0)
 	{}
 
+	cl_info::~cl_info() {}
+
 
 	//Classe de channel
 	ChannelIRC::ChannelIRC() {}
 
 	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client)
-	:	_client_list(),
-		_name(name), 
+	:	_name(name), 
+		_client_list(),
 		_size(1),
 		_max_size(42)
 	{
@@ -45,8 +45,8 @@ namespace ft
 	}
 
 	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client, int const &max_size)
-	:	_client_list(),
-		_name(name), 
+	:	_name(name), 
+		_client_list(),
 		_size(1),
 		_max_size(max_size)
 	{
@@ -70,11 +70,6 @@ namespace ft
 	std::vector<cl_info> ChannelIRC::getClientList()
 	{
 		return this->_client_list;
-	}
-
-	int		ChannelIRC::getSize()
-	{
-		return this->_size;
 	}
 
 	void	ChannelIRC::setName(const char *name)
@@ -188,6 +183,7 @@ namespace ft
 		std::vector<cl_info>::iterator ite = cl_list.begin();
 		while (ite->user->getId() != to_search->getId())
 			ite++;
+		return ite;
 	}
 
 	bool	clientExists(ClientIRC *const &to_add, std::vector<cl_info> &to_check)

@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 06:30:27 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 06:45:43 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,12 @@ namespace ft {
 						continue;
 					poll = *it;
 					if (clients.find(poll.fd) == clients.end()) {
-						std::cout << C_BLUE << "Poll deleted " << poll.fd << "." << C_RESET << std::endl;
+						std::cout << C_BLUE << "Poll of socket " << poll.fd << " deleted." << C_RESET << std::endl;
 						pfds.erase(it++);
 						break;
 					}
 					if (poll.revents & POLLIN) {
-						std::cout << C_BLUE << "Poll receive " << poll.fd << "." << C_RESET << std::endl;
+						std::cout << C_BLUE << "Socket " << poll.fd << " > POLLIN receive." << C_RESET << std::endl;
 						readClient(this->clients[poll.fd], poll.fd);
 						break;
 					}
@@ -235,10 +235,8 @@ namespace ft {
 	void ServerIRC::deleteClient(ClientIRC *client) {
 		if (!pfds.empty()) {
 			for (std::vector<pollfd>::iterator it = pfds.begin() + 1; it != pfds.end(); ++it) {
-				std::cout << "pfds test " << it->fd << " vs " << client->getPoll().fd << std::endl;
 				if (it->fd == client->getPoll().fd) {
 					pfds.erase(it);
-					std::cout << "pfds ERASE NICE !!! size  "<< pfds.size() << std::endl;
 					break;
 				}
 			}
@@ -247,7 +245,7 @@ namespace ft {
 		}
 		std::map<int, ClientIRC*>::iterator it = clients.find(client->getSocket());
 		if (it != clients.end()) {
-			std::cout << "Delete client : " << *it->second << std::endl;
+			// std::cout << "Delete client : " << *it->second << std::endl;
 			clients.erase(it);
 		}
 		client->closeSocket();
