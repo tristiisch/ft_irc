@@ -14,9 +14,9 @@
 
 namespace ft {
 
-	ServerConfig::ServerConfig() : port(-1), password("") {}
+	ServerConfig::ServerConfig() : port(-1), password(""), ip("0.0.0.0") {}
 
-	ServerConfig::ServerConfig(int& port, std::string& password) : port(port), password(password) {}
+	ServerConfig::ServerConfig(int& port, std::string& password) : port(port), password(password), ip("0.0.0.0") {}
 
 	ServerConfig& ServerConfig::operator=(const ServerConfig& x) {
 		this->setPassword(x.getPassword());
@@ -60,7 +60,17 @@ namespace ft {
 	const std::string& ServerConfig::getPassword() const {
 		return this->password;
 	}
+
 	const int& ServerConfig::getPort() const {
 		return this->port;
+	}
+
+	bool ServerConfig::setIP(const std::string& ip) {
+		this->ip = ip;
+		return true;
+	}
+
+	const std::string& ServerConfig::getIP() const {
+		return this->ip;
 	}
 }

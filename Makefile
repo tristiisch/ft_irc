@@ -9,8 +9,19 @@ SRCS_DIR			=	srcs
 OBJS_DIR			=	.objs
 OBJS_DIR_DEBUG		=	.objs_debug
 
+ifeq ($(OS),Windows_NT)
+
+# SRCS				=	$(shell dir * $(SRCS_DIR) /S /B | findstr \.cpp)
+SRCS				=	$(shell FORFILES /S /M *.cpp)
+# INCLUDES			=	$(shell dir * $(INCLUDE_DIR) /S /B  | findstr \.hpp)
+INCLUDES			=	$(shell FORFILES /S /M *.hpp)
+
+else
+
 SRCS				=	$(shell find $(SRCS_DIR) -type f -name '*.cpp')
 INCLUDES			=	$(shell find $(INCLUDE_DIR) -type f -name '*.hpp')
+
+endif
 OBJS				=	$(SRCS:$(SRCS_DIR)/%.cpp=$(OBJS_DIR)/%.o)
 OBJS_DEBUG			=	$(SRCS:$(SRCS_DIR)/%.cpp=$(OBJS_DIR_DEBUG)/%.o)
 

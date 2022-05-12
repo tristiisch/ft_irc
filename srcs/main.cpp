@@ -31,6 +31,7 @@ int main(const int ac, const char *av[]) {
 
 	if (!servConfig.set(ac, av))
 		return 1;
+	server.setIP("0.0.0.0");
 
 	server.setConfig(servConfig);
 

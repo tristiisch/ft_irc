@@ -19,6 +19,7 @@ namespace ft {
 
 		private:
 			int port;
+			std::string ip;
 			std::string password;
 
 		public :
@@ -33,13 +34,13 @@ namespace ft {
 			bool set(const int ac, const char *av[]);
 
 			const int& getPort() const;
-
 			bool setPort(const int& port);
-
 			bool setPort(const char *port);
 
 			const std::string& getPassword() const;
-
 			bool setPassword(const std::string& password);
+	
+			bool setIP(const std::string& ip);
+			const std::string& getIP() const;
 	};
 }
