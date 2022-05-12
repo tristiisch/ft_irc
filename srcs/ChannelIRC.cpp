@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/11 19:16:54 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/12 17:26:19 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@ namespace ft
 		ope(0)
 	{}
 
+	cl_info::~cl_info();
+
 
 	//Classe de channel
 	ChannelIRC::ChannelIRC() {}
 
 	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client)
-	:	_client_list(),
-		_name(name), 
+	:	_name(name), 
+		_client_list(),
 		_size(1),
 		_max_size(42)
 	{
@@ -45,8 +47,8 @@ namespace ft
 	}
 
 	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client, int const &max_size)
-	:	_client_list(),
-		_name(name), 
+	:	_name(name), 
+		_client_list(),
 		_size(1),
 		_max_size(max_size)
 	{
@@ -56,12 +58,7 @@ namespace ft
 	}
 
 	ChannelIRC::~ChannelIRC() {}
-
-	int		ChannelIRC::getSize()
-	{
-		return(this->_size);
-	}
-
+	
 	std::string	ChannelIRC::getName()
 	{
 		return (this->_name);

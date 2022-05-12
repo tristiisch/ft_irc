@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientIRC.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 16:05:16 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 17:30:17 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,13 @@ namespace ft {
 
 	void ClientIRC::sendMessage(ClientIRC *const &to, std::string const &message)\
 	{
+		std::string finished_msg = ":" + this->nick + " " + message;
+		to->recieveMessage(finished_msg);
+	}
 
+	void	ClientIRC::recieveMessage(std::string const &message)
+	{
+		std::string msg_for_client = message + MSG_DELIMITER;
+		send(this->clientSocket, msg_for_client.c_str(), msg_for_client.length(), 0);
 	}
 }
