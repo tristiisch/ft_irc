@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientIRC.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 16:47:58 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 16:05:16 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,10 @@ namespace ft {
 			this->setNick(args);
 			std::cout << C_BLUE << "Nick of " << getSockAddr() << " is now '" C_YELLOW << args << C_BLUE << "'." << C_RESET << std::endl;
 		} //else if ()
+	}
+
+	void ClientIRC::sendMessage(ClientIRC *const &to, std::string const &message)\
+	{
+
 	}
 }

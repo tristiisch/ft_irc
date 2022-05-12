@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientIRC.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/06 20:01:01 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 15:26:55 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,9 @@ namespace ft {
 			void executeCmds(std::string bufferCmds);
 
 			void executeCmd(std::string fullCmd);
+
+			void sendMessage(ClientIRC *const &to, std::string const &message);
+
+			void recieveMessage(std::string const &message);
 	};
 }
