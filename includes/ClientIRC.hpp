@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 17:29:48 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 17:31:57 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ namespace ft {
 			void setAuthorized(const bool& authorized);
 			void setPoll(pollfd& poll);
 
+			void sendMessage(ClientIRC *const &to, std::string const &message);
+			void recieveMessage(std::string const &message);
 	};
 
 	std::ostream &operator<<(std::ostream &outputFile, const ClientIRC &client);

@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/12 06:37:04 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 17:32:23 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,7 @@ namespace ft
 	}
 
 	ChannelIRC::~ChannelIRC() {}
-
-	int		ChannelIRC::getSize()
-	{
-		return(this->_size);
-	}
-
+	
 	std::string	ChannelIRC::getName()
 	{
 		return (this->_name);

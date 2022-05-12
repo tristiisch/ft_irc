@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 17:29:36 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 17:32:07 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,13 @@ namespace ft {
 
 	void ClientIRC::sendMessage(ClientIRC *const &to, std::string const &message)\
 	{
+		std::string finished_msg = ":" + this->nick + " " + message;
+		to->recieveMessage(finished_msg);
+	}
 
+	void	ClientIRC::recieveMessage(std::string const &message)
+	{
+		std::string msg_for_client = message + MSG_DELIMITER;
+		send(this->clientSocket, msg_for_client.c_str(), msg_for_client.length(), 0);
 	}
 }
