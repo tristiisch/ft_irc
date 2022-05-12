@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 06:04:34 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 06:13:40 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,26 +88,30 @@ namespace ft {
 		}
 		this->enabled = false;
 
-		for (std::map<int, ClientIRC*>::iterator it = clients.begin(); it != clients.end(); ++it) {
-			client = it->second;
-			// client->closeSocket(); -> heap-use-after-free
-			// delete client;
-			// clients.erase(it);
+		if (!clients.empty()) {
+			for (std::map<int, ClientIRC*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+				client = it->second;
+				// client->closeSocket(); -> heap-use-after-free
+				// delete client;
+				// clients.erase(it);
 
-			if (!client) {
-				std::cout << WARN << "'map<fd, ClientIRC*> clients' contains uninitialized instance of client." << C_RESET << std::endl;
-				clients.erase(it);
-				continue;
+				if (!client) {
+					std::cout << WARN << "'map<fd, ClientIRC*> clients' contains uninitialized instance of client." << C_RESET << std::endl;
+					// clients.erase(it);
+					continue;
+				}
+				deleteClient(client);
 			}
-			deleteClient(client);
+			clients.clear();
+		}
+		if (!pfds.empty()) {
+			/*for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) {
+				pfds.erase(it);
+				// delete *it;
+			}*/
+			pfds.clear();
 		}
 		closesocket(serverSocket);
-		clients.clear();
-		for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) {
-			pfds.erase(it);
-			// delete *it;
-		}
-		pfds.clear();
 		std::cout << C_RED << "ft_irc stopped" << C_RESET << std::endl;
 		return true;
 	}
@@ -136,7 +140,7 @@ namespace ft {
 						break;
 					}
 					if (poll.revents & POLLIN) {
-						std::cout << C_BLUE << "Poll receive " << poll.fd << ". " << pfds.size() << C_RESET << std::endl;
+						std::cout << C_BLUE << "Poll receive " << poll.fd << "." << C_RESET << std::endl;
 						readClient(this->clients[poll.fd], poll.fd);
 						break;
 					}
