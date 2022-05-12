@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 17:32:07 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 18:15:39 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	ClientIRC::ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick(""), authorized(false) {}
+	ClientIRC::ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick(""), authorized(false), delimitator("\r\n") {}
 
 	ClientIRC& ClientIRC::operator=(const ClientIRC& x) {
 		this->id = x.getId();
@@ -56,6 +56,10 @@ namespace ft {
 		return this->nick;
 	}
 
+	const std::string& ClientIRC::getDelimitator() const {
+		return this->delimitator;
+	}
+
 	const bool& ClientIRC::isAuthorized() const {
 		return this->authorized;
 	}
@@ -78,6 +82,10 @@ namespace ft {
 
 	void ClientIRC::setPoll(pollfd& poll) {
 		this->poll = poll;
+	}
+
+	void ClientIRC::setDelimitator(const std::string& delimitator) {
+		this->delimitator = delimitator;
 	}
 
 	void ClientIRC::sendMessage(ClientIRC *const &to, std::string const &message)\

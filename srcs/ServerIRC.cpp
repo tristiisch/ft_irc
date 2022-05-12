@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 06:45:43 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 19:15:51 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ namespace ft {
 	}
 
 	bool ServerIRC::stop() {
-		ClientIRC *client;
 	
 		if (!this->enabled) {
 			std::cerr << WARN << "Can't stop server IRC, he is not enabled." << C_RESET << std::endl;
@@ -89,8 +88,8 @@ namespace ft {
 		this->enabled = false;
 
 		if (!clients.empty()) {
-			for (std::map<int, ClientIRC*>::iterator it = clients.begin(); it != clients.end(); ++it) {
-				client = it->second;
+			for (std::map<int, ClientIRC*>::iterator it = clients.begin(); it != clients.end();) {
+				ClientIRC *client = it++->second;
 				// client->closeSocket(); -> heap-use-after-free
 				// delete client;
 				// clients.erase(it);
@@ -136,24 +135,26 @@ namespace ft {
 					poll = *it;
 					if (clients.find(poll.fd) == clients.end()) {
 						std::cout << C_BLUE << "Poll of socket " << poll.fd << " deleted." << C_RESET << std::endl;
-						pfds.erase(it++);
+						deleteClient(this->clients[(*it).fd]);
+						//pfds.erase(it++);
 						break;
 					}
 					if (poll.revents & POLLIN) {
-						std::cout << C_BLUE << "Socket " << poll.fd << " > POLLIN receive." << C_RESET << std::endl;
+						//std::cout << C_BLUE << "Socket " << poll.fd << " > POLLIN receive." << C_RESET << std::endl;
 						readClient(this->clients[poll.fd], poll.fd);
-						break;
+						// break;
 					}
 					if (poll.revents & POLLPRI) {
 						std::cout << C_BLUE << "Socket " << poll.fd << " > POLLRI receive." << C_RESET << std::endl;
 					}
-					// if (poll.revents & POLLNVAL) {
-					// 	std::cout << C_BLUE << "Socket " << poll.fd <<  " > Invalid request from" << C_RESET << std::endl;
-					// }
+					if (poll.revents & POLLNVAL) {
+						std::cout << C_BLUE << "Socket " << poll.fd <<  " > Invalid request from" << C_RESET << std::endl;
+					}
 					if (poll.revents & (POLLERR | POLLHUP)) {
 						// socket was closed
 						std::cout << C_RED << "Socket " << poll.fd <<  " > close." << C_RESET << std::endl;
-						// deleteClient(this->clients[(*it).fd]);
+						deleteClient(this->clients[(*it).fd]);
+						break;
 					}
 				}
 			}
@@ -195,10 +196,10 @@ namespace ft {
 		ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
 		ft::checkError(ret, "Error while sending Hello world msg to ", &this->clients[clientSocket]);
 
-		/*ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
-		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
-			return;
-		}*/
+		// ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
+		// if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
+		// 	return NULL;
+		// }
 		return client;
 	}
 
@@ -245,7 +246,7 @@ namespace ft {
 		}
 		std::map<int, ClientIRC*>::iterator it = clients.find(client->getSocket());
 		if (it != clients.end()) {
-			// std::cout << "Delete client : " << *it->second << std::endl;
+			std::cout << "Delete client : " << *it->second << std::endl;
 			clients.erase(it);
 		}
 		client->closeSocket();
