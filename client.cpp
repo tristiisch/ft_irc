@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:18:25 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 19:29:30 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 20:29:01 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int main() {
 	memset(messageEnvoi, 0x00, LG_MESSAGE*sizeof(char));
 	memset(messageRecu, 0x00, LG_MESSAGE*sizeof(char));
 	// Envoie un message au serveur
-	sprintf(messageEnvoi, "Hello world !\n");
-	ecrits = write(descripteurSocket, messageEnvoi, strlen(messageEnvoi)); // message à TAILLE variable
+	sprintf(messageEnvoi, "Hello server !\r\n");
+	ecrits = send(descripteurSocket, messageEnvoi, strlen(messageEnvoi), 0); // message à TAILLE variable
 	switch(ecrits)
 	{
 		case -1 : /* une erreur ! */
