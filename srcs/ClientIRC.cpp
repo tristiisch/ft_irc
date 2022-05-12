@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 04:48:54 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 17:29:36 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,10 @@ namespace ft {
 
 	void ClientIRC::setPoll(pollfd& poll) {
 		this->poll = poll;
+	}
+
+	void ClientIRC::sendMessage(ClientIRC *const &to, std::string const &message)\
+	{
+
 	}
 }
