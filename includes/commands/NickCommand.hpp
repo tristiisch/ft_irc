@@ -1,11 +1,11 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   QuitCommand.hpp                                    :+:      :+:    :+:   */
+/*   NickCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 18:53:37 by tglory            #+#    #+#             */
+/*   Created: 2022/05/08 21:32:54 by tglory            #+#    #+#             */
 /*   Updated: 2022/05/09 02:36:22 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
@@ -15,13 +15,14 @@
 #include "ClientCommand.hpp"
 
 namespace ft {
-	class QuitCommand : public ClientCommand {
+	class NickCommand : public ClientCommand {
 
 		public :
-			QuitCommand();
+			NickCommand();
 
-			~QuitCommand();
+			~NickCommand();
 
 			void execute(CommandContext &cmd) const;
 	};
 }
+

@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   QuitCommand.hpp                                    :+:      :+:    :+:   */
+/*   CommandManager.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 18:53:37 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 02:36:22 by tglory           ###   ########lyon.fr   */
+/*   Created: 2022/05/09 00:11:55 by tglory            #+#    #+#             */
+/*   Updated: 2022/05/12 05:21:36 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+#include "../ServerIRC.hpp"
+#include "../ClientIRC.hpp"
 #include "ClientCommand.hpp"
 
 namespace ft {
-	class QuitCommand : public ClientCommand {
 
-		public :
-			QuitCommand();
+	class CommandManager {
 
-			~QuitCommand();
+		private:
+			ServerIRC *server;
+			std::vector<ClientCommand*> commands;
 
-			void execute(CommandContext &cmd) const;
+			CommandManager();
+		public:
+			CommandManager(ServerIRC *server);
+			CommandManager &operator=(CommandManager const &instance);
+			~CommandManager();
+			void executeCmds(ClientIRC *client, std::string bufferCmds);
+			void executeCmd(ClientIRC *client, std::string& fullCmd);
+			const ServerIRC* getServer() const;
 	};
 }

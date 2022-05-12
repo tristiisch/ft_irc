@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/08 18:36:38 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 04:48:54 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,20 @@ namespace ft {
 
 	ClientIRC::ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick(""), authorized(false) {}
 
-	ClientIRC& ClientIRC::operator=(const ClientIRC& x)
-	{
+	ClientIRC& ClientIRC::operator=(const ClientIRC& x) {
 		this->id = x.getId();
 		this->sockAddr = x.getSockAddr();
 		this->clientSocket = x.getSocket();
 		return *this;
 	}
 
-	ClientIRC::~ClientIRC() {
-		closesocket(clientSocket);
+	ClientIRC::~ClientIRC() {}
+
+	bool ClientIRC::closeSocket() {
+		if (this->clientSocket <= 0)
+			return false;
+		closesocket(this->clientSocket);
+		return true;
 	}
 
 	const int& ClientIRC::getId() const {
@@ -56,6 +60,10 @@ namespace ft {
 		return this->authorized;
 	}
 
+	pollfd& ClientIRC::getPoll() {
+		return this->poll;
+	}
+
 	void ClientIRC::setSocket(SOCKET& clientSocket) {
 		this->clientSocket = clientSocket;
 	}
@@ -66,5 +74,9 @@ namespace ft {
 
 	void ClientIRC::setAuthorized(const bool& authorized) {
 		this->authorized = authorized;
+	}
+
+	void ClientIRC::setPoll(pollfd& poll) {
+		this->poll = poll;
 	}
 }

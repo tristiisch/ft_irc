@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/08 18:40:44 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/09 00:48:16 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ typedef struct in_addr IN_ADDR;
 
 namespace ft {
 
-	inline std::ostream &operator<<(std::ostream &outputFile, const SOCKADDR_IN &csin)
-	{
-		outputFile << inet_ntoa(csin.sin_addr) << ":" << csin.sin_port;
-		return outputFile;
-	}
+	std::string join(std::vector<std::string> &vector, std::string delim);
+	void split(std::string str, std::string delimt, void (*f)(std::string));
+	std::vector<std::string> split(std::string str, std::string delimt);
+	
+	std::ostream &operator<<(std::ostream &outputFile, const SOCKADDR_IN &csin);
 
 	template <class T>
 	std::string toString(T obj) {
