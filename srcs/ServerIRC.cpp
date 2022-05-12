@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerIRC.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 06:45:43 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 20:08:22 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,18 @@ namespace ft {
 		this->setConfig(x.getConfig());
 		return *this;
 	}
+
+
+	std::vector<ChannelIRC> ServerIRC::getChannels()
+	{
+		return this->channels;
+	}
+
+	std::map<int, ClientIRC *> ServerIRC::getClients()
+	{
+		return this->clients;
+	}
+
 
 	bool ServerIRC::start() {
 		SOCKADDR_IN sin;

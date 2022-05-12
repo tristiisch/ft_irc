@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 06:30:22 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 21:07:20 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,10 @@ typedef struct in_addr IN_ADDR;
 
 
 #define MSG_DELIMITER "\r\n"
-//il faut encore faire des define sur les messages d'erreur.
 
+//il faut encore faire des define sur les messages d'erreur.
+#define ERR_NOSUCHCHANNEL(channel) channel + " :no such channel"
+#define ERR_NOSUCHNICK(nick) nick + " :No such nick/channel"
 
 
 #ifndef DEBUG

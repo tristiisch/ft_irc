@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerIRC.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 06:39:17 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 20:07:06 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "ft_irc.hpp"
 #include "ServerConfig.hpp"
 #include "ClientIRC.hpp"
+#include "ChannelIRC.hpp"
 // #include "commands/CommandManager.hpp"
 
 
@@ -29,6 +30,7 @@ namespace ft {
 			ServerConfig config;
 			SOCKET serverSocket;
 			std::map<int, ClientIRC*> clients;
+			std::vector<ChannelIRC> channels;
 			int clientIdCounter; // Last Client Id
 			std::vector<pollfd> pfds;
 			CommandManager *commandManager;
@@ -38,6 +40,9 @@ namespace ft {
 			ServerIRC& operator=(const ServerIRC& x);
 			~ServerIRC();
 
+			std::vector<ChannelIRC>		getChannels();
+			std::map<int, ClientIRC*>	getClients();
+			
 			bool start();
 			bool stop();
 			void execute();

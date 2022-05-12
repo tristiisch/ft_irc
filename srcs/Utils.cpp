@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 18:34:56 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 02:06:48 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 19:56:03 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace ft {
 		std::string tmp;
 		size_t pos = 0;
 
-		while ((pos = str.find(delimt)) != std::string::npos)
+		while ((pos = str.find(delimt)) != std::string::npos && str[0] != ':') // À vérifier
 		{
 			tmp = str.substr(0, pos - 1);
 			vector.push_back(tmp);

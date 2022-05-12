@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 05:19:12 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 21:11:51 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,12 @@
 #include "../../includes/commands/QuitCommand.hpp"
 #include "../../includes/commands/CapCommand.hpp"
 #include "../../includes/commands/NickCommand.hpp"
+#include "../../includes/commands/KickCommand.hpp"
+#include "../../includes/commands/PrivateMsgCommand.hpp"
+#include "../../includes/commands/NoticeCommand.hpp"
 #include "../../includes/commands/PassCommand.hpp"
 #include "../../includes/commands/CommandContext.hpp"
+
 #include <vector>
 
 namespace ft {
@@ -28,6 +32,10 @@ namespace ft {
 		commands.push_back(new CapCommand());
 		commands.push_back(new NickCommand());
 		commands.push_back(new PassCommand());
+		commands.push_back(new KickCommand());
+		commands.push_back(new PrivateMsgCommand());
+		commands.push_back(new NoticeCommand());
+
 	}
 			
 	CommandManager &CommandManager::operator=(CommandManager const &instance) {

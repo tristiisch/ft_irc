@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/12 17:32:23 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 19:03:12 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,14 +156,14 @@ namespace ft
 		ite->banned = 0;
 	}
 
-	void	ChannelIRC::sendMessage(ClientIRC *const &sender, std::string const &message)
+	void	ChannelIRC::sendMessageToAll(ClientIRC *const &sender, std::string const &message)
 	{
 		std::vector<cl_info>::iterator ite = _client_list.begin();
-		std::string channel_msg = "#" + this->_name + " :" + message + MSG_DELIMITER;
+		std::string channel_msg = message + MSG_DELIMITER;
 		while(ite != _client_list.end())
 		{
 			if (ite->banned == 0 && ite->user != sender)
-				send(ite->user->getSocket(), channel_msg.c_str(), channel_msg.length(), 0); // a voir encore.
+				sender->sendMessage(ite->user, channel_msg.c_str());
 			ite++;
 		}
 	}
