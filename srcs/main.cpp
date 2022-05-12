@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:53:17 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 20:23:15 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 05:37:09 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static ft::ServerIRC server;
 
 void close_handler(int signal) {
 	(void)signal;
+	std::cout << C_RED << "Try to force kill the server..." << C_RESET << std::endl;
 	server.stop();
 }
 
@@ -31,7 +32,7 @@ int main(const int ac, const char *av[]) {
 
 	if (!servConfig.set(ac, av))
 		return 1;
-	server.setIP("0.0.0.0");
+	servConfig.setIP("0.0.0.0");
 
 	server.setConfig(servConfig);
 
@@ -42,6 +43,7 @@ int main(const int ac, const char *av[]) {
 	// while (i--) {
 	server.execute();
 	// }
+	std::cout << C_BLUE << "Task execute has ending." << C_RESET << std::endl;
 	if (server.isEnabled())
 		server.stop();
 

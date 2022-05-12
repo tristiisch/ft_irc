@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 02:35:13 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 05:19:12 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 
 namespace ft {
 	
-	CommandManager::CommandManager() {}
+	// CommandManager::CommandManager() {}
 
-	CommandManager::CommandManager(ServerIRC& server) : server(server) {
+	CommandManager::CommandManager(ServerIRC *server) : server(server) {
 		commands.push_back(new QuitCommand());
 		commands.push_back(new CapCommand());
 		commands.push_back(new NickCommand());
@@ -84,7 +84,7 @@ namespace ft {
 		std::cout << C_BLUE << "Unknown message receive from " << *client << ": '" C_YELLOW << fullCmd << C_BLUE << "'." << C_RESET << std::endl;
 	}
 
-	const ServerIRC& CommandManager::getServer() const {
+	const ServerIRC* CommandManager::getServer() const {
 		return this->server;
 	}
 }

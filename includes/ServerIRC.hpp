@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 04:06:06 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 05:10:03 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ namespace ft {
 			bool stop();
 			void execute();
 			ClientIRC* acceptClient();
-			bool readClient(ClientIRC *client);
+			bool readClient(ClientIRC *client, SOCKET& socket);
 			void deleteClient(ClientIRC *client);
 			bool isGoodPassword(std::string& password);
 

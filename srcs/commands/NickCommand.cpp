@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:31:41 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 02:42:17 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 05:21:51 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ namespace ft {
 
 	void NickCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
-		ServerIRC server = cmd.getServer();
+		// ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
 		std::string arg;
 

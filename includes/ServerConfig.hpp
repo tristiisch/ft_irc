@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:10 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/08 18:33:41 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 04:42:44 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ namespace ft {
 
 		private:
 			int port;
-			std::string ip;
 			std::string password;
+			std::string ip;
 
 		public :
 			ServerConfig();

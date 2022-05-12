@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 02:16:49 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 02:45:05 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 05:20:00 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ namespace ft {
 	class CommandContext {
 
 		private:
-			ServerIRC server;
+			ServerIRC *server;
 			ClientIRC *client;
 			std::string fullcmd;
 			std::string cmd;
@@ -30,7 +30,7 @@ namespace ft {
 
 		public:
 			CommandContext();
-			CommandContext(ServerIRC &server, ClientIRC *client, std::string &fullcmd, std::string &cmd, std::vector<std::string> &args) : server(server), client(client),
+			CommandContext(ServerIRC *server, ClientIRC *client, std::string &fullcmd, std::string &cmd, std::vector<std::string> &args) : server(server), client(client),
 				fullcmd(fullcmd), cmd(cmd), args(args) {}
 
 			CommandContext &operator=(CommandContext const &instance) {
@@ -43,7 +43,7 @@ namespace ft {
 			}
 			~CommandContext() {}
 
-			ServerIRC& getServer() {
+			ServerIRC* getServer() {
 				return this->server;
 			}
 			ClientIRC* getClient() {
