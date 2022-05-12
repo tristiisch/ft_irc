@@ -6,13 +6,23 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 16:47:58 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/08 18:33:42 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ServerConfig.hpp"
 
 namespace ft {
+
+	ServerConfig::ServerConfig() : port(-1), password(""), ip("0.0.0.0") {}
+
+	ServerConfig::ServerConfig(int& port, std::string& password) : port(port), password(password), ip("0.0.0.0") {}
+
+	ServerConfig& ServerConfig::operator=(const ServerConfig& x) {
+		this->setPassword(x.getPassword());
+		this->setPort(x.getPort());
+		return *this;
+	}
 
 	bool ServerConfig::set(const int ac, const char *av[]) {
 		if (ac < 3) {
@@ -50,7 +60,17 @@ namespace ft {
 	const std::string& ServerConfig::getPassword() const {
 		return this->password;
 	}
+
 	const int& ServerConfig::getPort() const {
 		return this->port;
+	}
+
+	bool ServerConfig::setIP(const std::string& ip) {
+		this->ip = ip;
+		return true;
+	}
+
+	const std::string& ServerConfig::getIP() const {
+		return this->ip;
 	}
 }

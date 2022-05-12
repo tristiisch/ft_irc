@@ -3,16 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   ClientIRC.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 17:30:17 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/12 17:32:07 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ClientIRC.hpp"
 
 namespace ft {
+
+	ClientIRC::ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick(""), authorized(false) {}
+
+	ClientIRC& ClientIRC::operator=(const ClientIRC& x) {
+		this->id = x.getId();
+		this->sockAddr = x.getSockAddr();
+		this->clientSocket = x.getSocket();
+		return *this;
+	}
+
+	ClientIRC::~ClientIRC() {}
+
+	bool ClientIRC::closeSocket() {
+		if (this->clientSocket <= 0)
+			return false;
+		closesocket(this->clientSocket);
+		return true;
+	}
 
 	const int& ClientIRC::getId() const {
 		return this->id;
@@ -38,6 +56,14 @@ namespace ft {
 		return this->nick;
 	}
 
+	const bool& ClientIRC::isAuthorized() const {
+		return this->authorized;
+	}
+
+	pollfd& ClientIRC::getPoll() {
+		return this->poll;
+	}
+
 	void ClientIRC::setSocket(SOCKET& clientSocket) {
 		this->clientSocket = clientSocket;
 	}
@@ -46,33 +72,12 @@ namespace ft {
 		this->nick = nick;
 	}
 
-	void ClientIRC::executeCmds(std::string bufferCmds) {
-		std::string token1;
-		std::string delim = "\n";
-		size_t pos = 0;
-			while ((pos = bufferCmds.find(delim)) != std::string::npos)
-		{
-			token1 = bufferCmds.substr(0, pos - 1);
-			executeCmd(token1);
-			bufferCmds.erase(0, pos + delim.length());
-		}
-		if (!bufferCmds.empty())
-			executeCmd(token1);
+	void ClientIRC::setAuthorized(const bool& authorized) {
+		this->authorized = authorized;
 	}
 
-	void ClientIRC::executeCmd(std::string fullCmd) {
-		size_t index = fullCmd.find(" ");
-		if (index == std::string::npos)
-			return;
-
-		std::string cmd = fullCmd.substr(0, index);
-		std::string args = fullCmd.substr(index + 1, fullCmd.size());
-		std::cout << C_BLUE << "Message receive from " << getSockAddr() << ": '" C_YELLOW << cmd << " " << args << C_BLUE << "'." << C_RESET << std::endl;
-
-		if (cmd == "NICK") {
-			this->setNick(args);
-			std::cout << C_BLUE << "Nick of " << getSockAddr() << " is now '" C_YELLOW << args << C_BLUE << "'." << C_RESET << std::endl;
-		} //else if ()
+	void ClientIRC::setPoll(pollfd& poll) {
+		this->poll = poll;
 	}
 
 	void ClientIRC::sendMessage(ClientIRC *const &to, std::string const &message)\

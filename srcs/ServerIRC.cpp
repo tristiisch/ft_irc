@@ -6,25 +6,35 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 19:01:32 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 06:45:43 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ServerIRC.hpp"
 #include "../includes/ClientIRC.hpp"
+#include "../includes/commands/ClientCommand.hpp"
+#include "../includes/commands/QuitCommand.hpp"
+#include "../includes/commands/CapCommand.hpp"
+#include "../includes/commands/NickCommand.hpp"
+#include "../includes/commands/PassCommand.hpp"
+#include "../includes/commands/CommandManager.hpp"
+#include "../includes/commands/CommandContext.hpp"
+#include <cstddef>
 
 namespace ft {
 
 	ServerIRC::ServerIRC() : enabled(false), clientIdCounter(1) {
-		pfds[0].fd = STDIN_FILENO;
+	/*	pfds[0].fd = STDIN_FILENO;
 		pfds[0].events = POLLIN;
 		//pfds[1].fd = serverSocket;
-		pfds[1].events = POLLIN | POLLPRI | POLLHUP | POLLERR;
+		pfds[1].events = POLLIN | POLLPRI | POLLHUP | POLLERR;*/
+		this->commandManager = new CommandManager(this);
 	}
 
 	ServerIRC::~ServerIRC() {
 		if (enabled)
 			stop();
+		delete this->commandManager;
 	}
 
 	ServerIRC& ServerIRC::operator=(const ServerIRC& x) {
@@ -36,12 +46,14 @@ namespace ft {
 		SOCKADDR_IN sin;
 		int ret;
 
-		sin.sin_addr.s_addr = inet_addr("0.0.0.0");
+		sin.sin_addr.s_addr = inet_addr(config.getIP().c_str());
 		sin.sin_family = PF_INET;
 		sin.sin_port = htons(config.getPort());
 
-		pfds[1].fd = socket(PF_INET, SOCK_STREAM, 0);
-		serverSocket = pfds[1].fd;
+		pfds.push_back(pollfd());
+		pfds.back().events = POLLIN;
+		pfds.back().fd = socket(PF_INET, SOCK_STREAM, 0);
+		serverSocket = pfds.back().fd;
 		if (ft::checkError(serverSocket, "Error with socket creation", (char*) NULL))
 			return false;
 		this->enabled = true;
@@ -67,134 +79,184 @@ namespace ft {
 		return true;
 	}
 
-	void ServerIRC::task() {
-		ClientIRC *client;
-		SOCKADDR_IN csin;
-    	SOCKET clientSocket;
-		socklen_t sinsize = sizeof(csin);
-		int ret, receiveByte;
-		char msg[] = "Hello world!\r\n";
-
-		if (!isEnabled())
-			exit(0);
-
-		std::cout << C_BLUE << "Poll start." << C_RESET << std::endl;
-		while ((ret = poll(pfds, 2, 1 * 1000)) != -1) { 
-			//std::cout << C_YELLOW << "FD " << pfds[1].fd << " Event " << pfds[1].revents << " receive. Poll ret " << ret << C_RESET << std::endl;
-			//std::cout << C_BLUE << "Polllllllllll." << C_RESET << std::endl;
-			if (pfds[0].revents & POLLIN) {
-				char *receiveMsg;
-				receiveMsg = (char*) std::calloc(512, 1);
-				receiveByte = read(clientSocket, receiveMsg, sizeof(receiveMsg)); // This will block current thread
-				if (ft::checkError(receiveByte, "Error while read connection", &csin)) {
-					closesocket(clientSocket);
-					return;
-				}
-				std::cout << C_BLUE << "STDIN receive: '" C_YELLOW << receiveMsg << C_BLUE << "'." << C_RESET << std::endl;
-				free(receiveMsg);
-				// read data from stdin and send it over the socket
-				//read(STDIN_FILENO, ...);
-				//std::cout << C_BLUE << "msg receive." << C_RESET << std::endl;
-			
-				// ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
-				// if (!ft::checkError(ret, "Error while sending Hello world msg to ", &csin)) {
-				// 	std::cout << C_BLUE << "A client logged in, we said 'Hello world'." << C_RESET << std::endl;
-				// }
-			}
-			if (pfds[1].revents & POLLIN) {
-				std::cout << C_BLUE << "POLLIN receive." << C_RESET << std::endl;
-				clientSocket = accept(serverSocket, (SOCKADDR *)&csin, &sinsize); // This will block current thread
-				if (ft::checkError(clientSocket, "Error while accept connection", &csin)) {
-					closesocket(clientSocket);
-					return;
-				}
-				std::cout << C_BLUE << "A client " << csin << " logged in." << C_RESET << std::endl;
-				client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
-				clients.insert(std::pair<int, ClientIRC*>(client->getId(), client));
-
-				// chat data received
-				//recv(socket, ...)
-				while (true) {
-					char *receiveMsg;
-					receiveMsg = (char*) std::calloc(512, 1);
-					receiveByte = recv(clientSocket, receiveMsg, 512, 0); // This will block current thread
-					if (receiveByte == 0)
-						break;
-					if (ft::checkError(receiveByte, "Error while read connection", &csin)) {
-						closesocket(clientSocket);
-						return;
-					}
-
-					// VALGRIND: Conditional jump or move depends on uninitialised value(s)
-					//std::cout << C_BLUE << "Message receive from " << csin << ": '" C_YELLOW << receiveMsg << C_BLUE << "'." << C_RESET << std::endl;
-					client->executeCmd(receiveMsg);
-					free(receiveMsg);
-				}
-			}
-			if (pfds[1].revents & POLLPRI) {
-				std::cout << C_BLUE << "POLLRI receive." << C_RESET << std::endl;
-			}
-			if (pfds[1].revents & POLLNVAL) {
-				std::cout << C_BLUE << "Invalid request from " << C_RESET << std::endl;
-				break;
-			}
-			if (pfds[1].revents & (POLLERR | POLLHUP)) {
-				std::cout << C_RED << "sock close." << C_RESET << std::endl;
-				// socket was closed
-			}
-		}
-
-		std::cout << C_BLUE << "Poll end." << C_RESET << std::endl;
-
-
-		/*pollfd pollfd;
-		pollfd.fd = serverSocket;
-		pollfd.events = POLLIN;
-		ret = poll(&pollfd, nfds++, 60);
-		ft::checkError(ret, "Error while using poll ", (char*) NULL);
-		std::cout << "poll " << pollfd.revents << std::endl;*/
-
-		/*while (true) {
-			char *receiveMsg;
-			receiveMsg = (char*) std::calloc(512, 1);
-			receiveByte = recv(clientSocket, receiveMsg, 512, 0); // This will block current thread
-			if (receiveByte == 0)
-				break;
-			if (ft::checkError(receiveByte, "Error while read connection", &csin)) {
-				closesocket(clientSocket);
-				return;
-			}
-
-			// VALGRIND: Conditional jump or move depends on uninitialised value(s)
-			//std::cout << C_BLUE << "Message receive from " << csin << ": '" C_YELLOW << receiveMsg << C_BLUE << "'." << C_RESET << std::endl;
-			client->executeCmd(receiveMsg);
-			free(receiveMsg);
-		}*/
-
-		/*ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
-		if (!ft::checkError(ret, "Error while sending Hello world msg to ", &csin)) {
-			std::cout << C_BLUE << "'Hello world' >> " << csin << "." << C_RESET << std::endl;
-		}*/
-		// clients.insert(std::pair<int, ClientIRC*>(client->getId(), client));
-		//closesocket(clientSocket);
-	}
-
 	bool ServerIRC::stop() {
+		ClientIRC *client;
+	
 		if (!this->enabled) {
 			std::cerr << WARN << "Can't stop server IRC, he is not enabled." << C_RESET << std::endl;
 			return false;
 		}
-        //std::for_each(clients.begin(), clients.end(), &ServerIRC::deleteClient);
-		std::map<int, ClientIRC*>::iterator it;
-		for (it = clients.begin(); it != clients.end(); it++) {
-			//deleteClient(it->second);
-			delete it->second;
-		}
-		clients.clear();
-		closesocket(serverSocket);
 		this->enabled = false;
+
+		if (!clients.empty()) {
+			for (std::map<int, ClientIRC*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+				client = it->second;
+				// client->closeSocket(); -> heap-use-after-free
+				// delete client;
+				// clients.erase(it);
+
+				if (!client) {
+					std::cout << WARN << "'map<fd, ClientIRC*> clients' contains uninitialized instance of client." << C_RESET << std::endl;
+					// clients.erase(it);
+					continue;
+				}
+				deleteClient(client);
+			}
+			clients.clear();
+		}
+		if (!pfds.empty()) {
+			/*for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) {
+				pfds.erase(it);
+				// delete *it;
+			}*/
+			pfds.clear();
+		}
+		closesocket(serverSocket);
 		std::cout << C_RED << "ft_irc stopped" << C_RESET << std::endl;
 		return true;
+	}
+
+	void ServerIRC::execute() {
+		int ret;
+
+		if (!isEnabled())
+			exit(0);
+
+		std::cout << C_BLUE << "Poll start with " << pfds.size() << ". " << C_RESET << std::endl;
+		while (this->enabled && ((ret = poll(&(pfds[0]), pfds.size(), 1 * 1000)) != -1)) {
+			if (pfds[0].revents & POLLIN)
+				acceptClient(); // serverSocket receive connection
+			else if (pfds.size() > 1) {
+				// std::cout << C_GREEN << "Poll size " << pfds.size() << "." << C_RESET << std::endl;
+				pollfd poll;
+				for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) { // clientsSockets receive connection
+					// std::cout << C_GREEN << "POLL FOR " << pfds.size() << "." << C_RESET << std::endl;
+					if (pfds[0].fd == it->fd)
+						continue;
+					poll = *it;
+					if (clients.find(poll.fd) == clients.end()) {
+						std::cout << C_BLUE << "Poll of socket " << poll.fd << " deleted." << C_RESET << std::endl;
+						pfds.erase(it++);
+						break;
+					}
+					if (poll.revents & POLLIN) {
+						std::cout << C_BLUE << "Socket " << poll.fd << " > POLLIN receive." << C_RESET << std::endl;
+						readClient(this->clients[poll.fd], poll.fd);
+						break;
+					}
+					if (poll.revents & POLLPRI) {
+						std::cout << C_BLUE << "Socket " << poll.fd << " > POLLRI receive." << C_RESET << std::endl;
+					}
+					// if (poll.revents & POLLNVAL) {
+					// 	std::cout << C_BLUE << "Socket " << poll.fd <<  " > Invalid request from" << C_RESET << std::endl;
+					// }
+					if (poll.revents & (POLLERR | POLLHUP)) {
+						// socket was closed
+						std::cout << C_RED << "Socket " << poll.fd <<  " > close." << C_RESET << std::endl;
+						// deleteClient(this->clients[(*it).fd]);
+					}
+				}
+			}
+			if (DEBUG) {
+				std::cout << C_BLUE << "next POOL ret : " << ret << " size : " << pfds.size() << " isEnable : " << this->enabled << C_RESET << std::endl;
+			}
+		}
+		if (ret == -1) {
+			// if (errno == EINTR) {
+			// 	exit(1);
+			// }
+			ft::checkError(ret, "Error while using POLL", &errno);
+		}
+		std::cout << C_BLUE << "Poll end. " << C_RESET << std::endl;
+	}
+
+	ClientIRC *ServerIRC::acceptClient() {
+		char msg[] = "Hello world!\r\n";
+		ClientIRC *client;
+		SOCKADDR_IN csin;
+    	SOCKET clientSocket;
+		socklen_t sinsize = sizeof(csin);
+		int ret;
+
+		clientSocket = accept(serverSocket, (SOCKADDR *)&csin, &sinsize); // This will block current thread
+		if (ft::checkError(clientSocket, "Error while accept connection", &csin)) {
+			closesocket(clientSocket);
+			return NULL;
+		}
+		std::cout << C_BLUE << "A client " << csin << " fd:" << clientSocket << " logged in." << C_RESET << std::endl;
+		client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
+		clients.insert(std::pair<int, ClientIRC*>(clientSocket, client));
+
+		pfds.push_back(pollfd());
+		pfds.back().events = POLLIN;
+		pfds.back().fd = clientSocket;
+		client->setPoll(pfds.back());
+
+		ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
+		ft::checkError(ret, "Error while sending Hello world msg to ", &this->clients[clientSocket]);
+
+		/*ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
+		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
+			return;
+		}*/
+		return client;
+	}
+
+	bool ServerIRC::readClient(ClientIRC *client, SOCKET &socket) {
+
+		int receiveByte;
+		char *receiveMsg;
+
+		if (!client) {
+			std::cout << WARN << "Unable to read null client with socket " << socket << "." << std::endl;
+			return false;
+		}
+		receiveMsg = (char*) std::calloc(512, 1);
+		receiveByte = recv(socket, receiveMsg, 512, 0);
+		if (receiveByte == 0) {
+			free(receiveMsg);
+			return false;
+		}
+		if (receiveByte == -1 && errno == EAGAIN) {
+			free(receiveMsg);
+			return false;
+		}
+		if (ft::checkError(receiveByte, "Error while read socket", client)) {
+			// std::cout << C_RED << errno << C_RESET << std::endl;
+			// closesocket(clientSocket);
+			free(receiveMsg);
+			return false;
+		}
+		this->commandManager->executeCmds(client, receiveMsg);
+		free(receiveMsg);
+		return true;
+	}
+
+	void ServerIRC::deleteClient(ClientIRC *client) {
+		if (!pfds.empty()) {
+			for (std::vector<pollfd>::iterator it = pfds.begin() + 1; it != pfds.end(); ++it) {
+				if (it->fd == client->getPoll().fd) {
+					pfds.erase(it);
+					break;
+				}
+			}
+		} else {
+			std::cout << WARN << "Unable to find clients poll." << std::endl;
+		}
+		std::map<int, ClientIRC*>::iterator it = clients.find(client->getSocket());
+		if (it != clients.end()) {
+			// std::cout << "Delete client : " << *it->second << std::endl;
+			clients.erase(it);
+		}
+		client->closeSocket();
+		delete client;
+	}
+
+	bool ServerIRC::isGoodPassword(std::string& password) {
+		std::string serverPassword = this->getConfig().getPassword();
+		if (serverPassword.empty() || serverPassword == password) 
+			return true;
+		return false;
 	}
 
 	int ServerIRC::getNewClientId() {

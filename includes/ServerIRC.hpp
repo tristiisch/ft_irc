@@ -6,18 +6,22 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/07 16:53:37 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 06:39:17 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #pragma once
 
 #include "ft_irc.hpp"
 #include "ServerConfig.hpp"
 #include "ClientIRC.hpp"
+// #include "commands/CommandManager.hpp"
+
 
 namespace ft {
+
+	class CommandManager;
+	// class ServerIRC;
 	class ServerIRC {
 
 		private:
@@ -26,29 +30,25 @@ namespace ft {
 			SOCKET serverSocket;
 			std::map<int, ClientIRC*> clients;
 			int clientIdCounter; // Last Client Id
-			pollfd pfds[2];
+			std::vector<pollfd> pfds;
+			CommandManager *commandManager;
 
 		public :
 			ServerIRC();
-
-			//ServerIRC(ServerConfig& config) : enabled(false), config(config), nfds(1) {}
-
 			ServerIRC& operator=(const ServerIRC& x);
-
 			~ServerIRC();
 
-			const ServerConfig& getConfig() const;
-
-			bool isEnabled() const;
-
-			bool setConfig(const ServerConfig& config);
-
 			bool start();
-
-			void task();
-
 			bool stop();
+			void execute();
+			ClientIRC* acceptClient();
+			bool readClient(ClientIRC *client, SOCKET& socket);
+			void deleteClient(ClientIRC *client);
+			bool isGoodPassword(std::string& password);
 
+			const ServerConfig& getConfig() const;
+			bool isEnabled() const;
+			bool setConfig(const ServerConfig& config);
 			int getNewClientId();
 	};
 }

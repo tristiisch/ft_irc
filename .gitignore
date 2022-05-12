@@ -2,3 +2,6 @@
 bircd/bircd
 ircserv
 output
+.vscode
+*.out
+*.DS_Store

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/11 19:10:46 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/12 06:30:22 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,11 @@ typedef struct in_addr IN_ADDR;
 
 namespace ft {
 
-	inline std::ostream &operator<<(std::ostream &outputFile, const SOCKADDR_IN &csin)
-	{
-		outputFile << inet_ntoa(csin.sin_addr) << ":" << csin.sin_port;
-		return outputFile;
-	}
+	std::string join(std::vector<std::string> &vector, std::string delim);
+	void split(std::string str, std::string delimt, void (*f)(std::string));
+	std::vector<std::string> split(std::string str, std::string delimt);
+	
+	std::ostream &operator<<(std::ostream &outputFile, const SOCKADDR_IN &csin);
 
 	template <class T>
 	std::string toString(T obj) {
@@ -108,19 +108,4 @@ namespace ft {
 		}
 		return 0;
 	}
-
-	inline void split(std::string str, std::string delimt, void (*f)(std::string)) {
-		std::string tmp;
-		size_t pos = 0;
-
-		while ((pos = str.find(delimt)) != std::string::npos)
-		{
-			tmp = str.substr(0, pos - 1);
-			f(tmp);
-			str.erase(0, pos + delimt.length());
-		}
-		if (!str.empty())
-			f(str);
-	}
-
 }

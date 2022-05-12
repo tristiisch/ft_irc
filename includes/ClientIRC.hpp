@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientIRC.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 15:26:55 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 17:31:57 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,47 +22,34 @@ namespace ft {
 			SOCKADDR_IN sockAddr;
 			SOCKET clientSocket;
 			std::string nick;
+			bool authorized;
+			pollfd poll;
 
-		public :
 			ClientIRC() : id(-1) {}
 
-			ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick("") {}
+		public :
 
-			ClientIRC& operator=(const ClientIRC& x)
-			{
-				this->id = x.getId();
-				this->sockAddr = x.getSockAddr();
-				this->clientSocket = x.getSocket();
-				return *this;
-			}
+			ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket);
+			ClientIRC& operator=(const ClientIRC& x);
+			~ClientIRC();
 
-			~ClientIRC()
-			{
-				closesocket(clientSocket);
-			}
-
+			bool closeSocket();
 			const int& getId() const;
-
 			const in_port_t& getPort() const;
-
 			const in_addr& getAddress() const;
-
 			const SOCKADDR_IN& getSockAddr() const;
-
 			const SOCKET& getSocket() const;
-
 			const std::string& getNick() const;
-
+			const bool& isAuthorized() const;
+			pollfd& getPoll();
 			void setSocket(SOCKET& clientSocket);
-
 			void setNick(std::string& nick);
-
-			void executeCmds(std::string bufferCmds);
-
-			void executeCmd(std::string fullCmd);
+			void setAuthorized(const bool& authorized);
+			void setPoll(pollfd& poll);
 
 			void sendMessage(ClientIRC *const &to, std::string const &message);
-
 			void recieveMessage(std::string const &message);
 	};
+
+	std::ostream &operator<<(std::ostream &outputFile, const ClientIRC &client);
 }

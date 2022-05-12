@@ -1,3 +1,0 @@
-[submodule "weechat"]
-	path = weechat
-	url = https://github.com/weechat/weechat.git
