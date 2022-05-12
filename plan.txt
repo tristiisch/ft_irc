@@ -2,10 +2,9 @@
 Cheminement IRC
 
 1. Créer un socket
-2. Relier le socket aune IP/port
+2. Relier le socket a une IP/port
 3. Marquer le socket sur lequel écouter
 4. Accepter un "appel"
 5. Fermer le socket d'écoute
 6. Pendant la reception - afficher le message, echo message
 7 .fermer le socket
-

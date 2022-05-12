@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 00:48:16 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 06:30:22 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 
-#include <winsock2.h> 
+#include <winsock2.h>
 
 #elif defined (linux) || defined(_POSIX_VERSION) || __unix__  || __linux__ || defined(_POSIX_VERSION) || __APPLE__
 
@@ -64,6 +64,12 @@ typedef struct in_addr IN_ADDR;
 
 #define ERROR C_RED << "ERROR > "
 #define WARN C_YELLOW << "WARN > "
+
+
+#define MSG_DELIMITER "\r\n"
+//il faut encore faire des define sur les messages d'erreur.
+
+
 
 #ifndef DEBUG
 # define DEBUG 0
