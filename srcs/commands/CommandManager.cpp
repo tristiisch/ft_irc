@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 19:15:18 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 05:42:43 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,46 +42,62 @@ namespace ft {
 		}
 	}
 
-	void CommandManager::executeCmds(ClientIRC *client, std::string bufferCmds) {
-		std::string token1;
-		std::string delim = client->getDelimitator();
+	void CommandManager::receiveCmd(ClientIRC *client, std::string bufferCmds) {
+		std::string str;
+		std::string delim = client->getDelimiter();
 		size_t pos = 0;
 
+		if (DEBUG_MODE) {
+			std::stringstream ss;
+			ss << DEBUG << *client << " send '" << bufferCmds << "'" << C_RESET << std::endl;
+			logAndPrint(ss.str());
+		}
 		while ((pos = bufferCmds.find(delim)) != std::string::npos) {
-			token1 = bufferCmds.substr(0, pos);
-			executeCmd(client, token1);
+			str = bufferCmds.substr(0, pos);
+			executeCmd(client, str);
 			bufferCmds.erase(0, pos + delim.length());
 		}
 		if (!bufferCmds.empty())
-			executeCmd(client, token1);
+			executeCmd(client, bufferCmds);
 	}
 
-	void CommandManager::executeCmd(ClientIRC *client, std::string& fullCmd) {
+	bool CommandManager::executeCmd(ClientIRC *client, std::string& fullCmd) {
+		std::string cmd, args;
+		std::vector<std::string> argsArray;
 		size_t index = fullCmd.find(" ");
-		if (index == std::string::npos)
-			return;
 
-		std::string cmd = fullCmd.substr(0, index);
-		std::string args = fullCmd.substr(index + 1, fullCmd.size());
-		std::vector<std::string> argsArray = split(args, " ");
+		logCommand(client, fullCmd);
+		if (index != std::string::npos) {
+			cmd = fullCmd.substr(0, index);
+			args = fullCmd.substr(index + 1, fullCmd.size());
+			argsArray = split(args, " ");
+		} else {
+			cmd = fullCmd;
+		}
 
 		for (std::vector<ClientCommand*>::const_iterator it = commands.begin(); it != commands.end(); ++it) {
 			ClientCommand *command = *it;
 			
 			if (command->getName() == cmd) {
 				if (command->isNeededToBeAutorized() && !client->isAuthorized()) {
-					std::cout << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RED << "', he didn't enter the server password." << C_RESET << std::endl;
-					return;
+					std::stringstream ss;
+					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RED << "', he didn't enter the server password." << C_RESET << std::endl;
+					logAndPrint(ss.str());
+					return false;
 				} else if (command->isNeededToBeOperator() && !client->isAuthorized()) {
-					std::cout << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RED << "', he is not operator." << C_RESET << std::endl;
-					return;
+					std::stringstream ss;
+					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RED << "', he is not operator." << C_RESET << std::endl;
+					logAndPrint(ss.str());
+					return false;
 				}
 				CommandContext commandContext(this->server, client, fullCmd, cmd, argsArray);
-				command->execute(commandContext);
-				return;
+				return command->execute(commandContext);
 			}
 		}
-		std::cout << C_BLUE << "Unknown message receive from " << *client << ": '" C_YELLOW << fullCmd << C_BLUE << "'." << C_RESET << std::endl;
+		std::stringstream ss;
+		ss << INFO << "Unknown message receive from " << *client << ": '" C_YELLOW << fullCmd << C_BLUE << "'." << C_RESET << std::endl;
+		logAndPrint(ss.str());
+		return false;
 	}
 
 	const ServerIRC* CommandManager::getServer() const {

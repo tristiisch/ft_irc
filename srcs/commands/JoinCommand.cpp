@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 06:40:09 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 04:23:44 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ namespace ft {
 
 	JoinCommand::~JoinCommand() {}
 
-	void JoinCommand::execute(CommandContext &cmd) const {
+	// In Dev
+	bool JoinCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		// ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
 
 		std::cout << C_BLUE << "Client " << *client << " want to JOIN channel '" << args[0] << "'" << C_RESET << std::endl;
+		return true;
 	}
 
 }

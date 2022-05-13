@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 19:15:51 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 06:40:37 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include "../includes/commands/PassCommand.hpp"
 #include "../includes/commands/CommandManager.hpp"
 #include "../includes/commands/CommandContext.hpp"
-#include <cstddef>
 
 namespace ft {
 
@@ -75,14 +74,18 @@ namespace ft {
 			stop();
 			return false;
 		}*/
-		std::cout << C_GREEN << "ft_irc started on port " << config.getPort() << C_RESET << std::endl;
+		std::stringstream ss;
+		ss << C_GREEN << "ft_irc started on port " << config.getPort() << C_RESET << std::endl;
+		logAndPrint(ss.str());
 		return true;
 	}
 
 	bool ServerIRC::stop() {
 	
 		if (!this->enabled) {
-			std::cerr << WARN << "Can't stop server IRC, he is not enabled." << C_RESET << std::endl;
+			std::stringstream ss;
+			ss << WARN << "Can't stop server IRC, he is not enabled." << C_RESET << std::endl;
+			logAndPrint(ss.str());
 			return false;
 		}
 		this->enabled = false;
@@ -95,7 +98,9 @@ namespace ft {
 				// clients.erase(it);
 
 				if (!client) {
-					std::cout << WARN << "'map<fd, ClientIRC*> clients' contains uninitialized instance of client." << C_RESET << std::endl;
+					std::stringstream ss;
+					ss << WARN << "'map<fd, ClientIRC*> clients' contains uninitialized instance of client." << C_RESET << std::endl;
+					logAndPrint(ss.str());
 					// clients.erase(it);
 					continue;
 				}
@@ -111,7 +116,9 @@ namespace ft {
 			pfds.clear();
 		}
 		closesocket(serverSocket);
-		std::cout << C_RED << "ft_irc stopped" << C_RESET << std::endl;
+		std::stringstream ss;
+		ss << INFO << C_RED << "ft_irc stopped" << C_RESET << std::endl;
+		logAndPrint(ss.str());
 		return true;
 	}
 
@@ -121,7 +128,9 @@ namespace ft {
 		if (!isEnabled())
 			exit(0);
 
-		std::cout << C_BLUE << "Poll start with " << pfds.size() << ". " << C_RESET << std::endl;
+		std::stringstream ss;
+		ss << INFO << "Poll start with " << pfds.size() << " poll open" << C_RESET << std::endl;
+		logAndPrint(ss.str());
 		while (this->enabled && ((ret = poll(&(pfds[0]), pfds.size(), 1 * 1000)) != -1)) {
 			if (pfds[0].revents & POLLIN)
 				acceptClient(); // serverSocket receive connection
@@ -158,9 +167,11 @@ namespace ft {
 					}
 				}
 			}
-			if (DEBUG) {
-				std::cout << C_BLUE << "next POOL ret : " << ret << " size : " << pfds.size() << " isEnable : " << this->enabled << C_RESET << std::endl;
-			}
+			// if (DEBUG_MODE) {
+			// 	std::stringstream ss;
+			// 	ss << DEBUG << "next POOL | last ret : " << ret << " polls open : " << pfds.size() << " isEnabled : " << this->enabled << C_RESET << std::endl;
+			// 	logAndPrint(ss.str());
+			// }
 		}
 		if (ret == -1) {
 			// if (errno == EINTR) {
@@ -168,7 +179,9 @@ namespace ft {
 			// }
 			ft::checkError(ret, "Error while using POLL", &errno);
 		}
-		std::cout << C_BLUE << "Poll end. " << C_RESET << std::endl;
+		std::stringstream ss2;
+		ss2 << INFO << "Poll end" << C_RESET << std::endl;
+		logAndPrint(ss2.str());
 	}
 
 	ClientIRC *ServerIRC::acceptClient() {
@@ -184,12 +197,14 @@ namespace ft {
 			closesocket(clientSocket);
 			return NULL;
 		}
-		std::cout << C_BLUE << "A client " << csin << " fd:" << clientSocket << " logged in." << C_RESET << std::endl;
+		std::stringstream ss;
+		ss << INFO << "A client " << csin << " fd:" << clientSocket << " logged in." << C_RESET << std::endl;
+		logAndPrint(ss.str());
 		client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
 		clients.insert(std::pair<int, ClientIRC*>(clientSocket, client));
 
 		pfds.push_back(pollfd());
-		pfds.back().events = POLLIN;
+		pfds.back().events = POLLIN | POLLPRI;
 		pfds.back().fd = clientSocket;
 		client->setPoll(pfds.back());
 
@@ -204,12 +219,13 @@ namespace ft {
 	}
 
 	bool ServerIRC::readClient(ClientIRC *client, SOCKET &socket) {
-
 		int receiveByte;
 		char *receiveMsg;
 
 		if (!client) {
-			std::cout << WARN << "Unable to read null client with socket " << socket << "." << std::endl;
+			std::stringstream ss;
+			ss << WARN << "Unable to read null client with socket " << socket << C_RESET << std::endl;
+			logAndPrint(ss.str());
 			return false;
 		}
 		receiveMsg = (char*) std::calloc(512, 1);
@@ -223,12 +239,11 @@ namespace ft {
 			return false;
 		}
 		if (ft::checkError(receiveByte, "Error while read socket", client)) {
-			// std::cout << C_RED << errno << C_RESET << std::endl;
-			// closesocket(clientSocket);
 			free(receiveMsg);
+			deleteClient(client);
 			return false;
 		}
-		this->commandManager->executeCmds(client, receiveMsg);
+		this->commandManager->receiveCmd(client, receiveMsg);
 		free(receiveMsg);
 		return true;
 	}
@@ -237,16 +252,27 @@ namespace ft {
 		if (!pfds.empty()) {
 			for (std::vector<pollfd>::iterator it = pfds.begin() + 1; it != pfds.end(); ++it) {
 				if (it->fd == client->getPoll().fd) {
+					if (DEBUG_MODE) {
+						std::stringstream ss;
+						ss << DEBUG << "Delete poll of client : " << it->fd << C_RESET << std::endl;
+						logAndPrint(ss.str());
+					}
 					pfds.erase(it);
 					break;
 				}
 			}
 		} else {
-			std::cout << WARN << "Unable to find clients poll." << std::endl;
+			std::stringstream ss;
+			ss << WARN << "Unable to find clients poll." << C_RESET << std::endl;
+			logAndPrint(ss.str());
 		}
 		std::map<int, ClientIRC*>::iterator it = clients.find(client->getSocket());
 		if (it != clients.end()) {
-			std::cout << "Delete client : " << *it->second << std::endl;
+			if (DEBUG_MODE) {
+				std::stringstream ss;
+				ss << DEBUG << "Delete client : " << *it->second << C_RESET << std::endl;
+				logAndPrint(ss.str());
+			}
 			clients.erase(it);
 		}
 		client->closeSocket();

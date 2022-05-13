@@ -18,15 +18,9 @@ ERROR_ARGS=(''
 GOOD_ARGS="6667 password"
 
 VALGRIND_FLAGS="--leak-check=full --error-exitcode=1 --show-leak-kinds=definite --track-origins=yes"
-DIFF_VERSION=`diff --version | head -n 1 | sed 's/|/ /' | awk '{print $4}' | sed -e 's/\./000/g' -e 's/000/\./1'`
-if [ $(echo "$DIFF_VERSION >= 3.4" | bc -l) == 1 ]; then
-	DIFF_FLAGS="--color"
-else
-	DIFF_FLAGS=""
-fi
 
 function compile {
-	make $1
+	make "$@"
 	if [ $? != 0 ]; then
 		echo -e "\033[0;31mKO : compile error\033[0m"
 		exit 1
@@ -34,8 +28,9 @@ function compile {
 }
 
 function launch {
-	./$EXEC $@
-	PIPE=${PIPESTATUS[0]}
+	./$EXEC $GOOD_ARGS
+	# PIPE=${PIPESTATUS[0]}
+	PIPE=$?
 	if [ $PIPE == 139 ]; then
 		echo -e "\033[0;31mKO : Segmentation fault\033[0m"
 		return $PIPE
@@ -45,19 +40,32 @@ function launch {
 	fi
 }
 
+function launchClients {
+	# if [ ! -z $(pidof ircserv) ]; then
+	# 	exit 1
+	# fi
+	make client
+	for (( i = 1; 5 >= i; i++ ))
+	do
+		printf '\r[⬜] Test client n°%s ...\n' "$i"
+		./client &> /dev/null
+		printf '\r[🟩] Test client n°%s ... done\n' "$i"
+		sleep 5
+	done
+	if [ ! -z $(pidof ircserv) ]; then
+		kill -2 $(pidof ircserv)
+	fi
+}
+
 function memory_check {
 	if command -v valgrind &>/dev/null ; then
-		if ! valgrind $VALGRIND_FLAGS ./$EXEC &> output ; then
-			echo -e "\033[0;31mKO : leaks --------------------------- valgrind result :\033[0m"
-			cat output
-			echo -e "\033[0;31mKO : leaks or bad usage\033[0m"
+		if ! valgrind $VALGRIND_FLAGS ./$EXEC $GOOD_ARGS ; then
+			echo -e "\033[0;31mKO : leaks --------------------------- valgrind result\033[0m"
 			return 1
 		fi
 	elif command -v leaks &>/dev/null ; then
-		if ! leaks -atExit --q -- ./$EXEC &> output ; then
-			echo -e "\033[0;31mKO : leaks --------------------------- leaks result :\033[0m"
-			cat output
-			echo -e "\033[0;31mKO : leaks\033[0m"
+		if ! leaks -atExit --q -- ./$EXEC $GOOD_ARGS; then
+			echo -e "\033[0;31mKO : leaks --------------------------- leaks\033[0m"
 			return 1
 		fi
 	else
@@ -65,7 +73,7 @@ function memory_check {
 	fi
 }
 
-compile $1
+compile kill debug -i CXXFLAGS='-Wall -Wextra -std=c++98 -g3 -fsanitize=address'
 
 OK=1
 # printf '[⬜] Testing bad arguments ...'
@@ -89,26 +97,26 @@ else
 	printf '\r[🟧] Testing bad arguments ... done\n'
 fi
 
-# for goodArg in $GOOD_ARGS
-# do
-	printf '[⬜] Test %s (max 120 sec) ...' "$GOOD_ARGS"
-	timeout 120 ./$EXEC $GOOD_ARGS &> log.txt
-	if [ $? != 0 ]; then
-		OK=0
-		printf '\r[🟥] Test %s return code %d\n' "$GOOD_ARGS" $?
-	elif [ $? == 139 ]; then
-		OK=0
-		printf '\r[🟥] Test %s make a SegFault\n' "$GOOD_ARGS"
-	else
-		printf '\r[🟩] Test %s ... done                                 \n' "$GOOD_ARGS"
-	fi
-# done
-if [ $OK == 1 ]; then
-	printf '\r[🟩] Testing good arguments ... done\n'
+compile debug CXXFLAGS='-Wall -Wextra -std=c++98 -g3'
+
+
+printf '[⬜] Test %s (max 120 sec) ...\n' "$GOOD_ARGS"
+# (timeout 120 ./$EXEC $GOOD_ARGS) & launchClients
+launchClients & launch
+if [ $? != 0 ]; then
+	OK=0
+	printf '[🟥] Test %s return code %d\n' "$GOOD_ARGS" $?
+elif [ $? == 139 ]; then
+	OK=0
+	printf '[🟥] Test %s make a SegFault\n' "$GOOD_ARGS"
 else
-	printf '\r[🟧] Testing good arguments ... done\n'
+	printf '[🟩] Test %s ... done\n' "$GOOD_ARGS"
 fi
 
-#memory_check
+# if [ $OK == 1 ]; then
+# 	printf '\r[🟩] Testing good arguments ... done\n'
+# else
+# 	printf '\r[🟧] Testing good arguments ... done\n'
+# fi
 
 exit $?

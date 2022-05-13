@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 18:53:37 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 05:19:57 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 04:23:24 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ namespace ft {
 
 			// void virtual execute(CommandContext &cmd) const = 0;
 
-			void virtual execute(CommandContext &cmd) const = 0;
+			bool virtual execute(CommandContext &cmd) const = 0;
 
 			std::string getName() const {
 				return this->name;

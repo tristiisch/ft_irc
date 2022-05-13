@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 18:34:56 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 02:06:48 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 06:41:06 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,66 @@ namespace ft {
 			}
 		}
 		return ss.str();
+	}
+	
+
+	void logAndPrint(std::string msg) {
+		std::stringstream ss;
+		std::string str;
+		std::ofstream myfile;
+		std::time_t t = std::time(0);   // get time now
+		std::tm* now = std::localtime(&t);
+		
+		ss << '[' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << "] " << msg;
+		str = ss.str();
+
+		std::cout << str;
+		myfile.open("log.txt", std::fstream::app);
+		myfile << str;
+		myfile.close();
+	}
+
+	void logAndPrint(std::ostream &out, std::string msg) {
+		std::stringstream ss;
+		std::string str;
+		std::ofstream myfile;
+		std::time_t t = std::time(0);   // get time now
+		std::tm* now = std::localtime(&t);
+		
+		ss << '[' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << "] " << msg;
+		str = ss.str();
+
+		out << str;
+		myfile.open("log.txt", std::fstream::app);
+		myfile << str;
+		myfile.close();
+	}
+
+	void log(std::string msg) {
+		std::stringstream ss;
+		std::string str;
+		std::ofstream myfile;
+		std::time_t t = std::time(0);   // get time now
+		std::tm* now = std::localtime(&t);
+		
+		ss << '[' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << "] " << msg;
+		str = ss.str();
+
+		myfile.open("log.txt", std::fstream::app);
+		myfile << str;
+		myfile.close();
+	}
+
+	void logCommand(ClientIRC *client, std::string msg) {
+		std::stringstream ss;
+		std::string str;
+		std::ofstream myfile;
+		
+		ss << *client << " > " << msg << std::endl;
+		str = ss.str();
+
+		myfile.open("commands.txt", std::fstream::app);
+		myfile << str;
+		myfile.close();
 	}
 }

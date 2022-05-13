@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:18:25 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 20:29:01 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 06:04:25 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int main() {
 	char messageEnvoi[LG_MESSAGE]; /* le message de la couche Application ! */
 	char messageRecu[LG_MESSAGE]; /* le message de la couche Application ! */
 	int ecrits, lus; /* nb d’octets ecrits et lus */
-	int retour;
 
 	// Crée un socket de communication
 	descripteurSocket = socket(PF_INET, SOCK_STREAM, 0); // 0 indique que l’on utilisera le protocole par défaut associé à SOCK_STREAM soit TCP

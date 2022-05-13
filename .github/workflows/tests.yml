@@ -55,9 +55,10 @@ jobs:
         shell: bash
 
       - name: Make
-        run: make all
+        run: make
         shell: bash
 
-      - name: Make
-        run: make fclean
+      - name: Start tests
+        run: ./tester.sh
         shell: bash
+        continue-on-error: true

@@ -5,3 +5,6 @@ output
 .vscode
 *.out
 *.DS_Store
+log.txt
+commands.txt
+client

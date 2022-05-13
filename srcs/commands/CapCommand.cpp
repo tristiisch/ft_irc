@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 18:13:18 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 04:25:26 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,23 @@ namespace ft {
 
 	CapCommand::~CapCommand() {}
 
-	void CapCommand::execute(CommandContext &cmd) const {
+	bool CapCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
+		std::string delimiterName;
 		// ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
 
-		std::cout << C_YELLOW << *client << " set the client CAP at '" << join(args, " ") << "'" << C_RESET << std::endl;
-		if (args[0] == "LR")
-			client->setDelimitator("\n");
+		if (args[0].rfind("LS", 0) == 0) {
+			delimiterName = "LS";
+			client->setDelimitator(LF_DELIMITER);
+		} else if (args[0].rfind("CRLF", 0) == 0) {
+			delimiterName = "CRLF";
+			client->setDelimitator(CRLF_DELIMITER);
+		} else {
+			std::cout << C_RED << *client << " try to set UNKNOWN string delimiter (was '" << join(args, " ") << "')" << C_RESET << std::endl;
+		 	return false;
+		}
+		std::cout << C_YELLOW << *client << " set string delimiter at '" << delimiterName << "'" << C_RESET << std::endl;
+		return true;
 	}
-
 }

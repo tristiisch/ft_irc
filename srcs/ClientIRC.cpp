@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 18:15:39 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 06:39:47 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	ClientIRC::ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick(""), authorized(false), delimitator("\r\n") {}
+	ClientIRC::ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick(""), authorized(false), delimiter("\r\n") {}
 
 	ClientIRC& ClientIRC::operator=(const ClientIRC& x) {
 		this->id = x.getId();
@@ -56,8 +56,8 @@ namespace ft {
 		return this->nick;
 	}
 
-	const std::string& ClientIRC::getDelimitator() const {
-		return this->delimitator;
+	const std::string& ClientIRC::getDelimiter() const {
+		return this->delimiter;
 	}
 
 	const bool& ClientIRC::isAuthorized() const {
@@ -84,8 +84,8 @@ namespace ft {
 		this->poll = poll;
 	}
 
-	void ClientIRC::setDelimitator(const std::string& delimitator) {
-		this->delimitator = delimitator;
+	void ClientIRC::setDelimitator(const std::string& Delimiter) {
+		this->delimiter = Delimiter;
 	}
 
 	void ClientIRC::sendMessage(ClientIRC *const &to, std::string const &message)\
@@ -96,7 +96,7 @@ namespace ft {
 
 	void	ClientIRC::recieveMessage(std::string const &message)
 	{
-		std::string msg_for_client = message + MSG_DELIMITER;
+		std::string msg_for_client = message + getDelimiter();
 		send(this->clientSocket, msg_for_client.c_str(), msg_for_client.length(), 0);
 	}
 }

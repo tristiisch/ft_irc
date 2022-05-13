@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:11:55 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 05:21:36 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 04:19:43 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ namespace ft {
 			CommandManager(ServerIRC *server);
 			CommandManager &operator=(CommandManager const &instance);
 			~CommandManager();
-			void executeCmds(ClientIRC *client, std::string bufferCmds);
-			void executeCmd(ClientIRC *client, std::string& fullCmd);
+			void receiveCmd(ClientIRC *client, std::string bufferCmds);
+			bool executeCmd(ClientIRC *client, std::string& fullCmd);
 			const ServerIRC* getServer() const;
 	};
 }
