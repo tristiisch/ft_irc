@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   JoinCommand.cpp                                    :+:      :+:    :+:   */
+/*   KickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 07:41:21 by tglory           ###   ########lyon.fr   */
+/*   Created: 2022/05/12 19:07:51 by alganoun          #+#    #+#             */
+/*   Updated: 2022/05/13 07:38:44 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/commands/JoinCommand.hpp"
+#include "../../includes/commands/KickCommand.hpp"
+	
+namespace ft
+{
+	KickCommand::KickCommand() : ClientCommand("KICK") {}
 
-namespace ft {
+	KickCommand::~KickCommand() {}
 
-	JoinCommand::JoinCommand() : ClientCommand("JOIN") {}
-
-	JoinCommand::~JoinCommand() {}
-
-	bool JoinCommand::execute(CommandContext &cmd) const {
+	bool KickCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
 
-		std::cout << C_BLUE << "Client " << *client << " want to JOIN channel '" << args[0] << "'" << C_RESET << std::endl;
+		std::cout << C_BLUE << "Client " << *client << " want to Kick '" << args[1]
+											<< "'" << "from the channel" <<args[0] <<  C_RESET << std::endl;
 
 		// Si le channel n'existe pas on le crée sinon on ajoute le client channel correspondant
 		std::vector<ChannelIRC>::iterator channel  = server->getChannels().begin();
@@ -31,14 +32,13 @@ namespace ft {
 		{
 			if (channel->getName() == args[0])
 			{	
-				channel->addUser(client);
+				channel->removeUser(client);
 				channel->sendMessageToAll(client, cmd.getFullCmd());
 				return true;
 			}
 			channel++;
 		}
-		ChannelIRC new_channel(args[0].c_str(), client);
+		client->recieveMessage(ERR_NOSUCHCHANNEL(args[0]));
 		return true;
 	}
-
 }

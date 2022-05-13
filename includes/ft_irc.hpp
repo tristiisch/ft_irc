@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 06:40:59 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 07:34:49 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ typedef struct in_addr IN_ADDR;
 #define CRLF_DELIMITER "\r\n"
 //il faut encore faire des define sur les messages d'erreur.
 
+#define ERR_NOSUCHCHANNEL(channel) channel + " :no such channel"
+#define ERR_NOSUCHNICK(nick) nick + " :No such nick/channel"
 
 
 #ifndef DEBUG_MODE

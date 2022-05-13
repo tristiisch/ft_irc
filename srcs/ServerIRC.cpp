@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 07:24:52 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 07:35:49 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,18 @@ namespace ft {
 		this->setConfig(x.getConfig());
 		return *this;
 	}
+
+
+	std::vector<ChannelIRC> ServerIRC::getChannels()
+	{
+		return this->channels;
+	}
+
+	std::map<int, ClientIRC *> ServerIRC::getClients()
+	{
+		return this->clients;
+	}
+
 
 	bool ServerIRC::start() {
 		SOCKADDR_IN sin;

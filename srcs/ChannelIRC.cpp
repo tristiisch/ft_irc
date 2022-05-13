@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/13 04:27:24 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 07:35:44 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,14 +156,14 @@ namespace ft
 		ite->banned = 0;
 	}
 
-	void	ChannelIRC::sendMessage(ClientIRC *const &sender, std::string const &message)
+	void	ChannelIRC::sendMessageToAll(ClientIRC *const &sender, std::string const &message)
 	{
 		std::vector<cl_info>::iterator ite = _client_list.begin();
-		std::string channel_msg = "#" + this->_name + " :" + message + sender->getDelimiter();
+		std::string channel_msg = message + sender->getDelimiter();
 		while(ite != _client_list.end())
 		{
 			if (ite->banned == 0 && ite->user != sender)
-				send(ite->user->getSocket(), channel_msg.c_str(), channel_msg.length(), 0); // a voir encore.
+				sender->sendMessage(ite->user, channel_msg.c_str());
 			ite++;
 		}
 	}

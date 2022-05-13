@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 18:34:56 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 06:41:06 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 07:35:53 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace ft {
 		std::string tmp;
 		size_t pos = 0;
 
-		while ((pos = str.find(delimt)) != std::string::npos)
+		while ((pos = str.find(delimt)) != std::string::npos && str[0] != ':') // À vérifier
 		{
 			tmp = str.substr(0, pos - 1);
 			vector.push_back(tmp);
