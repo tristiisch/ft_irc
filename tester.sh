@@ -17,7 +17,8 @@ ERROR_ARGS=(''
 
 GOOD_ARGS="6667 password"
 
-VALGRIND_FLAGS="--leak-check=full --error-exitcode=1 --show-leak-kinds=definite --track-origins=yes"
+# VALGRIND_FLAGS="--leak-check=full --error-exitcode=1 --show-leak-kinds=definite --track-origins=yes"
+VALGRIND_FLAGS="--error-exitcode=1"
 
 function compile {
 	make "$@"
@@ -50,10 +51,12 @@ function launchClients {
 		printf '\r[⬜] Test client n°%s ...\n' "$i"
 		./client &> /dev/null
 		printf '\r[🟩] Test client n°%s ... done\n' "$i"
-		sleep 5
+		sleep 1
 	done
-	if [ ! -z $(pidof ircserv) ]; then
-		kill -2 $(pidof ircserv)
+	# PID=$(pidof ircserv)
+	PID=$(pidof valgrind.bin)
+	if [ ! -z $PID ]; then
+		kill -2 $PID
 	fi
 }
 
@@ -97,12 +100,13 @@ else
 	printf '\r[🟧] Testing bad arguments ... done\n'
 fi
 
-compile re CXXFLAGS='-Wall -Wextra -std=c++98 -g3'
+compile clean debug CXXFLAGS='-Wall -Wextra -std=c++98 -g3'
 
 
 printf '[⬜] Test %s (max 120 sec) ...\n' "$GOOD_ARGS"
 # (timeout 120 ./$EXEC $GOOD_ARGS) & launchClients
-launchClients & launch
+# launchClients & launch
+launchClients & memory_check
 if [ $? != 0 ]; then
 	OK=0
 	printf '[🟥] Test %s return code %d\n' "$GOOD_ARGS" $?
