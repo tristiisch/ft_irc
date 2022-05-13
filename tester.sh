@@ -97,7 +97,7 @@ else
 	printf '\r[🟧] Testing bad arguments ... done\n'
 fi
 
-compile debug CXXFLAGS='-Wall -Wextra -std=c++98 -g3'
+compile re CXXFLAGS='-Wall -Wextra -std=c++98 -g3'
 
 
 printf '[⬜] Test %s (max 120 sec) ...\n' "$GOOD_ARGS"
