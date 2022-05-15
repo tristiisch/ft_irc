@@ -19,9 +19,11 @@
 #include <stdio.h>
 #include <sstream>
 #include <cstring>
+#include <fstream>
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <ctime>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 
@@ -64,21 +66,29 @@ typedef struct in_addr IN_ADDR;
 
 #define ERROR C_RED << "ERROR > "
 #define WARN C_YELLOW << "WARN > "
+#define INFO C_GREEN << "INFO > "
+#define DEBUG C_BLUE << "DEBUG > "
 
-
-#define MSG_DELIMITER "\r\n"
-
+#define LF_DELIMITER "\n"
+#define CRLF_DELIMITER "\r\n"
 //il faut encore faire des define sur les messages d'erreur.
+
 #define ERR_NOSUCHCHANNEL(channel) channel + " :no such channel"
 #define ERR_NOSUCHNICK(nick) nick + " :No such nick/channel"
 
 
-#ifndef DEBUG
-# define DEBUG 0
+#ifndef DEBUG_MODE
+# define DEBUG_MODE 0
 #endif
 
 namespace ft {
 
+	class ClientIRC;
+
+	void logCommand(ClientIRC *client, std::string msg);
+	void logAndPrint(std::ostream& out, std::string msg);
+	void logAndPrint(std::string msg);
+	void log(std::string msg);
 	std::string join(std::vector<std::string> &vector, std::string delim);
 	void split(std::string str, std::string delimt, void (*f)(std::string));
 	std::vector<std::string> split(std::string str, std::string delimt);
@@ -99,13 +109,15 @@ namespace ft {
 
 	template <class T>
 	int checkError(const int ret, const char *msg, T *arg) {
+		std::stringstream ss;
 		if (ret <= -1) {
-			std::cerr << C_RED;
+			ss << C_RED;
 			if (arg != NULL)
-				std::cerr << msg << " " << toString(*arg) << ": " << std::strerror(errno) << std::endl;
+				ss << msg << " " << toString(*arg) << ": " << std::strerror(errno);
 			else
-				std::cerr << msg << ": " << std::strerror(errno) << std::endl;
-			std::cerr << C_RESET;
+				ss << msg << ": " << std::strerror(errno);
+			ss << C_RESET << std::endl;
+			logAndPrint(std::cerr, ss.str());
 			return errno;
 		}
 		return 0;

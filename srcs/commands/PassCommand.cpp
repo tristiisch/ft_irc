@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:35:35 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 05:20:54 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 04:24:13 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ namespace ft {
 
 	PassCommand::~PassCommand() {}
 
-	void PassCommand::execute(CommandContext &cmd) const {
+	bool PassCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
@@ -29,9 +29,10 @@ namespace ft {
 
 		if (!server->isGoodPassword(clientPassword)) {
 			std::cout << C_RED << "Password '" << clientPassword << "' send by " << *client << " is not server password." << C_RESET << std::endl;
-			return;
+			return false;
 		}
 		client->setAuthorized(true);
 		std::cout << C_YELLOW << "Client " << *client << " has enter good server password." << C_RESET << std::endl;
+		return true;
 	}
 }

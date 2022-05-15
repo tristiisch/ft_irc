@@ -159,7 +159,8 @@ namespace ft
 	void	ChannelIRC::sendMessageToAll(ClientIRC *const &sender, std::string const &message)
 	{
 		std::vector<cl_info>::iterator ite = _client_list.begin();
-		std::string channel_msg = message + MSG_DELIMITER;
+		std::string channel_msg = message + sender->getDelimiter();
+
 		while(ite != _client_list.end())
 		{
 			if (ite->banned == 0 && ite->user != sender)

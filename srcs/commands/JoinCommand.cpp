@@ -18,7 +18,7 @@ namespace ft {
 
 	JoinCommand::~JoinCommand() {}
 
-	void JoinCommand::execute(CommandContext &cmd) const {
+	bool JoinCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
@@ -33,11 +33,13 @@ namespace ft {
 			{	
 				channel->addUser(client);
 				channel->sendMessageToAll(client, cmd.getFullCmd());
-				return;
+				return true;
+
 			}
 			channel++;
 		}
 		ChannelIRC new_channel(args[0].c_str(), client);
+		return true;
 	}
 
 }

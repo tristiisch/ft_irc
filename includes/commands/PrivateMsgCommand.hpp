@@ -22,6 +22,6 @@ namespace ft {
 
 			~PrivateMsgCommand();
 
-			void execute(CommandContext &cmd) const;
+			bool execute(CommandContext &cmd) const;
 	};
 }

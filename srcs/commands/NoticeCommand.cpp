@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NoticeCommand.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 21:08:34 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/12 21:09:15 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/13 07:38:02 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ namespace ft
 
 	NoticeCommand::~NoticeCommand() {}
 
-	void NoticeCommand::execute(CommandContext &cmd) const {
+	bool NoticeCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
@@ -33,7 +33,7 @@ namespace ft
 				if (channel->getName() == args[0])
 				{	
 					channel->sendMessageToAll(client, cmd.getFullCmd());
-					return;
+					return true;
 				}
 				channel++;
 			}
@@ -49,11 +49,12 @@ namespace ft
 				if (user->second->getNick() == args[0])
 				{	
 					client->sendMessage(user->second, cmd.getFullCmd());
-					return;
+					return true;
 				}
 				user++;
 			}
 			client->recieveMessage(ERR_NOSUCHNICK(args[0]));
 		}
+		return true;
 	}
 }

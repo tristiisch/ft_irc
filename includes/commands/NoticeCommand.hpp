@@ -22,6 +22,6 @@ namespace ft {
 
 			~NoticeCommand();
 
-			void execute(CommandContext &cmd) const;
+			bool execute(CommandContext &cmd) const;
 	};
 }

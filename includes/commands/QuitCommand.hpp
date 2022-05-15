@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 18:53:37 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/09 02:36:22 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 04:19:43 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ namespace ft {
 
 			~QuitCommand();
 
-			void execute(CommandContext &cmd) const;
+			bool execute(CommandContext &cmd) const;
 	};
 }

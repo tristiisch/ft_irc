@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   KickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:07:51 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/12 19:26:38 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/13 07:38:44 by tglory           ###   ########lyon.fr   *
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ namespace ft
 
 	KickCommand::~KickCommand() {}
 
-	void KickCommand::execute(CommandContext &cmd) const {
+
+	bool KickCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
@@ -34,10 +35,11 @@ namespace ft
 			{	
 				channel->removeUser(client);
 				channel->sendMessageToAll(client, cmd.getFullCmd());
-				return;
+				return true;
 			}
 			channel++;
 		}
 		client->recieveMessage(ERR_NOSUCHCHANNEL(args[0]));
+		return true;
 	}
 }
