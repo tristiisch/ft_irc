@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 21:11:51 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/15 16:45:36 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@
 #include "../../includes/commands/PrivateMsgCommand.hpp"
 #include "../../includes/commands/NoticeCommand.hpp"
 #include "../../includes/commands/PassCommand.hpp"
+#include "../../includes/commands/UserCommand.hpp"
 #include "../../includes/commands/CommandContext.hpp"
 
 #include <vector>
 
 namespace ft {
-	
+
 	// CommandManager::CommandManager() {}
 
 	CommandManager::CommandManager(ServerIRC *server) : server(server) {
@@ -34,10 +35,11 @@ namespace ft {
 		commands.push_back(new PassCommand());
 		commands.push_back(new KickCommand());
 		commands.push_back(new PrivateMsgCommand());
+		commands.push_back(new UserCommand());
 		commands.push_back(new NoticeCommand());
 
 	}
-			
+
 	CommandManager &CommandManager::operator=(CommandManager const &instance) {
 		this->server = instance.server;
 		this->commands = instance.commands;
@@ -85,7 +87,7 @@ namespace ft {
 
 		for (std::vector<ClientCommand*>::const_iterator it = commands.begin(); it != commands.end(); ++it) {
 			ClientCommand *command = *it;
-			
+
 			if (command->getName() == cmd) {
 				if (command->isNeededToBeAutorized() && !client->isAuthorized()) {
 					std::stringstream ss;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 21:07:20 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/15 19:17:36 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,24 +58,36 @@ typedef struct in_addr IN_ADDR;
 # error "Unknown compiler"
 #endif
 
-#define C_RED "\033[31m"
-#define C_GREEN "\033[32m"
-#define C_YELLOW "\033[33m"
-#define C_BLUE "\033[1;34m"
-#define C_RESET "\033[0m"
+# define C_RED "\033[31m"
+# define C_GREEN "\033[32m"
+# define C_YELLOW "\033[33m"
+# define C_BLUE "\033[1;34m"
+# define C_RESET "\033[0m"
 
-#define ERROR C_RED << "ERROR > "
-#define WARN C_YELLOW << "WARN > "
-#define INFO C_GREEN << "INFO > "
-#define DEBUG C_BLUE << "DEBUG > "
+# define ERROR C_RED << "ERROR > "
+# define WARN C_YELLOW << "WARN > "
+# define INFO C_GREEN << "INFO > "
+# define DEBUG C_BLUE << "DEBUG > "
 
-#define LF_DELIMITER "\n"
-#define CRLF_DELIMITER "\r\n"
+# define LF_DELIMITER "\n"
+# define CRLF_DELIMITER "\r\n"
 //il faut encore faire des define sur les messages d'erreur.
 
-#define ERR_NOSUCHCHANNEL(channel) channel + " :no such channel"
-#define ERR_NOSUCHNICK(nick) nick + " :No such nick/channel"
+#define ERR_NOSUCHCHANNEL(channel)				("403 *" + channel + " :no such channel")
+#define ERR_NOSUCHNICK(nick)					("406 *" + nick + " :No such nick/channel")
+#define ERR_NEEDMOREPARAMS(command)				("461 *" + command + " :Not enough parameters")
+#define ERR_ALREADYREGISTRED					"462 * :Unauthorized command (already registered)"
+#define RPL_WELCOME(nick, username, host)		"001 * Welcome to the Internet Relay Network " +  nick + "!" + username + "@" + host
 
+
+//392    RPL_USERSSTART
+//              ":UserID   Terminal  Host"
+//       393    RPL_USERS
+//              ":<username> <ttyline> <hostname>"
+//       394    RPL_ENDOFUSERS
+//              ":End of users"
+//       395    RPL_NOUSERS
+//              ":Nobody logged in"
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0
@@ -92,7 +104,7 @@ namespace ft {
 	std::string join(std::vector<std::string> &vector, std::string delim);
 	void split(std::string str, std::string delimt, void (*f)(std::string));
 	std::vector<std::string> split(std::string str, std::string delimt);
-	
+
 	std::ostream &operator<<(std::ostream &outputFile, const SOCKADDR_IN &csin);
 
 	template <class T>

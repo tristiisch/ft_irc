@@ -13,7 +13,7 @@
 #pragma once
 
 #include "ft_irc.hpp"
-#include "ServerIRC.hpp"
+#include "ClientIRC.hpp"
 
 namespace ft {
 
@@ -58,8 +58,6 @@ namespace ft {
 			void	unbanUser(ClientIRC *const &to_unban);
 
 			void	sendMessageToAll(ClientIRC *const &sender, std::string const &message);
-
-
 
 	};
 

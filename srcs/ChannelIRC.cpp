@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/12 19:03:12 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/15 14:11:22 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,18 @@ namespace ft
 	ChannelIRC::ChannelIRC() {}
 
 	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client)
-	:	_name(name), 
+	:	_name(name),
 		_client_list(),
 		_size(1),
 		_max_size(42)
 	{
+		std::cout << "Channel \"" << this->_name << "\" created." << std::endl;
 		this->_client_list.push_back(first_client);
 		std::cout << "The " << this->_name << "channel was created by the client n. " << first_client->getId() << std::endl;
 	}
 
 	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client, int const &max_size)
-	:	_name(name), 
+	:	_name(name),
 		_client_list(),
 		_size(1),
 		_max_size(max_size)
@@ -56,7 +57,7 @@ namespace ft
 	}
 
 	ChannelIRC::~ChannelIRC() {}
-	
+
 	std::string	ChannelIRC::getName()
 	{
 		return (this->_name);
@@ -143,7 +144,7 @@ namespace ft
 		}
 		ite->ope = 0;
 	}
-	
+
 	void	ChannelIRC::unbanUser(ClientIRC *const &to_unban)
 	{
 		std::vector<cl_info>::iterator ite  = clientSearch(this->_client_list, to_unban);
@@ -169,10 +170,10 @@ namespace ft
 		}
 	}
 
-	
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	
+
+
 	std::vector<cl_info>::iterator clientSearch
 	(std::vector<cl_info> cl_list, ClientIRC *const &to_search)
 	{
