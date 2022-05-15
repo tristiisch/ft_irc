@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:07:51 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/13 07:38:44 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/13 07:38:44 by tglory           ###   ########lyon.fr   *
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ namespace ft
 	KickCommand::KickCommand() : ClientCommand("KICK") {}
 
 	KickCommand::~KickCommand() {}
+
 
 	bool KickCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();

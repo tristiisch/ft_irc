@@ -33,6 +33,7 @@ namespace ft
 				if (channel->getName() == args[0])
 				{	
 					channel->sendMessageToAll(client, cmd.getFullCmd());
+
 					return true;
 				}
 				channel++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 07:34:49 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/12 21:07:20 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ typedef struct in_addr IN_ADDR;
 #define WARN C_YELLOW << "WARN > "
 #define INFO C_GREEN << "INFO > "
 #define DEBUG C_BLUE << "DEBUG > "
-
 
 #define LF_DELIMITER "\n"
 #define CRLF_DELIMITER "\r\n"
