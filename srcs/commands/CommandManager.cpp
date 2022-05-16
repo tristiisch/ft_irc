@@ -6,7 +6,7 @@
 /*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/15 16:45:36 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/16 19:37:37 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "../../includes/commands/PrivateMsgCommand.hpp"
 #include "../../includes/commands/NoticeCommand.hpp"
 #include "../../includes/commands/PassCommand.hpp"
+#include "../../includes/commands/JoinCommand.hpp"
 #include "../../includes/commands/UserCommand.hpp"
 #include "../../includes/commands/CommandContext.hpp"
 
@@ -34,6 +35,7 @@ namespace ft {
 		commands.push_back(new NickCommand());
 		commands.push_back(new PassCommand());
 		commands.push_back(new KickCommand());
+		commands.push_back(new JoinCommand());
 		commands.push_back(new PrivateMsgCommand());
 		commands.push_back(new UserCommand());
 		commands.push_back(new NoticeCommand());

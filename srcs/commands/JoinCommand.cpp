@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 19:04:50 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/16 23:31:06 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,17 @@ namespace ft {
 		while(channel != server->getChannels().end())
 		{
 			if (channel->getName() == args[0])
-			{	
+			{
 				channel->addUser(client);
-				channel->sendMessageToAll(client, cmd.getFullCmd());
+				client->recieveMessage(RPL_JOIN(client->getNick(), args[0]));
+				channel->sendMessageToAll(client, RPL_JOIN(client->getNick(), args[0]));
 				return true;
-
 			}
 			channel++;
 		}
 		ChannelIRC new_channel(args[0].c_str(), client);
+		server->getChannels().push_back(new_channel);
+		client->recieveMessage(RPL_JOIN(client->getNick(), args[0]));
 		return true;
 	}
 

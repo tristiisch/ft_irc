@@ -6,7 +6,7 @@
 /*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/15 19:17:36 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/16 20:03:08 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +78,7 @@ typedef struct in_addr IN_ADDR;
 #define ERR_NEEDMOREPARAMS(command)				("461 *" + command + " :Not enough parameters")
 #define ERR_ALREADYREGISTRED					"462 * :Unauthorized command (already registered)"
 #define RPL_WELCOME(nick, username, host)		"001 * Welcome to the Internet Relay Network " +  nick + "!" + username + "@" + host
-
-
-//392    RPL_USERSSTART
-//              ":UserID   Terminal  Host"
-//       393    RPL_USERS
-//              ":<username> <ttyline> <hostname>"
-//       394    RPL_ENDOFUSERS
-//              ":End of users"
-//       395    RPL_NOUSERS
-//              ":Nobody logged in"
+#define RPL_JOIN(nick, channel)					":" + nick + " JOIN " + channel
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0
