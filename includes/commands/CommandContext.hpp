@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 02:16:49 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 05:20:00 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/17 02:09:00 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "../ClientIRC.hpp"
 #include "ClientCommand.hpp"
 #include <exception>
+#include <sstream>
 
 namespace ft {
 
@@ -59,9 +60,22 @@ namespace ft {
 				return this->args;
 			}
 			std::string& getArg(size_t index) {
-				if (this->args.size() > index)
-					return this->args.at(index);
-				throw new std::exception();
+				if (this->args.size() <= index)
+					throw new std::exception();
+				return this->args.at(index);
+			}
+			std::string getFromArg(size_t index) {
+				std::stringstream ss;
+
+				if (this->args.size() <= index)
+					throw new std::exception();
+				for (size_t i = index; i < this->args.size(); ++i) {
+					ss << this->args[i];
+					if (i + 1 != this->args.size()) {
+						ss << ' ';
+					}
+				}
+				return ss.str();
 			}
 	};
 }

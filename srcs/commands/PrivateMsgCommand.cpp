@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivateMsgCommand.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:25:31 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/15 13:49:45 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/17 02:30:09 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ namespace ft
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
+		std::vector<std::string> channels = split(args[0], ","); // split channels separe by , in command received
 
 		if (args[0][0] == '#')
 		{

@@ -76,7 +76,7 @@ function memory_check {
 	fi
 }
 
-compile kill debug -i CXXFLAGS='-Wall -Wextra -std=c++98 -g3 -fsanitize=address'
+compile debug -i CXXFLAGS='-Wall -Wextra -std=c++98 -g3 -fsanitize=address'
 
 OK=1
 # printf '[⬜] Testing bad arguments ...'

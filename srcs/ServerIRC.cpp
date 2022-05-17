@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerIRC.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 20:08:22 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/17 00:53:57 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,9 +167,9 @@ namespace ft {
 						// std::cout << C_BLUE << "Socket " << it->fd << " > POLLIN receive." << C_RESET << std::endl;
 						readClient(this->clients[it->fd], it->fd);
 					}
-					if (it->revents & POLLPRI) {
-						std::cout << C_BLUE << "Socket " << it->fd << " > POLLRI receive." << C_RESET << std::endl;
-					}
+					// if (it->revents & POLLPRI) {
+					// 	std::cout << C_BLUE << "Socket " << it->fd << " > POLLRI receive." << C_RESET << std::endl;
+					// }
 					if (it->revents & POLLNVAL) {
 						std::cout << C_BLUE << "Socket " << it->fd <<  " > Invalid request from" << C_RESET << std::endl;
 					}
@@ -218,7 +218,8 @@ namespace ft {
 		clients.insert(std::pair<int, ClientIRC*>(clientSocket, client));
 
 		pfds.push_back(pollfd());
-		pfds.back().events = POLLIN | POLLPRI;
+		// pfds.back().events = POLLIN | POLLPRI;
+		pfds.back().events = POLLIN;
 		pfds.back().fd = clientSocket;
 		client->setPoll(pfds.back());
 
