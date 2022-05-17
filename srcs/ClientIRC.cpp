@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 06:39:47 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/17 21:24:46 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ namespace ft {
 	}
 
 	ClientIRC::~ClientIRC() {}
+
+	bool ClientIRC::operator ==(ClientIRC* const client) const {
+		return (id == client->id);
+	}
 
 	bool ClientIRC::closeSocket() {
 		if (this->clientSocket <= 0)

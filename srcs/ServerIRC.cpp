@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/17 00:53:57 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/17 21:39:18 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ namespace ft {
 	}
 
 
-	std::vector<ChannelIRC> ServerIRC::getChannels()
+	std::vector<ChannelIRC>& ServerIRC::getChannels()
 	{
 		return this->channels;
 	}
 
-	std::map<int, ClientIRC *> ServerIRC::getClients()
+	std::map<int, ClientIRC *>& ServerIRC::getClients()
 	{
 		return this->clients;
 	}

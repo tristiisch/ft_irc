@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:25:31 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/17 02:30:09 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/17 21:40:53 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft
 {
-	PrivateMsgCommand::PrivateMsgCommand() : ClientCommand("PRIVMSG") {}
+	PrivateMsgCommand::PrivateMsgCommand() : ClientCommand("PRIVMSG", true, false) {}
 
 	PrivateMsgCommand::~PrivateMsgCommand() {}
 

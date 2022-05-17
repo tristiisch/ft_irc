@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/16 23:31:06 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/17 21:42:05 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	JoinCommand::JoinCommand() : ClientCommand("JOIN") {}
+	JoinCommand::JoinCommand() : ClientCommand("JOIN", true, false) {}
 
 	JoinCommand::~JoinCommand() {}
 

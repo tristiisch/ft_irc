@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerIRC.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 07:43:20 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/17 21:32:28 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ namespace ft {
 			ServerIRC& operator=(const ServerIRC& x);
 			~ServerIRC();
 
-			std::vector<ChannelIRC>		getChannels();
-			std::map<int, ClientIRC*>	getClients();
+			std::vector<ChannelIRC>&	getChannels();
+			std::map<int, ClientIRC*>&	getClients();
 			
 			bool start();
 			bool stop();

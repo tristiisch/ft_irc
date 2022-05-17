@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/17 02:16:02 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/17 21:49:26 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ namespace ft
 	{
 		if (clientExists(to_add, this->_client_list) == true)
 		{
-			std::cout << "The User " << to_add->getNick() << "is already added to the channel." << std::endl;
+			std::cout << "The User " << *to_add << " is already added to the channel." << std::endl;
 			//envoyer l'info au client avec le bon code
 			return;
 		}
@@ -87,7 +87,7 @@ namespace ft
 			this->_size++;
 		else
 		{
-			std::cout << "The User " << to_add->getNick() << "cannot be added to a full channel." << std::endl;
+			std::cout << "The User " << *to_add << " cannot be added to a full channel." << std::endl;
 			// send au client ce qu' il faut
 		}
 
@@ -98,7 +98,7 @@ namespace ft
 		std::vector<cl_info>::iterator ite  = clientSearch(this->_client_list, to_add);
 		if (ite == this->_client_list.end() || ite->ope == 1)
 		{
-			std::cout << "The User " << to_add->getNick() << "is already operator in this channel." << std::endl;
+			std::cout << "The User " << to_add->getNick() << " is already operator in this channel." << std::endl;
 			//envoyer l'info au client avec le bon code
 			return;
 		}
@@ -186,10 +186,11 @@ namespace ft
 	bool	clientExists(ClientIRC *const &to_add, std::vector<cl_info> &to_check)
 	{
 		std::vector<cl_info>::iterator ite = to_check.begin();
-		while (ite->user->getId() != to_add->getId())
+		while (ite != to_check.end() && ite->user->getId() != to_add->getId())
 			ite++;
 		if (ite == to_check.end())
 			return (false);
 		return (true);
 	}
+
 }
