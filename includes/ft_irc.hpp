@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/16 20:03:08 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 03:12:35 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,12 @@ typedef struct in_addr IN_ADDR;
 //il faut encore faire des define sur les messages d'erreur.
 
 #define ERR_NOSUCHCHANNEL(channel)				("403 *" + channel + " :no such channel")
+#define ERR_CHANNELISFULL(char, channel)		("471 *" + channel + " :Cannot join channel")
+#define ERR_UNKNOWNMODE(char, channel)			("472 *" + char + " :is unknown mode char to me for " + channel)
+#define ERR_INVITEONLYCHAN(channel)				("473 *" + channel + " :Cannot join channel")
+#define ERR_BANNEDFROMCHAN(channel)				("474 *" + channel + " :Cannot join channel")
+#define ERR_BADCHANNELKEY(channel)				("475 *" + channel + " :Cannot join channel")
+#define ERR_NOPRIVILEGES						"481 *:Permission Denied- You're not an IRC operator"
 #define ERR_NOSUCHNICK(nick)					("406 *" + nick + " :No such nick/channel")
 #define ERR_NEEDMOREPARAMS(command)				("461 *" + command + " :Not enough parameters")
 #define ERR_ALREADYREGISTRED					"462 * :Unauthorized command (already registered)"

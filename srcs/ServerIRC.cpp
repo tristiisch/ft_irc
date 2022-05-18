@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/17 21:39:18 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 03:13:42 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ namespace ft {
 	}
 
 
-	std::vector<ChannelIRC>& ServerIRC::getChannels()
+	const std::vector<ChannelIRC*>& ServerIRC::getChannels() const
 	{
 		return this->channels;
 	}
 
-	std::map<int, ClientIRC *>& ServerIRC::getClients()
+	const std::map<int, ClientIRC *>& ServerIRC::getClients() const
 	{
 		return this->clients;
 	}
@@ -121,6 +121,7 @@ namespace ft {
 			clients.clear();
 		}
 		closesocket(serverSocket);
+		channels.clear();
 		if (!pfds.empty()) {
 			/*for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) {
 				pfds.erase(it);
@@ -318,5 +319,46 @@ namespace ft {
 			return false;
 		this->config = config;
 		return true;
+	}
+
+	ChannelIRC* ServerIRC::getChannel(std::string& channelName) const {
+		std::vector<ChannelIRC*>::const_iterator channel = getChannels().begin();
+
+		while (channel != getChannels().end()) {
+			if ((*channel)->getName() == channelName)
+				return *channel;
+			channel++;
+		}
+		return NULL;
+	}
+
+	ClientIRC* ServerIRC::getClientByNick(std::string& clientNickname) const {
+		for (std::map<int, ClientIRC*>::const_iterator it = getClients().begin(); it != getClients().end(); ++it) {
+			if (it->second->getNick() != "" && it->second->getNick() == clientNickname) {
+				return it->second;
+			}
+		}
+		return NULL;
+	}
+
+	ClientIRC* ServerIRC::getClientBySocket(SOCKET& socket) const {
+		for (std::map<int, ClientIRC*>::const_iterator it = getClients().begin(); it != getClients().end(); ++it) {
+			if (it->second->getSocket() == socket) {
+				return it->second;
+			}
+		}
+		return NULL;
+	}
+	ClientIRC* ServerIRC::getClientById(int& id) const {
+		for (std::map<int, ClientIRC*>::const_iterator it = getClients().begin(); it != getClients().end(); ++it) {
+			if (it->second->getId() == id) {
+				return it->second;
+			}
+		}
+		return NULL;
+	}
+
+	void ServerIRC::addChannel(ChannelIRC* channel) {
+		channels.push_back(channel);
 	}
 }

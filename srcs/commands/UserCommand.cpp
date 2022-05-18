@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/17 21:44:38 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 02:38:45 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ namespace ft {
 			client->recieveMessage(ERR_NEEDMOREPARAMS(this->name));
 			return false;
 		}
-		std::map<int, ClientIRC *>::iterator user = server->getClients().find(client->getSocket());
+		std::map<int, ClientIRC *>::const_iterator user = server->getClients().find(client->getSocket());
 		if (user != server->getClients().end())
 		{
 			client->recieveMessage(ERR_ALREADYREGISTRED);

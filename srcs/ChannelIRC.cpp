@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/17 21:49:26 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 02:31:54 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ namespace ft
 
 	ChannelIRC::~ChannelIRC() {}
 
-	std::string	ChannelIRC::getName()
+	const std::string	ChannelIRC::getName() const
 	{
 		return (this->_name);
 	}
 
-	std::vector<cl_info> ChannelIRC::getClientList()
+	const std::vector<cl_info> ChannelIRC::getClientList() const
 	{
 		return this->_client_list;
 	}

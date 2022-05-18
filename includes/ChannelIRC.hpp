@@ -43,10 +43,10 @@ namespace ft {
 			ChannelIRC(const char *name, ClientIRC *const &first_client, int const &max_size);
 			~ChannelIRC();
 
-			std::string getName();
+			const std::string getName() const;
 			int			getSize();
 			int			getMaxSize();
-			std::vector<cl_info> getClientList();
+			const std::vector<cl_info> getClientList() const;
 
 			void	setName(const char *name);
 

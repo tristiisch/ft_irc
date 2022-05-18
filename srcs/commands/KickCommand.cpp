@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 00:40:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/17 21:51:33 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 02:54:17 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,12 @@ namespace ft
 											<< "'" << "from the channel" <<args[0] <<  C_RESET << std::endl;
 
 		// Si le channel n'existe pas on le crée sinon on ajoute le client channel correspondant
-		std::vector<ChannelIRC>::iterator channel  = server->getChannels().begin();
-		while(channel != server->getChannels().end())
-		{
-			if (channel->getName() == args[0])
-			{	
-				channel->removeUser(client);
-				channel->sendMessageToAll(client, cmd.getFullCmd());
-				return true;
-			}
-			channel++;
-		}
-		client->recieveMessage(ERR_NOSUCHCHANNEL(args[0]));
+		ChannelIRC *channel  = server->getChannel(args[0]);
+		if (channel) {
+			channel->removeUser(client);
+			channel->sendMessageToAll(client, cmd.getFullCmd());
+		} else
+			client->recieveMessage(ERR_NOSUCHCHANNEL(args[0]));
 		return true;
 	}
 }

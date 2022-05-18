@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/17 21:32:28 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 03:01:34 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace ft {
 			ServerConfig config;
 			SOCKET serverSocket;
 			std::map<int, ClientIRC*> clients;
-			std::vector<ChannelIRC> channels;
+			std::vector<ChannelIRC*> channels;
 			int clientIdCounter; // Last Client Id
 			std::vector<pollfd> pfds;
 			CommandManager *commandManager;
@@ -40,8 +40,8 @@ namespace ft {
 			ServerIRC& operator=(const ServerIRC& x);
 			~ServerIRC();
 
-			std::vector<ChannelIRC>&	getChannels();
-			std::map<int, ClientIRC*>&	getClients();
+			const std::vector<ChannelIRC*>& getChannels() const;
+			const std::map<int, ClientIRC*>& getClients() const;
 			
 			bool start();
 			bool stop();
@@ -50,10 +50,14 @@ namespace ft {
 			bool readClient(ClientIRC *client, SOCKET& socket);
 			void deleteClient(ClientIRC *client);
 			bool isGoodPassword(std::string& password);
-
 			const ServerConfig& getConfig() const;
 			bool isEnabled() const;
 			bool setConfig(const ServerConfig& config);
 			int getNewClientId();
+			ClientIRC* getClientByNick(std::string& clientNickname) const;
+			ClientIRC* getClientBySocket(SOCKET& socket) const;
+			ClientIRC* getClientById(int& id) const;
+			ChannelIRC* getChannel(std::string& channelName) const;
+			void addChannel(ChannelIRC* channel);
 	};
 }
