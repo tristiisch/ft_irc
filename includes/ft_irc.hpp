@@ -6,7 +6,7 @@
 /*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/16 20:03:08 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 11:33:21 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,13 @@ typedef struct in_addr IN_ADDR;
 # define LF_DELIMITER "\n"
 # define CRLF_DELIMITER "\r\n"
 //il faut encore faire des define sur les messages d'erreur.
+
+#define ALREADY_IN_CHANNEL						1
+#define ALREADY_OPERATOR						2
+#define ALREADY_BANNED							3
+#define CHANNEL_FULL							4
+#define NO_SUCH_NICK							5
+
 
 #define ERR_NOSUCHCHANNEL(channel)				("403 *" + channel + " :no such channel")
 #define ERR_NOSUCHNICK(nick)					("406 *" + nick + " :No such nick/channel")
