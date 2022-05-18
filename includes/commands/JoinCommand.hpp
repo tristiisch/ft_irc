@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:32:35 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 07:41:30 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 17:59:02 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ namespace ft {
 			~JoinCommand();
 
 			bool execute(CommandContext &cmd) const;
+			void ErrorManagement(int ret, ClientIRC *const &client, std::string const &arg) const;
 	};
 }

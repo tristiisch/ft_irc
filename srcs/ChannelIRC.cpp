@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/18 16:22:28 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 18:30:45 by alganoun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,12 @@ namespace ft
 		if (clientExists(to_add, this->_client_list) == true)
 		{
 			std::cout << "The User " << to_add->getNick() << " is already added to the channel." << std::endl;
-			return (ALREADY_IN_CHANNEL);
+			return ALREADY_IN_CHANNEL;
+		}
+		else if (clientExists(to_add, this->_ban_list))
+		{
+			std::cout << "The User " << to_add->getNick() << " is banned from the channel." << std::endl;
+			return USER_BANNED;
 		}
 		this->_client_list.push_back(to_add);
 		if (_size < _max_size)
@@ -83,7 +88,7 @@ namespace ft
 		else
 		{
 			std::cout << "The User " << to_add->getNick() << " cannot be added to a full channel." << std::endl;
-			return (CHANNEL_FULL);
+			return CHANNEL_FULL;
 		}
 		return true;
 	}
@@ -180,7 +185,7 @@ namespace ft
 	bool	clientExists(ClientIRC *const &to_add, std::vector<ClientIRC *> &to_check)
 	{
 		std::vector<ClientIRC *>::iterator ite = to_check.begin();
-		while ((*ite)->getId() != to_add->getId())
+		while (ite != to_check.end() && (*ite)->getId() != to_add->getId())
 			ite++;
 		if (ite == to_check.end())
 			return (false);
