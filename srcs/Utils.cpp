@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 18:34:56 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 19:56:03 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/17 02:27:37 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ namespace ft {
 
 		while ((pos = str.find(delimt)) != std::string::npos)
 		{
-			tmp = str.substr(0, pos - 1);
+			tmp = str.substr(0, pos);
 			f(tmp);
 			str.erase(0, pos + delimt.length());
 		}
@@ -50,7 +50,7 @@ namespace ft {
 
 		while ((pos = str.find(delimt)) != std::string::npos && str[0] != ':') // À vérifier
 		{
-			tmp = str.substr(0, pos - 1);
+			tmp = str.substr(0, pos);
 			vector.push_back(tmp);
 			str.erase(0, pos + delimt.length());
 		}
@@ -61,6 +61,7 @@ namespace ft {
 
 	std::string join(std::vector<std::string> &vector, std::string delim) {
 		std::stringstream ss;
+
 		for (std::vector<std::string>::iterator it = vector.begin(); it != vector.end(); ++it) {
 			ss << *it;
 			if (it + 1 != vector.end()) {
@@ -75,7 +76,7 @@ namespace ft {
 		std::stringstream ss;
 		std::string str;
 		std::ofstream myfile;
-		std::time_t t = std::time(0);   // get time now
+		std::time_t t = std::time(0);
 		std::tm* now = std::localtime(&t);
 		
 		ss << '[' << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << "] " << msg;

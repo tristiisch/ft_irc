@@ -1,6 +1,6 @@
 CXX					=	c++
-#CXXFLAGS			=	-Wall -Wextra -std=c++98 -g3
-CXXFLAGS			=	-Wall -Wextra -std=c++98 -g3 -fsanitize=address
+CXXFLAGS			=	-Wall -Wextra -std=c++98 -g3
+# CXXFLAGS			=	-Wall -Wextra -std=c++98 -g3 -fsanitize=address
 #CXXFLAGS			=	-Wall -Wextra -Werror -std=c++98
 NAME				=	ircserv
 NAME_CLIENT			=	client
@@ -68,7 +68,7 @@ client: $(OBJS_CLIENT)
 kill:
 	@printf '[⚪] Kill PID ...\n'
 	@kill "$(pidof ircserv)"
-	@netstat -anp|grep 6667
+	@netstat -anp | grep 6667
 	@sudo fuser -k 6667/tcp
 	@printf '[🟢] Kill PID \n'
 

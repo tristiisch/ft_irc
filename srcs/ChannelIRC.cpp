@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/18 11:42:21 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 16:22:28 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ namespace ft
 	{
 		std::cout << "Channel \"" << this->_name << "\" created." << std::endl;
 		this->_client_list.push_back(first_client);
-		std::cout << "The " << this->_name << "channel was created by the client n. " << first_client->getId() << std::endl;
+		std::cout << "The " << this->_name << " channel was created by the client n. " << first_client->getId() << std::endl;
 	}
 
 	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client, int const &max_size)
@@ -39,13 +39,13 @@ namespace ft
 		_max_size(max_size)
 	{
 		this->_client_list.push_back(first_client);
-		std::cout << "The " << this->_name << "channel of size "
+		std::cout << "The " << this->_name << " channel of size "
 						<< this->_max_size << " was created by the client n. " << first_client->getId() << std::endl;
 	}
 
 	ChannelIRC::~ChannelIRC() {}
 
-	std::string	ChannelIRC::getName()
+	const std::string	ChannelIRC::getName() const
 	{
 		return (this->_name);
 	}
@@ -74,7 +74,7 @@ namespace ft
 	{
 		if (clientExists(to_add, this->_client_list) == true)
 		{
-			std::cout << "The User " << to_add->getNick() << "is already added to the channel." << std::endl;
+			std::cout << "The User " << to_add->getNick() << " is already added to the channel." << std::endl;
 			return (ALREADY_IN_CHANNEL);
 		}
 		this->_client_list.push_back(to_add);
@@ -82,27 +82,28 @@ namespace ft
 			this->_size++;
 		else
 		{
-			std::cout << "The User " << to_add->getNick() << "cannot be added to a full channel." << std::endl;
+			std::cout << "The User " << to_add->getNick() << " cannot be added to a full channel." << std::endl;
 			return (CHANNEL_FULL);
 		}
-
+		return true;
 	}
 
 	int		ChannelIRC::addOperator(ClientIRC *const &to_add)
 	{
 		if (clientExists(to_add, this->_ope_list))
 		{
-			std::cout << "The User " << to_add->getNick() << "is already operator in this channel." << std::endl;
+			std::cout << "The User " << to_add->getNick() << " is already operator in this channel." << std::endl;
 			return ALREADY_OPERATOR;
 		}
 		this->_ope_list.push_back(to_add);
+		return true;
 	}
 
 	int		ChannelIRC::addBannedUser(ClientIRC *const &to_add)
 	{
 		if (clientExists(to_add, this->_ban_list))
 		{
-			std::cout << "The User " << to_add->getNick() << "is already banned from the channel." << std::endl;
+			std::cout << "The User " << to_add->getNick() << " is already banned from the channel." << std::endl;
 			return ALREADY_BANNED;
 		}
 		this->_ban_list.push_back(to_add);
@@ -111,41 +112,44 @@ namespace ft
 			removeUser(to_add);
 			this->_size--;
 		}
-
+		return true;
 	}
 
 	int		ChannelIRC::removeUser(ClientIRC *const &to_remove)
 	{
 		if (clientExists(to_remove, this->_client_list) == false)
 		{
-			std::cout << "The User " << to_remove->getNick() << "does not exist in this channel." << std::endl;
+			std::cout << "The User " << to_remove->getNick() << " does not exist in this channel." << std::endl;
 			return NO_SUCH_NICK;
 		}
 		std::vector<ClientIRC *>::iterator ite = ClientIterator(to_remove, _client_list);
 		this->_client_list.erase(ite);
 		this->_size--;
+		return true;
 	}
 
 	int		ChannelIRC::removeOperator(ClientIRC *const &to_remove)
 	{
 		if (clientExists(to_remove, this->_ope_list) == false)
 		{
-			std::cout << "The User " << to_remove->getNick() << "is not an operator in this channel." << std::endl;
+			std::cout << "The User " << to_remove->getNick() << " is not an operator in this channel." << std::endl;
 			return NO_SUCH_NICK;
 		}
 		std::vector<ClientIRC *>::iterator ite = ClientIterator(to_remove, _ope_list);
 		this->_ope_list.erase(ite);
+		return true;
 	}
 
 	int		ChannelIRC::unbanUser(ClientIRC *const &to_unban)
 	{
 		if (clientExists(to_unban, this->_ban_list) == false)
 		{
-			std::cout << "The User " << to_unban->getNick() << "is not banned from the channel." << std::endl;
+			std::cout << "The User " << to_unban->getNick() << " is not banned from the channel." << std::endl;
 			return NO_SUCH_NICK;;
 		}
 		std::vector<ClientIRC *>::iterator ite = ClientIterator(to_unban, _ban_list);
 		this->_ban_list.erase(ite);
+		return true;
 	}
 
 	void	ChannelIRC::sendMessageToAll(ClientIRC *const &sender, std::string const &message)
@@ -182,4 +186,5 @@ namespace ft
 			return (false);
 		return (true);
 	}
+
 }

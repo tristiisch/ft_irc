@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerIRC.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/12 20:08:22 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/18 16:06:47 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ namespace ft {
 	}
 
 
-	std::vector<ChannelIRC> ServerIRC::getChannels()
+	const std::vector<ChannelIRC*>& ServerIRC::getChannels() const
 	{
 		return this->channels;
 	}
 
-	std::map<int, ClientIRC *> ServerIRC::getClients()
+	const std::map<int, ClientIRC *>& ServerIRC::getClients() const
 	{
 		return this->clients;
 	}
@@ -121,6 +121,7 @@ namespace ft {
 			clients.clear();
 		}
 		closesocket(serverSocket);
+		channels.clear();
 		if (!pfds.empty()) {
 			/*for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) {
 				pfds.erase(it);
@@ -144,7 +145,7 @@ namespace ft {
 		ss << INFO << "Poll start with " << pfds.size() << " poll open" << C_RESET << std::endl;
 		logAndPrint(ss.str());
 		ss.clear();
-		while (this->enabled && ((ret = poll(&(pfds[0]), pfds.size(), 1 * 1000)) != -1)) {
+		while (this->enabled && !pfds.empty() && ((ret = poll(&(pfds[0]), pfds.size(), 1 * 1000)) != -1)) {
 			if (pfds[0].revents & POLLIN)
 				acceptClient(); // serverSocket receive connection
 			else if (pfds.size() > 1) {
@@ -167,9 +168,9 @@ namespace ft {
 						// std::cout << C_BLUE << "Socket " << it->fd << " > POLLIN receive." << C_RESET << std::endl;
 						readClient(this->clients[it->fd], it->fd);
 					}
-					if (it->revents & POLLPRI) {
-						std::cout << C_BLUE << "Socket " << it->fd << " > POLLRI receive." << C_RESET << std::endl;
-					}
+					// if (it->revents & POLLPRI) {
+					// 	std::cout << C_BLUE << "Socket " << it->fd << " > POLLRI receive." << C_RESET << std::endl;
+					// }
 					if (it->revents & POLLNVAL) {
 						std::cout << C_BLUE << "Socket " << it->fd <<  " > Invalid request from" << C_RESET << std::endl;
 					}
@@ -218,7 +219,8 @@ namespace ft {
 		clients.insert(std::pair<int, ClientIRC*>(clientSocket, client));
 
 		pfds.push_back(pollfd());
-		pfds.back().events = POLLIN | POLLPRI;
+		// pfds.back().events = POLLIN | POLLPRI;
+		pfds.back().events = POLLIN;
 		pfds.back().fd = clientSocket;
 		client->setPoll(pfds.back());
 
@@ -317,5 +319,46 @@ namespace ft {
 			return false;
 		this->config = config;
 		return true;
+	}
+
+	ChannelIRC* ServerIRC::getChannel(std::string& channelName) const {
+		std::vector<ChannelIRC*>::const_iterator channel = getChannels().begin();
+
+		while (channel != getChannels().end()) {
+			if ((*channel)->getName() == channelName)
+				return *channel;
+			channel++;
+		}
+		return NULL;
+	}
+
+	ClientIRC* ServerIRC::getClientByNick(std::string& clientNickname) const {
+		for (std::map<int, ClientIRC*>::const_iterator it = getClients().begin(); it != getClients().end(); ++it) {
+			if (it->second->getNick() != "" && it->second->getNick() == clientNickname) {
+				return it->second;
+			}
+		}
+		return NULL;
+	}
+
+	ClientIRC* ServerIRC::getClientBySocket(SOCKET& socket) const {
+		for (std::map<int, ClientIRC*>::const_iterator it = getClients().begin(); it != getClients().end(); ++it) {
+			if (it->second->getSocket() == socket) {
+				return it->second;
+			}
+		}
+		return NULL;
+	}
+	ClientIRC* ServerIRC::getClientById(int& id) const {
+		for (std::map<int, ClientIRC*>::const_iterator it = getClients().begin(); it != getClients().end(); ++it) {
+			if (it->second->getId() == id) {
+				return it->second;
+			}
+		}
+		return NULL;
+	}
+
+	void ServerIRC::addChannel(ChannelIRC* channel) {
+		channels.push_back(channel);
 	}
 }
