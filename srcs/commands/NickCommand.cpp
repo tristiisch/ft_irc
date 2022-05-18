@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:31:41 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 20:33:05 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 21:30:58 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ namespace ft {
 
 	bool NickCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
-		// ServerIRC *server = cmd.getServer();
+		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
 		std::string arg;
 

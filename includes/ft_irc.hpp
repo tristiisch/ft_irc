@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 20:33:26 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 21:33:11 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ typedef struct in_addr IN_ADDR;
 #define RPL_JOIN(nick, channel)					":" + nick + " JOIN " + channel
 #define RPL_NICK(nick)								"NICK " + nick
 #define ERR_CANNOTSENDTOCHAN(channel)           ("404 *" + channel + " :Cannot send to channel")
+#define RPL_PART(channel, msg, nick, username, host)	":" + nick + "!" + username + "@" + host + " PART " + channel + " :" + msg
+#define ERR_NOTONCHANNEL(channel)						"442 * " + channel + " :You're not on that channel"
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0

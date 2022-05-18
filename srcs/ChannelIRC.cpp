@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/18 18:30:45 by alganoun         ###   ########.fr       */
+/*   Updated: 2022/05/18 21:29:44 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,22 @@ namespace ft
 
 	ChannelIRC::~ChannelIRC() {}
 
-	const std::string	ChannelIRC::getName() const
+	const std::string&	ChannelIRC::getName() const
 	{
 		return (this->_name);
 	}
 
-	std::vector<ClientIRC *> ChannelIRC::getClientList()
+	std::vector<ClientIRC *>& ChannelIRC::getClientList()
 	{
 		return this->_client_list;
 	}
 
-	std::vector<ClientIRC *> ChannelIRC::getBanList()
+	std::vector<ClientIRC *>& ChannelIRC::getBanList()
 	{
 		return this->_ban_list;
 	}
 
-	std::vector<ClientIRC *> ChannelIRC::getOpeList()
+	std::vector<ClientIRC *>& ChannelIRC::getOpeList()
 	{
 		return this->_ope_list;
 	}
@@ -82,14 +82,12 @@ namespace ft
 			std::cout << "The User " << to_add->getNick() << " is banned from the channel." << std::endl;
 			return USER_BANNED;
 		}
-		this->_client_list.push_back(to_add);
-		if (_size < _max_size)
-			this->_size++;
-		else
-		{
+		if ((int) _client_list.size() + 1 > _max_size) {
 			std::cout << "The User " << to_add->getNick() << " cannot be added to a full channel." << std::endl;
 			return CHANNEL_FULL;
 		}
+		this->_client_list.push_back(to_add);
+		this->_size++;
 		return true;
 	}
 

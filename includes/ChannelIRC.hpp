@@ -33,12 +33,12 @@ namespace ft {
 			ChannelIRC(const char *name, ClientIRC *const &first_client, int const &max_size);
 			~ChannelIRC();
 
-			const std::string getName() const;
+			const std::string& getName() const;
 			int			getSize();
 			int			getMaxSize();
-			std::vector<ClientIRC *> getClientList();
-			std::vector<ClientIRC *> getBanList();
-			std::vector<ClientIRC *> getOpeList();
+			std::vector<ClientIRC *>& getClientList();
+			std::vector<ClientIRC *>& getBanList();
+			std::vector<ClientIRC *>& getOpeList();
 
 			void	setName(const char *name);
 
