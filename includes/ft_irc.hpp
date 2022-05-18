@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 21:33:11 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 23:17:59 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,25 +81,25 @@ typedef struct in_addr IN_ADDR;
 #define USER_BANNED								-6
 
 
-#define ERR_NOSUCHCHANNEL(channel)				("403 *" + channel + " :no such channel")
-#define ERR_CHANNELISFULL(channel)				("471 *" + channel + " :Cannot join channel")
-#define ERR_UNKNOWNMODE(char, channel)			("472 *" + char + " :is unknown mode char to me for " + channel)
-#define ERR_INVITEONLYCHAN(channel)				("473 *" + channel + " :Cannot join channel")
-#define ERR_BANNEDFROMCHAN(channel)				("474 *" + channel + " :Cannot join channel")
-#define ERR_BADCHANNELKEY(channel)				("475 *" + channel + " :Cannot join channel")
-#define ERR_NOPRIVILEGES						"481 *:Permission Denied- You're not an IRC operator"
-#define ERR_NOSUCHNICK(nick)					("406 *" + nick + " :No such nick/channel")
-#define ERR_NEEDMOREPARAMS(command)				("461 *" + command + " :Not enough parameters")
-#define ERR_ALREADYREGISTRED					"462 * :Unauthorized command (already registered)"
-#define RPL_WELCOME(nick, username, host)		"001 * Welcome to the Internet Relay Network " +  nick + "!" + username + "@" + host
-#define	RPL_YOURHOST						 	"002 * Your host is irc@localhost, running version 1.0"
-#define	RPL_CREATED								"003 * This server was created 05/18/22"
-#define RPL_MYINFO 								"004 * irc@localhost 1.0 mode test mode test2"
+#define ERR_NOSUCHCHANNEL(channel)				("403 " + channel + " :no such channel")
+#define ERR_CHANNELISFULL(channel)				("471 " + channel + " :Cannot join channel")
+#define ERR_UNKNOWNMODE(char, channel)			("472 " + char + " :is unknown mode char to me for " + channel)
+#define ERR_INVITEONLYCHAN(channel)				("473 " + channel + " :Cannot join channel")
+#define ERR_BANNEDFROMCHAN(channel)				("474 " + channel + " :Cannot join channel")
+#define ERR_BADCHANNELKEY(channel)				("475 " + channel + " :Cannot join channel")
+#define ERR_NOPRIVILEGES						"481 :Permission Denied- You're not an IRC operator"
+#define ERR_NOSUCHNICK(nick)					("406 " + nick + " :No such nick/channel")
+#define ERR_NEEDMOREPARAMS(command)				("461 " + command + " :Not enough parameters")
+#define ERR_ALREADYREGISTRED					"462 :Unauthorized command (already registered)"
+#define RPL_WELCOME(nick, username, host)		"001 " + nick + " to the Internet Relay Network " +  nick + "!" + username + "@" + host
+#define	RPL_YOURHOST						 	"002 Your host is 127.0.0.1, running version 1.0"
+#define	RPL_CREATED								"003 This server was created 05/18/22"
+#define RPL_MYINFO 								"004 irc@localhost 1.0 mode test mode test2"
 #define RPL_JOIN(nick, channel)					":" + nick + " JOIN " + channel
 #define RPL_NICK(nick)								"NICK " + nick
-#define ERR_CANNOTSENDTOCHAN(channel)           ("404 *" + channel + " :Cannot send to channel")
+#define ERR_CANNOTSENDTOCHAN(channel)           ("404 " + channel + " :Cannot send to channel")
 #define RPL_PART(channel, msg, nick, username, host)	":" + nick + "!" + username + "@" + host + " PART " + channel + " :" + msg
-#define ERR_NOTONCHANNEL(channel)						"442 * " + channel + " :You're not on that channel"
+#define ERR_NOTONCHANNEL(channel)						"442 " + channel + " :You're not on that channel"
 
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0

@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:31:41 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 21:30:58 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 22:47:45 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ namespace ft {
 		arg = cmd.getArg(0);
 		client->setNick(arg);
 		std::cout << C_YELLOW << "Nick of " << *client << " is now '" << arg << "'." << C_RESET << std::endl;
-		client->recieveMessage(RPL_NICK(std::string(arg)));
+		client->recieveMessage(RPL_NICK(arg));
 		return true;
 	}
 
