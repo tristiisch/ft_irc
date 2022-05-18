@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/18 02:38:45 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 15:58:11 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@ namespace ft {
 
 	bool UserCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
-		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
 		if (args.size() != 4)
 		{
 			client->recieveMessage(ERR_NEEDMOREPARAMS(this->name));
 			return false;
 		}
-		std::map<int, ClientIRC *>::const_iterator user = server->getClients().find(client->getSocket());
-		if (user != server->getClients().end())
+		if (client->isRegistered())
 		{
 			client->recieveMessage(ERR_ALREADYREGISTRED);
 			return false;
 		}
+		client->setRegistered(true);
+		client->setUsername(args[2]);
 		client->recieveMessage(RPL_WELCOME(args[0], args[2], args[1]));
 		return true;
 	}

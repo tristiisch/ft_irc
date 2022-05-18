@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 03:13:42 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 16:06:47 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ namespace ft {
 		ss << INFO << "Poll start with " << pfds.size() << " poll open" << C_RESET << std::endl;
 		logAndPrint(ss.str());
 		ss.clear();
-		while (this->enabled && ((ret = poll(&(pfds[0]), pfds.size(), 1 * 1000)) != -1)) {
+		while (this->enabled && !pfds.empty() && ((ret = poll(&(pfds[0]), pfds.size(), 1 * 1000)) != -1)) {
 			if (pfds[0].revents & POLLIN)
 				acceptClient(); // serverSocket receive connection
 			else if (pfds.size() > 1) {

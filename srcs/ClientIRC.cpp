@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/17 21:24:46 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 15:56:16 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,15 @@
 
 namespace ft {
 
-	ClientIRC::ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) : id(id), sockAddr(sockAddr), clientSocket(clientSocket), nick(""), authorized(false), delimiter("\r\n") {}
+	ClientIRC::ClientIRC(int id, SOCKADDR_IN& sockAddr, SOCKET& clientSocket) :
+		id(id),
+		sockAddr(sockAddr),
+		clientSocket(clientSocket),
+		nick(""),
+		delimiter("\r\n"),
+		authorized(false),
+		registered(false)
+	{}
 
 	ClientIRC& ClientIRC::operator=(const ClientIRC& x) {
 		this->id = x.getId();
@@ -102,5 +110,21 @@ namespace ft {
 	{
 		std::string msg_for_client = message + getDelimiter();
 		send(this->clientSocket, msg_for_client.c_str(), msg_for_client.length(), 0);
+	}
+
+	const bool& ClientIRC::isRegistered() const {
+		return this->registered;
+	}
+
+	void ClientIRC::setRegistered(const bool& registered) {
+		this->registered = registered;
+	}
+
+	const std::string& ClientIRC::getUsername() const {
+		return this->username;
+	}
+
+	void ClientIRC::setUsername(std::string& username) {
+		this->username = username;
 	}
 }
