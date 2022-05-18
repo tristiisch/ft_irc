@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 20:57:40 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 23:20:14 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ typedef struct in_addr IN_ADDR;
 #define NO_SUCH_NICK							5
 
 
-#define RPL_WELCOME(nick, username, host)				"001 * Welcome to the Internet Relay Network " +  nick + "!" + username + "@" + host
+#define RPL_WELCOME(nick, username, host)				"001 " + nick + " Welcome to the Internet Relay Network " +  nick + "!" + username + "@" + host
 #define RPL_AWAY(nick, msg)								"301 *" + nick + " :" + msg
 #define ERR_NOSUCHCHANNEL(channel)						"403 *" + channel + " :no such channel"
 #define ERR_NOPRIVILEGES								"481 *:Permission Denied- You're not an IRC operator"

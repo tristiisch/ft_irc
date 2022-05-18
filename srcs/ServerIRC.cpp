@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 16:06:47 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 22:21:47 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ namespace ft {
 			return false;
 		}
 
-		/*ret = fcntl(serverSocket, F_SETFL, O_NONBLOCK);
+		ret = fcntl(serverSocket, F_SETFL, O_NONBLOCK);
 		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
 			stop();
 			return false;
-		}*/
+		}
 		std::stringstream ss;
 		ss << C_GREEN << "ft_irc started on port " << config.getPort() << C_RESET << std::endl;
 		logAndPrint(ss.str());
@@ -227,10 +227,10 @@ namespace ft {
 		ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
 		ft::checkError(ret, "Error while sending Hello world msg to ", &this->clients[clientSocket]);
 
-		// ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
-		// if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
-		// 	return NULL;
-		// }
+		ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
+		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
+			return NULL;
+		}
 		return client;
 	}
 
