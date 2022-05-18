@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/18 02:31:54 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 16:22:28 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,14 @@
 
 namespace ft
 {
-
-	//Structure de stockage des infos des clients
-	cl_info::cl_info()
-	:	user(NULL),
-		banned(0),
-		ope(0)
-	{}
-
-	cl_info::cl_info(ClientIRC *const &to_add)
-	:	user(to_add),
-		banned(0),
-		ope(0)
-	{}
-
-	cl_info::~cl_info() {}
-
-
 	//Classe de channel
 	ChannelIRC::ChannelIRC() {}
 
 	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client)
 	:	_name(name),
 		_client_list(),
+		_ban_list(),
+		_ope_list(),
 		_size(1),
 		_max_size(42)
 	{
@@ -48,6 +33,8 @@ namespace ft
 	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client, int const &max_size)
 	:	_name(name),
 		_client_list(),
+		_ban_list(),
+		_ope_list(),
 		_size(1),
 		_max_size(max_size)
 	{
@@ -63,9 +50,19 @@ namespace ft
 		return (this->_name);
 	}
 
-	const std::vector<cl_info> ChannelIRC::getClientList() const
+	std::vector<ClientIRC *> ChannelIRC::getClientList()
 	{
 		return this->_client_list;
+	}
+
+	std::vector<ClientIRC *> ChannelIRC::getBanList()
+	{
+		return this->_ban_list;
+	}
+
+	std::vector<ClientIRC *> ChannelIRC::getOpeList()
+	{
+		return this->_ope_list;
 	}
 
 	void	ChannelIRC::setName(const char *name)
@@ -73,99 +70,97 @@ namespace ft
 		this->_name = name;
 	}
 
-	void	ChannelIRC::addUser(ClientIRC *const &to_add)
+	int		ChannelIRC::addUser(ClientIRC *const &to_add)
 	{
 		if (clientExists(to_add, this->_client_list) == true)
 		{
-			std::cout << "The User " << *to_add << " is already added to the channel." << std::endl;
-			//envoyer l'info au client avec le bon code
-			return;
+			std::cout << "The User " << to_add->getNick() << " is already added to the channel." << std::endl;
+			return (ALREADY_IN_CHANNEL);
 		}
-		cl_info nclient(to_add);
-		this->_client_list.push_back(nclient);
+		this->_client_list.push_back(to_add);
 		if (_size < _max_size)
 			this->_size++;
 		else
 		{
-			std::cout << "The User " << *to_add << " cannot be added to a full channel." << std::endl;
-			// send au client ce qu' il faut
+			std::cout << "The User " << to_add->getNick() << " cannot be added to a full channel." << std::endl;
+			return (CHANNEL_FULL);
 		}
-
+		return true;
 	}
 
-	void	ChannelIRC::addOperator(ClientIRC *const &to_add)
+	int		ChannelIRC::addOperator(ClientIRC *const &to_add)
 	{
-		std::vector<cl_info>::iterator ite  = clientSearch(this->_client_list, to_add);
-		if (ite == this->_client_list.end() || ite->ope == 1)
+		if (clientExists(to_add, this->_ope_list))
 		{
-			std::cout << "The User " << to_add->getNick() << " is already operator in this channel." << std::endl;
-			//envoyer l'info au client avec le bon code
-			return;
+			std::cout << "The User " << to_add->getNick() << " is already operator in this channel." << std::endl;
+			return ALREADY_OPERATOR;
 		}
-		ite->ope= 1;
+		this->_ope_list.push_back(to_add);
+		return true;
 	}
 
-	void	ChannelIRC::addBannedUser(ClientIRC *const &to_add)
+	int		ChannelIRC::addBannedUser(ClientIRC *const &to_add)
 	{
-		std::vector<cl_info>::iterator ite  = clientSearch(this->_client_list, to_add);
-		if (ite == this->_client_list.end() || ite->banned == 1)
+		if (clientExists(to_add, this->_ban_list))
 		{
-			std::cout << "The User " << to_add->getNick() << "is already banned from the channel." << std::endl;
-			//envoyer l'info au client avec le bon code
-			return;
+			std::cout << "The User " << to_add->getNick() << " is already banned from the channel." << std::endl;
+			return ALREADY_BANNED;
 		}
-		ite->banned = 1;
-		this->_size--;
+		this->_ban_list.push_back(to_add);
+		if (clientExists(to_add, this->_client_list))
+		{
+			removeUser(to_add);
+			this->_size--;
+		}
+		return true;
 	}
 
-	void	ChannelIRC::removeUser(ClientIRC *const &to_remove)
+	int		ChannelIRC::removeUser(ClientIRC *const &to_remove)
 	{
 		if (clientExists(to_remove, this->_client_list) == false)
 		{
-			std::cout << "The User " << to_remove->getNick() << "does not exist in this channel." << std::endl;
-			//envoyer l'info au client avec le bon code
-			return;
+			std::cout << "The User " << to_remove->getNick() << " does not exist in this channel." << std::endl;
+			return NO_SUCH_NICK;
 		}
-		std::vector<cl_info>::iterator ite = _client_list.begin();
-		while (ite->user->getId() != to_remove->getId())
-			ite++;
+		std::vector<ClientIRC *>::iterator ite = ClientIterator(to_remove, _client_list);
 		this->_client_list.erase(ite);
 		this->_size--;
+		return true;
 	}
 
-	void	ChannelIRC::removeOperator(ClientIRC *const &to_remove)
+	int		ChannelIRC::removeOperator(ClientIRC *const &to_remove)
 	{
-		std::vector<cl_info>::iterator ite  = clientSearch(this->_client_list, to_remove);
-		if (ite == this->_client_list.end() || ite->banned == 0)
+		if (clientExists(to_remove, this->_ope_list) == false)
 		{
-			std::cout << "The User " << to_remove->getNick() << "is not an operator in this channel." << std::endl;
-			//envoyer l'info au client avec le bon code
-			return;
+			std::cout << "The User " << to_remove->getNick() << " is not an operator in this channel." << std::endl;
+			return NO_SUCH_NICK;
 		}
-		ite->ope = 0;
+		std::vector<ClientIRC *>::iterator ite = ClientIterator(to_remove, _ope_list);
+		this->_ope_list.erase(ite);
+		return true;
 	}
 
-	void	ChannelIRC::unbanUser(ClientIRC *const &to_unban)
+	int		ChannelIRC::unbanUser(ClientIRC *const &to_unban)
 	{
-		std::vector<cl_info>::iterator ite  = clientSearch(this->_client_list, to_unban);
-		if (ite == this->_client_list.end() || ite->banned == 0)
+		if (clientExists(to_unban, this->_ban_list) == false)
 		{
-			std::cout << "The User " << to_unban->getNick() << "is not banned from the channel." << std::endl;
-			//envoyer l'info au client avec le bon code
-			return;
+			std::cout << "The User " << to_unban->getNick() << " is not banned from the channel." << std::endl;
+			return NO_SUCH_NICK;;
 		}
-		ite->banned = 0;
+		std::vector<ClientIRC *>::iterator ite = ClientIterator(to_unban, _ban_list);
+		this->_ban_list.erase(ite);
+		return true;
 	}
 
 	void	ChannelIRC::sendMessageToAll(ClientIRC *const &sender, std::string const &message)
 	{
-		std::vector<cl_info>::iterator ite = _client_list.begin();
+		std::vector<ClientIRC *>::iterator ite = _client_list.begin();
 		std::string channel_msg = message + sender->getDelimiter();
 
 		while(ite != _client_list.end())
 		{
-			if (ite->banned == 0 && ite->user != sender)
-				sender->sendMessage(ite->user, channel_msg.c_str());
+			if ((*ite)->getId() != sender->getId())
+				sender->sendMessage(*ite, channel_msg.c_str());
 			ite++;
 		}
 	}
@@ -173,20 +168,19 @@ namespace ft
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-	std::vector<cl_info>::iterator clientSearch
-	(std::vector<cl_info> cl_list, ClientIRC *const &to_search)
+	std::vector<ClientIRC *>::iterator ClientIterator
+		(ClientIRC *const &to_find, std::vector<ClientIRC *> &to_check)
 	{
-		std::vector<cl_info>::iterator ite = cl_list.begin();
-		while (ite->user->getId() != to_search->getId())
+		std::vector<ClientIRC *>::iterator ite = to_check.begin();
+		while ((*ite)->getId() != to_find->getId())
 			ite++;
 		return ite;
 	}
 
-	bool	clientExists(ClientIRC *const &to_add, std::vector<cl_info> &to_check)
+	bool	clientExists(ClientIRC *const &to_add, std::vector<ClientIRC *> &to_check)
 	{
-		std::vector<cl_info>::iterator ite = to_check.begin();
-		while (ite != to_check.end() && ite->user->getId() != to_add->getId())
+		std::vector<ClientIRC *>::iterator ite = to_check.begin();
+		while ((*ite)->getId() != to_add->getId())
 			ite++;
 		if (ite == to_check.end())
 			return (false);

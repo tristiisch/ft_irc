@@ -17,23 +17,13 @@
 
 namespace ft {
 
-	struct cl_info
-	{
-
-		ClientIRC *user;
-		int banned;
-		int ope;
-
-		cl_info();
-		cl_info(ClientIRC *const &to_add);
-		~cl_info();
-	};
-
 	class ChannelIRC {
 
 		private:
 		std::string _name;
-		std::vector<cl_info> _client_list;
+		std::vector<ClientIRC *> _client_list;
+		std::vector<ClientIRC *> _ban_list;
+		std::vector<ClientIRC *> _ope_list;
 		int _size;
 		int _max_size;
 
@@ -46,21 +36,25 @@ namespace ft {
 			const std::string getName() const;
 			int			getSize();
 			int			getMaxSize();
-			const std::vector<cl_info> getClientList() const;
+			std::vector<ClientIRC *> getClientList();
+			std::vector<ClientIRC *> getBanList();
+			std::vector<ClientIRC *> getOpeList();
 
 			void	setName(const char *name);
 
-			void	addUser(ClientIRC *const &to_add);
-			void	addOperator(ClientIRC *const &to_add);
-			void	addBannedUser(ClientIRC *const &to_add);
-			void	removeUser(ClientIRC *const &to_remove);
-			void	removeOperator(ClientIRC *const &to_remove);
-			void	unbanUser(ClientIRC *const &to_unban);
+			int		addUser(ClientIRC *const &to_add);
+			int		addOperator(ClientIRC *const &to_add);
+			int		addBannedUser(ClientIRC *const &to_add);
+			int		removeUser(ClientIRC *const &to_remove);
+			int		removeOperator(ClientIRC *const &to_remove);
+			int		unbanUser(ClientIRC *const &to_unban);
 
 			void	sendMessageToAll(ClientIRC *const &sender, std::string const &message);
 
 	};
 
-	bool							clientExists(ClientIRC *const &to_add, std::vector<cl_info> &to_check);
-	std::vector<cl_info>::iterator 	clientSearch (std::vector<cl_info> cl_list, ClientIRC *const &to_search);
+	std::vector<ClientIRC *>::iterator ClientIterator
+		(ClientIRC *const &to_find, std::vector<ClientIRC *> &to_check);
+
+	bool			clientExists(ClientIRC *const &to_add, std::vector<ClientIRC *> &to_check);
 }

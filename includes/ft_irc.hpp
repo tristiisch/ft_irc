@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 03:12:35 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 16:19:02 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,15 @@ typedef struct in_addr IN_ADDR;
 # define CRLF_DELIMITER "\r\n"
 //il faut encore faire des define sur les messages d'erreur.
 
+#define ALREADY_IN_CHANNEL						1
+#define ALREADY_OPERATOR						2
+#define ALREADY_BANNED							3
+#define CHANNEL_FULL							4
+#define NO_SUCH_NICK							5
+
+
 #define ERR_NOSUCHCHANNEL(channel)				("403 *" + channel + " :no such channel")
-#define ERR_CHANNELISFULL(char, channel)		("471 *" + channel + " :Cannot join channel")
+#define ERR_CHANNELISFULL(channel)				("471 *" + channel + " :Cannot join channel")
 #define ERR_UNKNOWNMODE(char, channel)			("472 *" + char + " :is unknown mode char to me for " + channel)
 #define ERR_INVITEONLYCHAN(channel)				("473 *" + channel + " :Cannot join channel")
 #define ERR_BANNEDFROMCHAN(channel)				("474 *" + channel + " :Cannot join channel")
