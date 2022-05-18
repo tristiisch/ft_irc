@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 18:53:37 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/17 02:06:28 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 20:30:28 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "../ft_irc.hpp"
 #include "../ClientIRC.hpp"
 #include "../ServerIRC.hpp"
-#include "../commands/CommandContext.hpp"
+#include "CommandContext.hpp"
 namespace ft {
 	class ClientCommand {
 
@@ -25,34 +25,20 @@ namespace ft {
 			bool needToBeOperator;
 
 		public :
-			ClientCommand(std::string name) : name(name), needToBeAuthorized(false), needToBeOperator(false) {}
+			ClientCommand(std::string name);
 
-			ClientCommand(std::string name, bool needToBeAuthorized, bool needToBeOperator) : name(name),
-				needToBeAuthorized(needToBeAuthorized), needToBeOperator(needToBeOperator) {}
+			ClientCommand(std::string name, bool needToBeAuthorized, bool needToBeOperator);
 			
-			ClientCommand &operator=(ClientCommand const &instance) {
-				this->name = instance.name;
-				this->needToBeAuthorized = instance.needToBeAuthorized;
-				this->needToBeOperator = instance.needToBeOperator;
-				return *this;
-			}
+			ClientCommand &operator=(ClientCommand const &instance);
 
 			virtual ~ClientCommand() {};
 
-			// void virtual execute(CommandContext &cmd) const = 0;
-
 			bool virtual execute(CommandContext &cmd) const = 0;
 
-			std::string getName() const {
-				return this->name;
-			}
+			std::string getName() const;
 
-			bool isNeededToBeAutorized() const {
-				return this->needToBeAuthorized;
-			}
+			bool isNeededToBeAutorized() const;
 
-			bool isNeededToBeOperator() const {
-				return this->needToBeOperator;
-			}
+			bool isNeededToBeOperator() const;
 	};
 }

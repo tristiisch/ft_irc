@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/18 16:22:28 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 20:43:15 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,22 @@ namespace ft
 
 	ChannelIRC::~ChannelIRC() {}
 
-	const std::string	ChannelIRC::getName() const
+	const std::string&	ChannelIRC::getName() const
 	{
 		return (this->_name);
 	}
 
-	std::vector<ClientIRC *> ChannelIRC::getClientList()
+	std::vector<ClientIRC *>& ChannelIRC::getClientList()
 	{
 		return this->_client_list;
 	}
 
-	std::vector<ClientIRC *> ChannelIRC::getBanList()
+	std::vector<ClientIRC *>& ChannelIRC::getBanList()
 	{
 		return this->_ban_list;
 	}
 
-	std::vector<ClientIRC *> ChannelIRC::getOpeList()
+	std::vector<ClientIRC *>& ChannelIRC::getOpeList()
 	{
 		return this->_ope_list;
 	}
@@ -77,14 +77,12 @@ namespace ft
 			std::cout << "The User " << to_add->getNick() << " is already added to the channel." << std::endl;
 			return (ALREADY_IN_CHANNEL);
 		}
-		this->_client_list.push_back(to_add);
-		if (_size < _max_size)
-			this->_size++;
-		else
-		{
+		if ((int) _client_list.size() + 1 > _max_size) {
 			std::cout << "The User " << to_add->getNick() << " cannot be added to a full channel." << std::endl;
 			return (CHANNEL_FULL);
 		}
+		this->_client_list.push_back(to_add);
+		this->_size++;
 		return true;
 	}
 
@@ -180,7 +178,7 @@ namespace ft
 	bool	clientExists(ClientIRC *const &to_add, std::vector<ClientIRC *> &to_check)
 	{
 		std::vector<ClientIRC *>::iterator ite = to_check.begin();
-		while ((*ite)->getId() != to_add->getId())
+		while (ite != to_check.end() && (*ite)->getId() != to_add->getId())
 			ite++;
 		if (ite == to_check.end())
 			return (false);

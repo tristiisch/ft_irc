@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/16 19:37:37 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/18 21:04:09 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@
 #include "../../includes/commands/JoinCommand.hpp"
 #include "../../includes/commands/UserCommand.hpp"
 #include "../../includes/commands/CommandContext.hpp"
-
-#include <vector>
+#include "../../includes/commands/PartCommand.hpp"
 
 namespace ft {
 
@@ -39,6 +38,7 @@ namespace ft {
 		commands.push_back(new PrivateMsgCommand());
 		commands.push_back(new UserCommand());
 		commands.push_back(new NoticeCommand());
+		commands.push_back(new PartCommand());
 
 	}
 
@@ -93,12 +93,12 @@ namespace ft {
 			if (command->getName() == cmd) {
 				if (command->isNeededToBeAutorized() && !client->isAuthorized()) {
 					std::stringstream ss;
-					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RED << "', he didn't enter the server password." << C_RESET << std::endl;
+					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he didn't enter the server password." << C_RESET << std::endl;
 					logAndPrint(ss.str());
 					return false;
 				} else if (command->isNeededToBeOperator() && !client->isAuthorized()) {
 					std::stringstream ss;
-					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RED << "', he is not operator." << C_RESET << std::endl;
+					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he is not operator." << C_RESET << std::endl;
 					logAndPrint(ss.str());
 					return false;
 				}
