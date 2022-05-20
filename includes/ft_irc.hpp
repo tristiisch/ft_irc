@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 19:19:59 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 19:48:30 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct in_addr IN_ADDR;
 #define ERR_BANNEDFROMCHAN(channel)						"474 *" + channel + " :Cannot join channel"
 #define ERR_BADCHANNELKEY(channel)						"475 *" + channel + " :Cannot join channel"
 #define ERR_NOPRIVILEGES								"481 *:Permission Denied- You're not an IRC operator"
+#define ERR_CHANOPRIVSNEEDED(channel)					"482 " + channel + " :You're not channel operator"
 #define RPL_JOIN(nick, channel)							":" + nick + " JOIN " + channel
 #define RPL_NAMREPLY(nick, channel)						"=" + channel + " : @ " + nick
 #define RPL_NICK(newNick, nick, username, host)			":" + nick + "!" + username + "@" + host + " NICK " + newNick

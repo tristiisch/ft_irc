@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 00:40:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 19:21:56 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 21:40:45 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ namespace ft
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
+		std::vector<std::string> channels_args = split(args[0], ",");
+		std::vector<std::string> users_args= split(args[0], ",");
 		if (args.size() > 2)
 			client->recieveMessage(ERR_NEEDMOREPARAMS(std::string("KICK")));
 		// ici il faut checker les arguments, il peut y avoir plusieurs personnes kicked en même temps sur plusieurs channel
@@ -32,6 +34,10 @@ namespace ft
 		if (channel) {
 			if (!clientExists(client, channel->getClientList())){
 				client->recieveMessage(ERR_NOTONCHANNEL(channel->getName()));
+				return false;
+			}
+			else if (!clientExists(client, channel->getOpeList())){
+				client->recieveMessage(ERR_CHANOPRIVSNEEDED(channel->getName()));
 				return false;
 			}
 			else if (channel->removeUser(client) == NO_SUCH_NICK){
