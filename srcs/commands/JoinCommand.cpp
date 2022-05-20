@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 23:05:24 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/19 19:34:02 by allanganoun      ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ namespace ft {
 		channels = split(args[0], ",");
 		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it) {
 			std::cout << C_BLUE << "Client " << *client << " want to JOIN channel '" << *it << "'" << C_RESET << std::endl;
-
+			if ((*it)[0] != '#')
+				client->recieveMessage(ERR_NOSUCHCHANNEL(*it));
 			ChannelIRC *channel = server->getChannel(*it);
 			if (channel) {
 				int ret = channel->addUser(client);
@@ -42,12 +43,12 @@ namespace ft {
 				}
 				client->recieveMessage(RPL_JOIN(client->getNick(), *it));
 				channel->sendMessageToAll(client, RPL_JOIN(client->getNick(), *it));
-			} 
+			}
 			else {
 				ChannelIRC *new_channel = new ChannelIRC(it->c_str(), client);
 				server->addChannel(new_channel);
 				client->recieveMessage(RPL_JOIN(client->getNick(), *it));
-			}		
+			}
 		}
 		return true;
 	}
@@ -58,7 +59,8 @@ namespace ft {
 			client->recieveMessage(ERR_CHANNELISFULL(arg));
 		else if (ret == USER_BANNED)
 			client->recieveMessage(ERR_BANNEDFROMCHAN(arg));
-
+		else if (ret == ALREADY_IN_CHANNEL)
+			client->recieveMessage(ERR_ALREADYREGISTRED);
 	}
-	
+
 }
