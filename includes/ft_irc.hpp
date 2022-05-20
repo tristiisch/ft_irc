@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 23:17:59 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 17:43:50 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct in_addr IN_ADDR;
 #define ERR_NOPRIVILEGES						"481 :Permission Denied- You're not an IRC operator"
 #define ERR_NOSUCHNICK(nick)					("406 " + nick + " :No such nick/channel")
 #define ERR_NEEDMOREPARAMS(command)				("461 " + command + " :Not enough parameters")
+#define ERR_USERNOTINCHANNEL(nick, channel)		"441 " + nick + " " + channel + " :they aren't on that channel"	
 #define ERR_ALREADYREGISTRED					"462 :Unauthorized command (already registered)"
 #define RPL_WELCOME(nick, username, host)		"001 " + nick + " to the Internet Relay Network " +  nick + "!" + username + "@" + host
 #define	RPL_YOURHOST						 	"002 Your host is 127.0.0.1, running version 1.0"
