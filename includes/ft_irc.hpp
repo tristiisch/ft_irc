@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 19:18:12 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 19:19:59 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ typedef struct in_addr IN_ADDR;
 #define RPL_MYINFO(nick)								"004 " + nick + " irc@localhost 1.0 mode test mode test2"
 #define RPL_AWAY(nick, msg)								"301 *" + nick + " :" + msg
 #define ERR_NOSUCHCHANNEL(channel)						"403 *" + channel + " :no such channel"
-#define ERR_NOSUCHNICK(nick)							"406 *" + nick + " :No such nick/channel"
 #define ERR_CANNOTSENDTOCHAN(channel)					"404 *" + channel + " :Cannot send to channel"
+#define ERR_NOSUCHNICK(nick)							"406 *" + nick + " :No such nick/channel"
 #define ERR_NONICKNAMEGIVEN								"431 * :No nickname given"
 #define ERR_NICKNAMEINUSE(nick)							"433 *" + nick + " :Nickname is already in use"
 #define ERR_USERNOTINCHANNEL(nick, channel)				"441 " + nick + " " + channel + " :they aren't on that channel"	

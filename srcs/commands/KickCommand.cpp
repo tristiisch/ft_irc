@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 00:40:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 17:48:21 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 19:21:56 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,14 @@ namespace ft
 											<< "'" << "from the channel" <<args[0] <<  C_RESET << std::endl;
 		ChannelIRC *channel  = server->getChannel(args[0]);
 		if (channel) {
-			if (channel->removeUser(client) == NO_SUCH_NICK)
+			if (!clientExists(client, channel->getClientList())){
+				client->recieveMessage(ERR_NOTONCHANNEL(channel->getName()));
+				return false;
+			}
+			else if (channel->removeUser(client) == NO_SUCH_NICK){
 				client->recieveMessage(ERR_USERNOTINCHANNEL(args[1], channel->getName()));
+				return false;
+			}
 			channel->sendMessageToAll(client, cmd.getFullCmd());
 		} else
 			client->recieveMessage(ERR_NOSUCHCHANNEL(args[0]));
