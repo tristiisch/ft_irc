@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivateMsgCommand.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:25:31 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/18 21:29:46 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 17:31:28 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 

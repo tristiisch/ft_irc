@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: allanganoun <allanganoun@student.42lyon    +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/19 19:34:02 by allanganoun      ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 17:33:16 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,18 @@ namespace ft {
 			if ((*it)[0] != '#')
 				client->recieveMessage(ERR_NOSUCHCHANNEL(*it));
 			ChannelIRC *channel = server->getChannel(*it);
-			if (channel) {
-				int ret = channel->addUser(client);
-				if (ret < 0) {
-					ErrorManagement(ret, client, (*it));
-					continue;
-				}
-				client->recieveMessage(RPL_JOIN(client->getNick(), *it));
-				channel->sendMessageToAll(client, RPL_JOIN(client->getNick(), *it));
+			if (!channel) {
+				channel = new ChannelIRC(it->c_str(), client);
+				server->addChannel(channel);
 			}
-			else {
-				ChannelIRC *new_channel = new ChannelIRC(it->c_str(), client);
-				server->addChannel(new_channel);
-				client->recieveMessage(RPL_JOIN(client->getNick(), *it));
+			int ret = channel->addUser(client);
+			if (ret < 0) {
+				ErrorManagement(ret, client, (*it));
+				continue;
 			}
+			client->recieveMessage(RPL_JOIN(client->getNick(), *it));
+			client->recieveMessage(RPL_NAMREPLY(client->getNick(), *it));
+			channel->sendMessageToAll(client, RPL_JOIN(client->getNick(), *it));
 		}
 		return true;
 	}
@@ -62,5 +60,4 @@ namespace ft {
 		else if (ret == ALREADY_IN_CHANNEL)
 			client->recieveMessage(ERR_ALREADYREGISTRED);
 	}
-
 }

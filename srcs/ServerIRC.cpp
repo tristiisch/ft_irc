@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 16:06:47 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 16:20:04 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ namespace ft {
 
 	bool ServerIRC::start() {
 		SOCKADDR_IN sin;
+		std::stringstream ss;
 		int ret;
 
 		sin.sin_addr.s_addr = inet_addr(config.getIP().c_str());
@@ -69,6 +70,26 @@ namespace ft {
 			return false;
 		this->enabled = true;
 
+		ret = fcntl(serverSocket, F_SETFL, O_NONBLOCK);
+		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
+			stop();
+			return false;
+		}
+
+		int enable = 1;
+		ret = setsockopt(serverSocket, SOL_SOCKET, SO_REUSEPORT, &enable, sizeof(enable));
+		if (ft::checkError(ret, "Error while use setsockopt SO_REUSEPORT", (char*) NULL)) {
+			stop();
+			return false;
+		}
+
+		enable = 1;
+		ret = setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
+		if (ft::checkError(ret, "Error while use setsockopt SO_REUSEADDR", (char*) NULL)) {
+			stop();
+			return false;
+		}
+	
 		ret = bind(serverSocket, (SOCKADDR *)&sin, sizeof(sin));
 		if (ft::checkError(ret, "Error while binding port", &config.getPort())) {
 			stop();
@@ -81,12 +102,6 @@ namespace ft {
 			return false;
 		}
 
-		/*ret = fcntl(serverSocket, F_SETFL, O_NONBLOCK);
-		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
-			stop();
-			return false;
-		}*/
-		std::stringstream ss;
 		ss << C_GREEN << "ft_irc started on port " << config.getPort() << C_RESET << std::endl;
 		logAndPrint(ss.str());
 		return true;
@@ -158,7 +173,7 @@ namespace ft {
 					}
 					if (clients.find(it->fd) == clients.end()) {
 						std::stringstream ss;
-						ss << INFO << "Pollfd " << it->fd << " not linked to fd." << C_RESET << std::endl;
+						ss << DEBUG << "Pollfd " << it->fd << " not linked to fd." << C_RESET << std::endl;
 						logAndPrint(ss.str());
 						// deleteClient(this->clients[it->fd]);
 						// pfds.erase(it);
@@ -194,9 +209,11 @@ namespace ft {
 			// }
 			ft::checkError(ret, "Error while using POLL", &errno);
 		}
-		std::stringstream ss2;
-		ss2 << INFO << "Poll end" << C_RESET << std::endl;
-		logAndPrint(ss2.str());
+		if (DEBUG_MODE) {
+			std::stringstream ss2;
+			ss2 << DEBUG << "Poll end" << C_RESET << std::endl;
+			logAndPrint(ss2.str());
+		}
 	}
 
 	ClientIRC *ServerIRC::acceptClient() {
@@ -227,10 +244,10 @@ namespace ft {
 		ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
 		ft::checkError(ret, "Error while sending Hello world msg to ", &this->clients[clientSocket]);
 
-		// ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
-		// if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
-		// 	return NULL;
-		// }
+		ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
+		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
+			return NULL;
+		}
 		return client;
 	}
 
@@ -360,5 +377,9 @@ namespace ft {
 
 	void ServerIRC::addChannel(ChannelIRC* channel) {
 		channels.push_back(channel);
+	}
+
+	CommandManager* ServerIRC::getCommandManager() {
+		return this->commandManager;
 	}
 }

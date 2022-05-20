@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 20:27:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 20:29:30 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 17:26:20 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ namespace ft {
 		return *this;
 	}
 
-	std::string ClientCommand::getName() const {
+	const std::string& ClientCommand::getName() const {
 		return this->name;
 	}
 
-	bool ClientCommand::isNeededToBeAutorized() const {
+	const bool& ClientCommand::isNeededToBeAutorized() const {
 		return this->needToBeAuthorized;
 	}
 
-	bool ClientCommand::isNeededToBeOperator() const {
+	const bool& ClientCommand::isNeededToBeOperator() const {
 		return this->needToBeOperator;
 	}
 }

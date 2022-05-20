@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   UserCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/18 22:57:40 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 17:32:39 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ namespace ft {
 		}
 		client->setRegistered(true);
 		client->setUsername(args[2]);
-		client->recieveMessage(RPL_WELCOME(args[3], args[0],std::string("127.0.0.1")));
+		client->recieveMessage(RPL_WELCOME(args[3], args[0], std::string("127.0.0.1")));
 		client->recieveMessage(RPL_YOURHOST);
 		return true;
 	}

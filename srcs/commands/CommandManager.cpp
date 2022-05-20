@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 21:04:09 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 17:27:00 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@
 #include "../../includes/commands/UserCommand.hpp"
 #include "../../includes/commands/CommandContext.hpp"
 #include "../../includes/commands/PartCommand.hpp"
+#include "../../includes/commands/ExitCommand.hpp"
+#include "../../includes/commands/HelpCommand.hpp"
 
 namespace ft {
 
-	// CommandManager::CommandManager() {}
+	CommandManager::CommandManager() {}
 
 	CommandManager::CommandManager(ServerIRC *server) : server(server) {
 		commands.push_back(new QuitCommand());
@@ -39,7 +41,8 @@ namespace ft {
 		commands.push_back(new UserCommand());
 		commands.push_back(new NoticeCommand());
 		commands.push_back(new PartCommand());
-
+		commands.push_back(new ExitCommand());
+		commands.push_back(new HelpCommand());
 	}
 
 	CommandManager &CommandManager::operator=(CommandManager const &instance) {
@@ -114,5 +117,9 @@ namespace ft {
 
 	const ServerIRC* CommandManager::getServer() const {
 		return this->server;
+	}
+
+	std::vector<ClientCommand*>& CommandManager::getCommands() {
+		return this->commands;
 	}
 }
