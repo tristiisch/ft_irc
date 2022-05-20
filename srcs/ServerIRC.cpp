@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 16:20:04 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 17:48:17 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,6 @@ namespace ft {
 	}
 
 	ClientIRC *ServerIRC::acceptClient() {
-		char msg[] = "Hello world!\r\n";
 		ClientIRC *client;
 		SOCKADDR_IN csin;
     	SOCKET clientSocket;
@@ -240,9 +239,7 @@ namespace ft {
 		pfds.back().events = POLLIN;
 		pfds.back().fd = clientSocket;
 		client->setPoll(pfds.back());
-
-		ret = send(clientSocket, msg, std::strlen(msg), 0) == -1;
-		ft::checkError(ret, "Error while sending Hello world msg to ", &this->clients[clientSocket]);
+		client->recieveMessage("Hello world!");
 
 		ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {

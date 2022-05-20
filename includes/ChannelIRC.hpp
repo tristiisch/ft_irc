@@ -29,8 +29,8 @@ namespace ft {
 
 		public :
 			ChannelIRC();
-			ChannelIRC(const char *name, ClientIRC *const &first_client);
-			ChannelIRC(const char *name, ClientIRC *const &first_client, int const &max_size);
+			ChannelIRC(const char *name);
+			ChannelIRC(const char *name, int const &max_size);
 			~ChannelIRC();
 
 			const std::string& getName() const;

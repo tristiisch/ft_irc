@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 17:33:16 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 19:15:23 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ namespace ft {
 				client->recieveMessage(ERR_NOSUCHCHANNEL(*it));
 			ChannelIRC *channel = server->getChannel(*it);
 			if (!channel) {
-				channel = new ChannelIRC(it->c_str(), client);
+				channel = new ChannelIRC(it->c_str());
 				server->addChannel(channel);
 			}
 			int ret = channel->addUser(client);

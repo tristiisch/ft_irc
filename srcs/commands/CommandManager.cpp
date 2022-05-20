@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 17:27:00 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 18:51:45 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ namespace ft {
 
 		if (DEBUG_MODE) {
 			std::stringstream ss;
-			ss << DEBUG << *client << " send '" << bufferCmds << "'" << C_RESET << std::endl;
+			ss << C_BLUE << "<- " << *client << " send '" << bufferCmds << "'" << C_RESET << std::endl;
 			logAndPrint(ss.str());
 		}
 		while ((pos = bufferCmds.find(delim)) != std::string::npos) {
