@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:53:17 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 05:33:22 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 16:16:49 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,11 @@ int main(const int ac, const char *av[]) {
 	// while (i--) {
 	server.execute();
 	// }
-	std::stringstream ss;
-	ss << DEBUG << C_RED << "Task execute has ending." << C_RESET << std::endl;
-	ft::logAndPrint(ss.str());
+	if (DEBUG_MODE) {
+		std::stringstream ss;
+		ss << DEBUG << C_RED << "Task execute has ending." << C_RESET << std::endl;
+		ft::logAndPrint(ss.str());
+	}
 	if (server.isEnabled())
 		server.stop();
 	return 0;

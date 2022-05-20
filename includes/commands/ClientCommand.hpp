@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 18:53:37 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 20:30:28 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 16:11:45 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ namespace ft {
 
 			virtual ~ClientCommand() {};
 
-			bool virtual execute(CommandContext &cmd) const = 0;
+			virtual bool execute(CommandContext &cmd) const = 0;
 
-			std::string getName() const;
+			const std::string& getName() const;
 
-			bool isNeededToBeAutorized() const;
+			const bool& isNeededToBeAutorized() const;
 
-			bool isNeededToBeOperator() const;
+			const bool& isNeededToBeOperator() const;
 	};
 }

@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 03:01:34 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 14:52:13 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ namespace ft {
 			ClientIRC* getClientById(int& id) const;
 			ChannelIRC* getChannel(std::string& channelName) const;
 			void addChannel(ChannelIRC* channel);
+			CommandManager* getCommandManager();
 	};
 }
