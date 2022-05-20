@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:31:41 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 20:32:43 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 17:30:52 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ namespace ft {
 			client->recieveMessage(ERR_NICKNAMEINUSE(newNick));
 			return false;
 		}
-		// client->recieveMessage("NICK " + newNick);
 		client->recieveMessage(RPL_NICK(newNick, client->getNick(), client->getUsername(), "localhost"));
 		std::cout << C_YELLOW << "Nick of " << *client << " is now '" << newNick << "'." << C_RESET << std::endl;
 		client->setNick(newNick);

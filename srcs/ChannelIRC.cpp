@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/18 20:43:15 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 17:33:10 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,16 @@ namespace ft
 		if (clientExists(to_add, this->_client_list) == true)
 		{
 			std::cout << "The User " << to_add->getNick() << " is already added to the channel." << std::endl;
-			return (ALREADY_IN_CHANNEL);
+			return ALREADY_IN_CHANNEL;
+		}
+		else if (clientExists(to_add, this->_ban_list))
+		{
+			std::cout << "The User " << to_add->getNick() << " is banned from the channel." << std::endl;
+			return USER_BANNED;
 		}
 		if ((int) _client_list.size() + 1 > _max_size) {
 			std::cout << "The User " << to_add->getNick() << " cannot be added to a full channel." << std::endl;
-			return (CHANNEL_FULL);
+			return CHANNEL_FULL;
 		}
 		this->_client_list.push_back(to_add);
 		this->_size++;

@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 14:57:06 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 17:27:00 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ namespace ft {
 		commands.push_back(new PartCommand());
 		commands.push_back(new ExitCommand());
 		commands.push_back(new HelpCommand());
-
 	}
 
 	CommandManager &CommandManager::operator=(CommandManager const &instance) {
