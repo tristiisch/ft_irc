@@ -80,18 +80,17 @@ typedef struct in_addr IN_ADDR;
 #define NO_SUCH_NICK							-5
 #define USER_BANNED								-6
 
-
 #define RPL_WELCOME(nick, username, host)				"001 " + nick + " to the Internet Relay Network " +  nick + "!" + username + "@" + host
 #define	RPL_YOURHOST						 			"002 Your host is 127.0.0.1, running version 1.0"
 #define	RPL_CREATED										"003 This server was created 05/18/22"
 #define RPL_MYINFO 										"004 irc@localhost 1.0 mode test mode test2"
 #define RPL_AWAY(nick, msg)								"301 *" + nick + " :" + msg
 #define ERR_NOSUCHCHANNEL(channel)						"403 *" + channel + " :no such channel"
-#define ERR_NOPRIVILEGES								"481 *:Permission Denied- You're not an IRC operator"
 #define ERR_NOSUCHNICK(nick)							"406 *" + nick + " :No such nick/channel"
 #define ERR_CANNOTSENDTOCHAN(channel)					"404 *" + channel + " :Cannot send to channel"
 #define ERR_NONICKNAMEGIVEN								"431 * :No nickname given"
 #define ERR_NICKNAMEINUSE(nick)							"433 *" + nick + " :Nickname is already in use"
+#define ERR_USERNOTINCHANNEL(nick, channel)		"441 " + nick + " " + channel + " :they aren't on that channel"	
 #define ERR_NOTONCHANNEL(channel)						"442 * " + channel + " :You're not on that channel"
 #define ERR_NEEDMOREPARAMS(command)						"461 *" + command + " :Not enough parameters"
 #define ERR_ALREADYREGISTRED							"462 * :Unauthorized command (already registered)"
@@ -100,9 +99,12 @@ typedef struct in_addr IN_ADDR;
 #define ERR_INVITEONLYCHAN(channel)						"473 *" + channel + " :Cannot join channel"
 #define ERR_BANNEDFROMCHAN(channel)						"474 *" + channel + " :Cannot join channel"
 #define ERR_BADCHANNELKEY(channel)						"475 *" + channel + " :Cannot join channel"
+#define ERR_NOPRIVILEGES								"481 *:Permission Denied- You're not an IRC operator"
 #define RPL_JOIN(nick, channel)							":" + nick + " JOIN " + channel
 #define RPL_NAMREPLY(nick, channel)						"=" + channel + " : @ " + nick
 #define RPL_NICK(newNick, nick, username, host)			":" + nick + "!" + username + "@" + host + " NICK " + newNick
+#define ERR_CANNOTSENDTOCHAN(channel)           ("404 " + channel + " :Cannot send to channel")
+
 #define RPL_PART(channel, msg, nick, username, host)	":" + nick + "!" + username + "@" + host + " PART " + channel + " :" + msg
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0
