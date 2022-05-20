@@ -62,6 +62,7 @@ typedef struct in_addr IN_ADDR;
 # define C_GREEN "\033[32m"
 # define C_YELLOW "\033[33m"
 # define C_BLUE "\033[1;34m"
+# define C_CYAN "\033[36m"
 # define C_RESET "\033[0m"
 
 # define ERROR C_RED << "ERROR > "
@@ -80,10 +81,11 @@ typedef struct in_addr IN_ADDR;
 #define NO_SUCH_NICK							-5
 #define USER_BANNED								-6
 
-#define RPL_WELCOME(nick, username, host)				"001 " + nick + " to the Internet Relay Network " +  nick + "!" + username + "@" + host
-#define	RPL_YOURHOST						 			"002 Your host is 127.0.0.1, running version 1.0"
-#define	RPL_CREATED										"003 This server was created 05/18/22"
-#define RPL_MYINFO 										"004 irc@localhost 1.0 mode test mode test2"
+
+#define RPL_WELCOME(nick, username, host)				"001 " + nick + " Welcome to the Internet Relay Network " +  nick + "!" + username + "@" + host
+#define	RPL_YOURHOST(nick)						 		"002 " + nick + " Your host is 127.0.0.1, running version 1.0"
+#define	RPL_CREATED(nick)								"003 " + nick + " This server was created 05/18/22"
+#define RPL_MYINFO(nick)								"004 " + nick + " irc@localhost 1.0 mode test mode test2"
 #define RPL_AWAY(nick, msg)								"301 *" + nick + " :" + msg
 #define ERR_NOSUCHCHANNEL(channel)						"403 *" + channel + " :no such channel"
 #define ERR_CANNOTSENDTOCHAN(channel)					"404 *" + channel + " :Cannot send to channel"
@@ -104,7 +106,6 @@ typedef struct in_addr IN_ADDR;
 #define RPL_JOIN(nick, channel)							":" + nick + " JOIN " + channel
 #define RPL_NAMREPLY(nick, channel)						"=" + channel + " : @ " + nick
 #define RPL_NICK(newNick, nick, username, host)			":" + nick + "!" + username + "@" + host + " NICK " + newNick
-#define ERR_CANNOTSENDTOCHAN(channel)           ("404 " + channel + " :Cannot send to channel")
 
 #define RPL_PART(channel, msg, nick, username, host)	":" + nick + "!" + username + "@" + host + " PART " + channel + " :" + msg
 #ifndef DEBUG_MODE

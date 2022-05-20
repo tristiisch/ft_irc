@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/20 17:33:10 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/20 19:15:21 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ namespace ft
 	//Classe de channel
 	ChannelIRC::ChannelIRC() {}
 
-	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client)
+	ChannelIRC::ChannelIRC(const char *name)
 	:	_name(name),
 		_client_list(),
 		_ban_list(),
@@ -26,11 +26,9 @@ namespace ft
 		_max_size(42)
 	{
 		std::cout << "Channel \"" << this->_name << "\" created." << std::endl;
-		this->_client_list.push_back(first_client);
-		std::cout << "The " << this->_name << " channel was created by the client n. " << first_client->getId() << std::endl;
 	}
 
-	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client, int const &max_size)
+	ChannelIRC::ChannelIRC(const char *name, int const &max_size)
 	:	_name(name),
 		_client_list(),
 		_ban_list(),
@@ -38,9 +36,8 @@ namespace ft
 		_size(1),
 		_max_size(max_size)
 	{
-		this->_client_list.push_back(first_client);
 		std::cout << "The " << this->_name << " channel of size "
-						<< this->_max_size << " was created by the client n. " << first_client->getId() << std::endl;
+						<< this->_max_size << " was created." << std::endl;
 	}
 
 	ChannelIRC::~ChannelIRC() {}
