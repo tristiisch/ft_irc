@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 18:51:45 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/22 20:35:44 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include "../../includes/commands/PartCommand.hpp"
 #include "../../includes/commands/ExitCommand.hpp"
 #include "../../includes/commands/HelpCommand.hpp"
+#include "../../includes/commands/ModeCommand.hpp"
 
 namespace ft {
 
@@ -43,6 +44,7 @@ namespace ft {
 		commands.push_back(new PartCommand());
 		commands.push_back(new ExitCommand());
 		commands.push_back(new HelpCommand());
+		commands.push_back(new ModeCommand());
 	}
 
 	CommandManager &CommandManager::operator=(CommandManager const &instance) {
