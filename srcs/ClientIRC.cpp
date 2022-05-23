@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 17:08:38 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 17:59:53 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ namespace ft {
 		nick(""),
 		delimiter("\r\n"),
 		authorized(false),
-		registered(false)
+		registered(false),
+		ope(false)
 	{}
 
 	ClientIRC& ClientIRC::operator=(const ClientIRC& x) {
@@ -139,10 +140,10 @@ namespace ft {
 	}
 
 	const bool& ClientIRC::isOperator() const {
-		return this->op;
+		return this->ope;
 	}
 
-	void ClientIRC::setOperator(const bool& op) {
-		this->op = op;
+	void ClientIRC::setOperator(const bool& ope) {
+		this->ope = ope;
 	}
 }

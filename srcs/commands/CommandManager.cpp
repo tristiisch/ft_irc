@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 17:13:04 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 18:00:07 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "../../includes/commands/ExitCommand.hpp"
 #include "../../includes/commands/HelpCommand.hpp"
 #include "../../includes/commands/OperCommand.hpp"
+#include "../../includes/commands/ModeCommand.hpp"
 
 namespace ft {
 
@@ -45,6 +46,8 @@ namespace ft {
 		commands.push_back(new PartCommand());
 		commands.push_back(new ExitCommand());
 		commands.push_back(new OperCommand());
+		commands.push_back(new HelpCommand());
+		commands.push_back(new ModeCommand());
 	}
 
 	CommandManager &CommandManager::operator=(CommandManager const &instance) {
