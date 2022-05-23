@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/23 13:00:29 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 21:01:42 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,21 @@ namespace ft
 		}
 	}
 
+	void	ChannelIRC::clearUser(ClientIRC *const &to_clear) {
+		std::vector<ClientIRC *>::iterator ite;
+
+		ite = ClientIterator(to_clear, _ope_list);
+		if (ite != _ope_list.end())
+			this->_ope_list.erase(ite);
+
+		ite = ClientIterator(to_clear, _ban_list);
+		if (ite != _ban_list.end())
+			this->_ban_list.erase(ite);
+
+		ite = ClientIterator(to_clear, _client_list);
+		if (ite != _client_list.end())
+			this->_client_list.erase(ite);
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -174,7 +189,7 @@ namespace ft
 		(ClientIRC *const &to_find, std::vector<ClientIRC *> &to_check)
 	{
 		std::vector<ClientIRC *>::iterator ite = to_check.begin();
-		while ((*ite)->getId() != to_find->getId())
+		while (ite != to_check.end() && (*ite)->getId() != to_find->getId())
 			ite++;
 		return ite;
 	}

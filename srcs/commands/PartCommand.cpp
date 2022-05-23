@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 20:35:09 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 17:31:22 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 21:13:41 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,13 @@ namespace ft {
 				client->recieveMessage(ERR_NOTONCHANNEL(*it));
 				continue;
 			}
-			client->recieveMessage(RPL_PART(channel->getName(), "", client->getNick(), client->getUsername(), "localhost"));
-			channel->sendMessageToAll(client, RPL_PART(channel->getName(), "", client->getNick(), client->getUsername(), "localhost"));
-			channel->removeUser(client);
+			client->recieveMessage(RPL_PART(channel->getName(), "", client->getNick(), client->getUsername(), client->getHost()));
+			channel->sendMessageToAll(client, RPL_PART(channel->getName(), "", client->getNick(), client->getUsername(), client->getHost()));
+			/*if (clientExists(client, channel->getOpeList())) {
+				channel->removeOperator(client);
+			}
+			channel->removeUser(client);*/
+			channel->clearUser(client);
 		}
 		return true;
 	}

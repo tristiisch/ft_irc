@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 17:59:48 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 21:13:42 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ namespace ft {
 			const int& getId() const;
 			const in_port_t& getPort() const;
 			const in_addr& getAddress() const;
+			const char* getHost() const;
 			const SOCKADDR_IN& getSockAddr() const;
 			const SOCKET& getSocket() const;
 			const std::string& getNick() const;
