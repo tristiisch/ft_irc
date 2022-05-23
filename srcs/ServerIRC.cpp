@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 17:48:17 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 15:36:55 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,9 @@ namespace ft {
 	}
 
 	bool ServerIRC::stop() {
-	
 		if (!this->enabled) {
 			std::stringstream ss;
-			ss << WARN << "Can't stop server IRC, he is not enabled." << C_RESET << std::endl;
+			ss << WARN << "Can't stop server IRC, it is not enabled." << C_RESET << std::endl;
 			logAndPrint(ss.str());
 			return false;
 		}
@@ -151,30 +150,42 @@ namespace ft {
 	}
 
 	void ServerIRC::execute() {
+		std::stringstream ss;
 		int ret;
 
 		if (!isEnabled())
 			exit(0);
 
-		std::stringstream ss;
-		ss << INFO << "Poll start with " << pfds.size() << " poll open" << C_RESET << std::endl;
-		logAndPrint(ss.str());
-		ss.clear();
-		while (this->enabled && !pfds.empty() && ((ret = poll(&(pfds[0]), pfds.size(), 1 * 1000)) != -1)) {
+		if (DEBUG_MODE) {
+			ss << INFO << "Poll start with " << pfds.size() << " poll open" << C_RESET << std::endl;
+			logAndPrint(ss.str());
+			ss.clear();
+		}
+		while (this->enabled && !pfds.empty() && (ret = poll(&pfds[0], pfds.size(), 1 * 1000) != -1)) {
 			if (pfds[0].revents & POLLIN)
 				acceptClient(); // serverSocket receive connection
 			else if (pfds.size() > 1) {
 				// std::cout << C_GREEN << "Poll size " << pfds.size() << "." << C_RESET << std::endl;
-				for (std::vector<pollfd>::iterator it = pfds.begin() + 1; it != pfds.end(); it++) { // clientsSockets receive connection
+				for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) { // clientsSockets receive connection
+					if (it == pfds.begin()) {
+						continue;
+					}
+					if (!this->isEnabled()) {
+						std::cout << C_BLUE << "popopo STOP HERE" << C_RESET << std::endl;
+						break;
+					}
 					// std::cout << C_GREEN << "POLL FOR " << pfds.size() << "." << C_RESET << std::endl;
 					if (it->fd < 0) {
 						ss << INFO << "Pollfd " << it->fd << " negative." << C_RESET << std::endl;
+						logAndPrint(ss.str());
+						ss.clear();
 						break;
 					}
 					if (clients.find(it->fd) == clients.end()) {
 						std::stringstream ss;
 						ss << DEBUG << "Pollfd " << it->fd << " not linked to fd." << C_RESET << std::endl;
 						logAndPrint(ss.str());
+						ss.clear();
 						// deleteClient(this->clients[it->fd]);
 						// pfds.erase(it);
 						break;
@@ -210,9 +221,8 @@ namespace ft {
 			ft::checkError(ret, "Error while using POLL", &errno);
 		}
 		if (DEBUG_MODE) {
-			std::stringstream ss2;
-			ss2 << DEBUG << "Poll end" << C_RESET << std::endl;
-			logAndPrint(ss2.str());
+			ss << DEBUG << "Poll end" << C_RESET << std::endl;
+			logAndPrint(ss.str());
 		}
 	}
 

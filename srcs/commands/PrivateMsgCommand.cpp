@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:25:31 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/20 17:31:28 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 15:17:48 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ namespace ft
 			std::cout << C_BLUE << "Client " << *client << " want to send the message "
 										<< "'" <<args[1] << "'" << " to " << args[0] << C_RESET << std::endl;
 			ClientIRC *target  = server->getClientByNick(args[0]);
-			if (!client) {
+			if (!target) {
 				client->recieveMessage(ERR_NOSUCHNICK(args[0]));
 				return false;
 			}
