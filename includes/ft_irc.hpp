@@ -103,6 +103,7 @@ typedef struct in_addr IN_ADDR;
 #define ERR_BADCHANNELKEY(channel)						"475 *" + channel + " :Cannot join channel"
 #define ERR_NOPRIVILEGES								"481 *:Permission Denied- You're not an IRC operator"
 #define ERR_CHANOPRIVSNEEDED(channel)					"482 " + channel + " :You're not channel operator"
+#define ERR_UMODEUNKNOWNFLAG							"501 :Unknown MODE flag"
 #define RPL_JOIN(nick, channel)							":" + nick + " JOIN " + channel
 #define RPL_NAMREPLY(nick, channel)						"=" + channel + " : @ " + nick
 #define RPL_NICK(newNick, nick, username, host)			":" + nick + "!" + username + "@" + host + " NICK " + newNick
