@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/20 19:15:21 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 13:00:29 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ namespace ft
 
 	int		ChannelIRC::addOperator(ClientIRC *const &to_add)
 	{
+		if (!clientExists(to_add, this->_client_list))
+			return NO_SUCH_NICK;
 		if (clientExists(to_add, this->_ope_list))
 		{
 			std::cout << "The User " << to_add->getNick() << " is already operator in this channel." << std::endl;

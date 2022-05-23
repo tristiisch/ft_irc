@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientIRC.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 15:42:28 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 15:33:13 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ namespace ft {
 			std::string delimiter;
 			bool authorized;
 			bool registered;
-
+			bool ope;
 			ClientIRC() : id(-1) {}
 
 		public :
@@ -50,6 +50,7 @@ namespace ft {
 			pollfd& getPoll();
 			const bool& isRegistered() const;
 			const std::string& getUsername() const;
+			const bool& getOperator() const;
 
 			void setSocket(SOCKET& clientSocket);
 			void setNick(std::string& nick);
@@ -58,6 +59,7 @@ namespace ft {
 			void setPoll(pollfd& poll);
 			void setRegistered(const bool& registered);
 			void setUsername(std::string& username);
+			void setOperator(bool state);
 
 			void sendMessage(ClientIRC *const &to, std::string const &message);
 			void recieveMessage(std::string const &message);

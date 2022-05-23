@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 00:40:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/22 20:31:50 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 12:01:02 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,5 @@ namespace ft
 		return true;
 	}
 
-	ClientIRC 	*searchByName(std::string const &name, std::vector<ClientIRC *>client_list)
-	{
-		std::vector<ClientIRC *>::iterator ite = client_list.begin();
-		while (ite != client_list.end())
-		{
-			if (name.compare((*ite)->getNick()))
-				break;
-			ite++;
-		}
-		return *ite;
-	}
+	
 }
