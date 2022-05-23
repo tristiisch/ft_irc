@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 15:36:55 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 17:10:00 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@
 namespace ft {
 
 	ServerIRC::ServerIRC() : enabled(false), clientIdCounter(1) {
-	/*	pfds[0].fd = STDIN_FILENO;
-		pfds[0].events = POLLIN;
-		//pfds[1].fd = serverSocket;
-		pfds[1].events = POLLIN | POLLPRI | POLLHUP | POLLERR;*/
 		this->commandManager = new CommandManager(this);
 	}
 

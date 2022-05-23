@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 17:46:42 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 17:08:38 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ namespace ft {
 		this->id = x.getId();
 		this->sockAddr = x.getSockAddr();
 		this->clientSocket = x.getSocket();
+		this->nick = x.getNick();
+		this->delimiter = x.getDelimiter();
+		this->authorized = x.isAuthorized();
+		this->registered = x.isRegistered();
 		return *this;
 	}
 
@@ -132,5 +136,13 @@ namespace ft {
 
 	void ClientIRC::setUsername(std::string& username) {
 		this->username = username;
+	}
+
+	const bool& ClientIRC::isOperator() const {
+		return this->op;
+	}
+
+	void ClientIRC::setOperator(const bool& op) {
+		this->op = op;
 	}
 }

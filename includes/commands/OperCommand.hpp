@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HelpCommand.hpp                                    :+:      :+:    :+:   */
+/*   OperCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 18:53:37 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 15:39:59 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 15:39:22 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "ClientCommand.hpp"
-#include "CommandManager.hpp"
 
 namespace ft {
-	class HelpCommand : public ClientCommand {
+	class OperCommand : public ClientCommand {
 
 		public :
-			HelpCommand();
+			OperCommand();
 
-			~HelpCommand();
+			~OperCommand();
 
 			bool execute(CommandContext &cmd) const;
 	};

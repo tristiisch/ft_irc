@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 18:51:45 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 17:13:04 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@
 #include "../../includes/commands/PartCommand.hpp"
 #include "../../includes/commands/ExitCommand.hpp"
 #include "../../includes/commands/HelpCommand.hpp"
+#include "../../includes/commands/OperCommand.hpp"
 
 namespace ft {
 
 	CommandManager::CommandManager() {}
 
 	CommandManager::CommandManager(ServerIRC *server) : server(server) {
+		commands.push_back(new HelpCommand());
 		commands.push_back(new QuitCommand());
 		commands.push_back(new CapCommand());
 		commands.push_back(new NickCommand());
@@ -42,7 +44,7 @@ namespace ft {
 		commands.push_back(new NoticeCommand());
 		commands.push_back(new PartCommand());
 		commands.push_back(new ExitCommand());
-		commands.push_back(new HelpCommand());
+		commands.push_back(new OperCommand());
 	}
 
 	CommandManager &CommandManager::operator=(CommandManager const &instance) {
@@ -55,6 +57,7 @@ namespace ft {
 		for (std::vector<ClientCommand*>::iterator it = commands.begin(); it != commands.end(); ++it) {
 			delete *it;
 		}
+		commands.clear();
 	}
 
 	void CommandManager::receiveCmd(ClientIRC *client, std::string bufferCmds) {
@@ -99,7 +102,7 @@ namespace ft {
 					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he didn't enter the server password." << C_RESET << std::endl;
 					logAndPrint(ss.str());
 					return false;
-				} else if (command->isNeededToBeOperator() && !client->isAuthorized()) {
+				} else if (command->isNeededToBeOperator() && !client->isOperator()) {
 					std::stringstream ss;
 					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he is not operator." << C_RESET << std::endl;
 					logAndPrint(ss.str());

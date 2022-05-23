@@ -1,36 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HelpCommand.cpp                                    :+:      :+:    :+:   */
+/*   OperCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 15:43:14 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 17:08:49 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/commands/HelpCommand.hpp"
+#include "../../includes/commands/OperCommand.hpp"
 
 namespace ft {
 
-	HelpCommand::HelpCommand() : ClientCommand("HELP") {}
+	OperCommand::OperCommand() : ClientCommand("OPER") {}
 
-	HelpCommand::~HelpCommand() {}
+	OperCommand::~OperCommand() {}
 
-	bool HelpCommand::execute(CommandContext &cmd) const {
+	bool OperCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
-		std::vector<ClientCommand*> commands = server->getCommandManager()->getCommands();
-		std::string prefix = "006 " + client->getNick() + " ";
-		std::stringstream ss;
-		
-		ss << prefix << "HELP - " << commands.size() << " commands" << client->getDelimiter();
-		for (std::vector<ClientCommand*>::iterator it = commands.begin(); it != commands.end(); ++it) {
-			ClientCommand *clientCmd = *it;
-			ss << prefix << clientCmd->getName() << client->getDelimiter();
+
+		if (cmd.getArgs().size() < 2) {
+			client->recieveMessage(ERR_NEEDMOREPARAMS(std::string("OPER")));
+			return false;
 		}
-		client->recieveMessage(ss.str());
+
+		if (!server->isGoodPassword(cmd.getArg(1))) {
+			client->recieveMessage(ERR_PASSWDMISMATCH);
+			return false;
+		}
+		client->recieveMessage(RPL_YOUREOPER);
+		client->setOperator(true);
 		return true;
 	}
 }

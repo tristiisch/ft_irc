@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:32:12 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/18 15:42:28 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 17:12:49 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ namespace ft {
 			std::string delimiter;
 			bool authorized;
 			bool registered;
+			bool op;
 
 			ClientIRC() : id(-1) {}
 
@@ -50,14 +51,16 @@ namespace ft {
 			pollfd& getPoll();
 			const bool& isRegistered() const;
 			const std::string& getUsername() const;
+			const bool& isOperator() const;
 
 			void setSocket(SOCKET& clientSocket);
 			void setNick(std::string& nick);
 			void setAuthorized(const bool& authorized);
-			void setDelimitator(const std::string& Delimiter);
+			void setDelimitator(const std::string& delimiter);
 			void setPoll(pollfd& poll);
 			void setRegistered(const bool& registered);
 			void setUsername(std::string& username);
+			void setOperator(const bool& op);
 
 			void sendMessage(ClientIRC *const &to, std::string const &message);
 			void recieveMessage(std::string const &message);
