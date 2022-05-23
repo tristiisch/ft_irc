@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 18:12:37 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 18:29:44 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ typedef struct in_addr IN_ADDR;
 #define	RPL_CREATED(nick)								"003 " + nick + " This server was created 05/18/22"
 #define RPL_MYINFO(nick)								"004 " + nick + " irc@localhost 1.0 mode test mode test2"
 #define RPL_AWAY(nick, msg)								"301 " + nick + " :" + msg
-#define RPL_UNIQOPIS(nick, channel)						"325 " + channel + " " + nick
+#define RPL_UNIQOPIS(nick, channel)						"325 * " + channel + " " + nick
 #define RPL_NAMREPLY(nick, channel, target)				"353 " + nick + " = " + channel + " : " + target
 #define RPL_YOUREOPER(nick)								"381 " + nick + " :You are now an IRC operator"
 #define ERR_NOSUCHCHANNEL(channel)						"403 " + channel + " :no such channel"
@@ -105,10 +105,10 @@ typedef struct in_addr IN_ADDR;
 #define ERR_INVITEONLYCHAN(channel)						"473 " + channel + " :Cannot join channel"
 #define ERR_BANNEDFROMCHAN(channel)						"474 " + channel + " :Cannot join channel"
 #define ERR_BADCHANNELKEY(channel)						"475 " + channel + " :Cannot join channel"
-#define ERR_NOPRIVILEGES								"481 :Permission Denied- You're not an IRC operator"
+#define ERR_NOPRIVILEGES								"481 * :Permission Denied- You're not an IRC operator"
 #define ERR_CHANOPRIVSNEEDED(channel)					"482 " + channel + " :You're not channel operator"
-#define ERR_UMODEUNKNOWNFLAG							"501 :Unknown MODE flag"
-#define ERR_USERSDONTMATCH								"502 :Cannot change mode for other users"
+#define ERR_UMODEUNKNOWNFLAG							"501 * :Unknown MODE flag"
+#define ERR_USERSDONTMATCH								"502 * :Cannot change mode for other users"
 #define RPL_JOIN(channel)								"JOIN " + channel
 #define RPL_NICK(newNick, nick, username, host)			":" + nick + "!" + username + "@" + host + " NICK " + newNick
 #define RPL_PART(channel, msg, nick, username, host)	":" + nick + "!" + username + "@" + host + " PART " + channel + " :" + msg

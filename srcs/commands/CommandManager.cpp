@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 18:00:07 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 18:14:37 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ namespace ft {
 					std::stringstream ss;
 					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he is not operator." << C_RESET << std::endl;
 					logAndPrint(ss.str());
+					client->recieveMessage(ERR_NOPRIVILEGES);
 					return false;
 				}
 				CommandContext commandContext(this->server, client, fullCmd, cmd, argsArray);

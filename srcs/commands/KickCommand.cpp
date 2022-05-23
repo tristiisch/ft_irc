@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 00:40:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 18:03:16 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 19:39:00 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 	
 namespace ft
 {
-	KickCommand::KickCommand() : ClientCommand("KICK") {}
+	KickCommand::KickCommand() : ClientCommand("KICK", true, false) {}
 
 	KickCommand::~KickCommand() {}
 
@@ -25,11 +25,13 @@ namespace ft
 		std::vector<std::string> args = cmd.getArgs();
 		std::vector<std::string> channels_args = split(args[0], ",");
 		std::vector<std::string> users_args= split(args[1], ",");
-		if (args.size() < 2)
+		if (args.size() < 2) {
 			client->recieveMessage(ERR_NEEDMOREPARAMS(std::string("KICK")));
+			return false;
+		}
 		
 		std::cout << C_BLUE << "Client " << *client << " want to Kick '" << args[1]
-											<< "'" << "from the channel" <<args[0] <<  C_RESET << std::endl;
+											<< "'" << " from the channel" <<args[0] <<  C_RESET << std::endl;
 		
 		std::vector<std::string>::iterator users = users_args.begin();
 		std::vector<std::string>::iterator channels = channels_args.begin();
@@ -39,21 +41,28 @@ namespace ft
 			while (channels != channels_args.end())
 			{
 				ChannelIRC *channel  = server->getChannel(*channels);
-				ClientIRC *user_client = server->getClientByNick(*users);
+				ClientIRC *target = server->getClientByNick(*users);
 				if (channel) {
 					if (!clientExists(client, channel->getClientList())){
 						client->recieveMessage(ERR_NOTONCHANNEL(channel->getName()));
-						return false;
+						channels++;
+						continue;
 					}
 					else if (!clientExists(client, channel->getOpeList())){
 						client->recieveMessage(ERR_CHANOPRIVSNEEDED(channel->getName()));
-						return false;
+						channels++;
+						continue;
 					}
-					else if (channel->removeUser(user_client) == NO_SUCH_NICK){
+					else if (clientExists(target, channel->getClientList()) == false)
+					{
+						std::cout << "The User " << target->getNick() << " does not exist in this channel." << std::endl;
 						client->recieveMessage(ERR_USERNOTINCHANNEL(*users, channel->getName()));
-						return false;
+						channels++;
+						continue;
 					}
-					channel->sendMessageToAll(client, cmd.getFullCmd()); // il faut peut être revoir ça 
+					channel->sendMessageToAll(client, cmd.getFullCmd()); // il faut peut être revoir ça
+					channel->removeUser(target);
+					client->sendMessage(client, cmd.getFullCmd());
 				} else
 					client->recieveMessage(ERR_NOSUCHCHANNEL(args[0]));
 				channels++;
