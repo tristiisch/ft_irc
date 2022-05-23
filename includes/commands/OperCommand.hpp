@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ExitCommand.cpp                                    :+:      :+:    :+:   */
+/*   OperCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 17:17:38 by tglory           ###   ########lyon.fr   */
+/*   Created: 2022/05/08 18:53:37 by tglory            #+#    #+#             */
+/*   Updated: 2022/05/23 15:39:22 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/commands/ExitCommand.hpp"
+#pragma once
+
+#include "ClientCommand.hpp"
 
 namespace ft {
+	class OperCommand : public ClientCommand {
 
-	ExitCommand::ExitCommand() : ClientCommand("EXIT", true, true) {}
+		public :
+			OperCommand();
 
-	ExitCommand::~ExitCommand() {}
+			~OperCommand();
 
-	bool ExitCommand::execute(CommandContext &cmd) const {
-		ServerIRC *server = cmd.getServer();
-		
-		server->stop();
-		return true;
-	}
+			bool execute(CommandContext &cmd) const;
+	};
 }

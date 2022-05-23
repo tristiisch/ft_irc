@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientIRC.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 15:35:35 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 17:59:53 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ namespace ft {
 		this->id = x.getId();
 		this->sockAddr = x.getSockAddr();
 		this->clientSocket = x.getSocket();
+		this->nick = x.getNick();
+		this->delimiter = x.getDelimiter();
+		this->authorized = x.isAuthorized();
+		this->registered = x.isRegistered();
 		return *this;
 	}
 
@@ -131,15 +135,15 @@ namespace ft {
 		return this->username;
 	}
 
-	const bool& ClientIRC::getOperator() const {
-		return this->ope;
-	}
-
 	void ClientIRC::setUsername(std::string& username) {
 		this->username = username;
 	}
 
-	void ClientIRC::setOperator(bool state){
-		this->ope  = state;
+	const bool& ClientIRC::isOperator() const {
+		return this->ope;
+	}
+
+	void ClientIRC::setOperator(const bool& ope) {
+		this->ope = ope;
 	}
 }

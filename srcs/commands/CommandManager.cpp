@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandManager.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/22 20:35:44 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 18:14:37 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include "../../includes/commands/PartCommand.hpp"
 #include "../../includes/commands/ExitCommand.hpp"
 #include "../../includes/commands/HelpCommand.hpp"
+#include "../../includes/commands/OperCommand.hpp"
 #include "../../includes/commands/ModeCommand.hpp"
 
 namespace ft {
@@ -32,6 +33,7 @@ namespace ft {
 	CommandManager::CommandManager() {}
 
 	CommandManager::CommandManager(ServerIRC *server) : server(server) {
+		commands.push_back(new HelpCommand());
 		commands.push_back(new QuitCommand());
 		commands.push_back(new CapCommand());
 		commands.push_back(new NickCommand());
@@ -43,6 +45,7 @@ namespace ft {
 		commands.push_back(new NoticeCommand());
 		commands.push_back(new PartCommand());
 		commands.push_back(new ExitCommand());
+		commands.push_back(new OperCommand());
 		commands.push_back(new HelpCommand());
 		commands.push_back(new ModeCommand());
 	}
@@ -57,6 +60,7 @@ namespace ft {
 		for (std::vector<ClientCommand*>::iterator it = commands.begin(); it != commands.end(); ++it) {
 			delete *it;
 		}
+		commands.clear();
 	}
 
 	void CommandManager::receiveCmd(ClientIRC *client, std::string bufferCmds) {
@@ -101,10 +105,11 @@ namespace ft {
 					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he didn't enter the server password." << C_RESET << std::endl;
 					logAndPrint(ss.str());
 					return false;
-				} else if (command->isNeededToBeOperator() && !client->isAuthorized()) {
+				} else if (command->isNeededToBeOperator() && !client->isOperator()) {
 					std::stringstream ss;
 					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he is not operator." << C_RESET << std::endl;
 					logAndPrint(ss.str());
+					client->recieveMessage(ERR_NOPRIVILEGES);
 					return false;
 				}
 				CommandContext commandContext(this->server, client, fullCmd, cmd, argsArray);

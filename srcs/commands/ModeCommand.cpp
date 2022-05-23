@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:33:40 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/23 17:47:59 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 18:34:50 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ namespace ft {
 			return false;
 		}
 		std::cout << "An Mode command is used by " << client->getNick() << std::endl;
-		if (client->getOperator() == false){
+		if (client->isOperator() == false){
 			client->recieveMessage(ERR_NOPRIVILEGES);
 			return false;
 		}
@@ -50,34 +50,34 @@ namespace ft {
 					client->recieveMessage(ERR_NOSUCHNICK(args[2]));
 					return false;
 				}
-				else if (args[1][1] == 'o' && clientExists(client, channel->getClientList())){
+				else if (args[1][1] == 'o' && !clientExists(client, channel->getClientList())){
 					client->recieveMessage(ERR_NOTONCHANNEL(channel->getName()));
 					return false;
 				}
-				if (args[1].compare("+o")){
+				if (!args[1].compare("+o")){
 					ret = channel->addOperator(target);
 					if (ret < 0){
 						ErrorManagement(ret, target, args[0]);
 						return false;
 					}
 					else{
-						client->recieveMessage(RPL_UNIQOPIS(args[2], channel->getName()));
-						channel->sendMessageToAll(client, RPL_UNIQOPIS(args[2], channel->getName()));
+						client->recieveMessage(":" + args[2] + " " + cmd.getFullCmd());
+						channel->sendMessageToAll(client, cmd.getFullCmd());
 						return true;
 					}
 				}
-				else if (args[1].compare("-o")){
+				else if (!args[1].compare("-o")){
 					if (channel->removeOperator(target) == NO_SUCH_NICK){
 						client->recieveMessage(ERR_NOSUCHNICK(args[0]));
 						return false;
 					}
 					else{
-						client->recieveMessage(RPL_UNIQOPIS(args[2], channel->getName()));
-						channel->sendMessageToAll(client, RPL_UNIQOPIS(args[2], channel->getName()));
+						client->recieveMessage(":" + args[2] + " " + cmd.getFullCmd());
+						channel->sendMessageToAll(client, cmd.getFullCmd());
 						return true;
 					}
 				}
-				else if (args[1].compare("+b")){
+				else if (!args[1].compare("+b")){
 					if (channel->addBannedUser(target) == ALREADY_BANNED)
 						return false;
 					else{
@@ -86,7 +86,7 @@ namespace ft {
 						return true;
 					}
 				}
-				else if (args[1].compare("-b")){
+				else if (!args[1].compare("-b")){
 					if (channel->unbanUser(target) == NO_SUCH_NICK){	
 						client->recieveMessage(ERR_NOSUCHNICK(args[2]));
 						return false;
@@ -98,7 +98,7 @@ namespace ft {
 					}
 				}	
 			}
-			else if (args[0].compare(client->getNick())){
+			else if (!args[0].compare(client->getNick())){
 				client->recieveMessage(ERR_USERSDONTMATCH);
 				return false;
 			}
