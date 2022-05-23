@@ -51,13 +51,14 @@ function launchClients {
 		printf '\r[⬜] Test client n°%s ...\n' "$i"
 		./client &> /dev/null
 		printf '\r[🟩] Test client n°%s ... done\n' "$i"
-		sleep 1
 	done
-	# PID=$(pidof ircserv)
-	PID=$(pidof valgrind.bin)
-	if [ ! -z $PID ]; then
-		kill -2 $PID
+
+	if command -v valgrind &>/dev/null ; then
+		PID=$(pidof valgrind.bin)
+	else
+		PID=$(pidof ircserv)
 	fi
+	kill -2 $PID
 }
 
 function memory_check {

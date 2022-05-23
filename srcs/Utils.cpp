@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 18:34:56 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 17:34:08 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 20:04:17 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ namespace ft {
 		std::time_t t = std::time(0);
 		std::tm* now = std::localtime(&t);
 		
-		ss << '[' << std::setfill('0') << std::setw(2) << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << "] " << msg;
+		ss << '[' << std::setfill('0') << std::setw(2) << now->tm_hour << ':' << std::setfill('0') << std::setw(2) << now->tm_min << ':' << std::setfill('0') << std::setw(2) << now->tm_sec << "] " << msg;
 		str = ss.str();
 
 		std::cout << str;
@@ -95,7 +95,7 @@ namespace ft {
 		std::time_t t = std::time(0);   // get time now
 		std::tm* now = std::localtime(&t);
 		
-		ss << '[' << std::setfill('0') << std::setw(2) << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << "] " << msg;
+		ss << '[' << std::setfill('0') << std::setw(2) << now->tm_hour << ':' << std::setfill('0') << std::setw(2) << now->tm_min << ':' << std::setfill('0') << std::setw(2) << now->tm_sec << "] " << msg;
 		str = ss.str();
 
 		out << str;
@@ -111,7 +111,7 @@ namespace ft {
 		std::time_t t = std::time(0);   // get time now
 		std::tm* now = std::localtime(&t);
 		
-		ss << '[' << std::setfill('0') << std::setw(2) << now->tm_hour << ':' << now->tm_min << ':' << now->tm_sec << "] " << msg;
+		ss << '[' << std::setfill('0') << std::setw(2) << now->tm_hour << ':' << std::setfill('0') << std::setw(2) << now->tm_min << ':' << std::setfill('0') << std::setw(2) << now->tm_sec << "] " << msg;
 		str = ss.str();
 
 		myfile.open("log.txt", std::fstream::app);

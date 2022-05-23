@@ -5,18 +5,23 @@ on: [push, pull_request]
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
 
       - name: Install Progs for Tester
+        if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt update
           sudo apt install -y bash clang valgrind
 
       - name: Environnement Informations Linux
+        if: matrix.os == 'ubuntu-latest'
         run: |
           echo OS version
           lsb_release -a
@@ -34,7 +39,19 @@ jobs:
           diff --version
         shell: bash
 
+      - name: Environnement Informations macOS
+        if: matrix.os == 'macos-latest'
+        run: |
+          echo OS version
+          system_profiler SPSoftwareDataType
+          echo
+          echo Clang version
+          clang++ --version
+          echo
+          echo DiffUtils version
+          diff --version
+        shell: bash
+
       - name: Start tests
         run: ./tester.sh
         shell: bash
-        continue-on-error: true
