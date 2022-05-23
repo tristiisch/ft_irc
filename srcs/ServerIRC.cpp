@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 17:10:00 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 17:30:01 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,10 +178,11 @@ namespace ft {
 						break;
 					}
 					if (clients.find(it->fd) == clients.end()) {
-						std::stringstream ss;
-						ss << DEBUG << "Pollfd " << it->fd << " not linked to fd." << C_RESET << std::endl;
-						logAndPrint(ss.str());
-						ss.clear();
+						if (DEBUG_MODE) {
+							ss << DEBUG << "Pollfd " << it->fd << " not linked to fd." << C_RESET << std::endl;
+							logAndPrint(ss.str());
+							ss.clear();
+						}
 						// deleteClient(this->clients[it->fd]);
 						// pfds.erase(it);
 						break;
@@ -190,16 +191,15 @@ namespace ft {
 						// std::cout << C_BLUE << "Socket " << it->fd << " > POLLIN receive." << C_RESET << std::endl;
 						readClient(this->clients[it->fd], it->fd);
 					}
-					// if (it->revents & POLLPRI) {
-					// 	std::cout << C_BLUE << "Socket " << it->fd << " > POLLRI receive." << C_RESET << std::endl;
-					// }
+					if (it->revents & POLLPRI) {
+						std::cout << C_BLUE << "Socket " << it->fd << " > POLLRI receive." << C_RESET << std::endl;
+					}
 					if (it->revents & POLLNVAL) {
 						std::cout << C_BLUE << "Socket " << it->fd <<  " > Invalid request from" << C_RESET << std::endl;
 					}
 					if (it->revents & (POLLERR | POLLHUP)) {
-						// socket was closed
-						std::cout << C_RED << "Socket " << it->fd <<  " > close." << C_RESET << std::endl;
-						// deleteClient(this->clients[it->fd]);
+						std::cout << C_RED << "Socket " << it->fd << " - " << *this->clients[it->fd] << " > close." << C_RESET << std::endl;
+						deleteClient(this->clients[it->fd]);
 						// break;
 					}
 				}
@@ -224,6 +224,7 @@ namespace ft {
 
 	ClientIRC *ServerIRC::acceptClient() {
 		ClientIRC *client;
+		std::stringstream ss;
 		SOCKADDR_IN csin;
     	SOCKET clientSocket;
 		socklen_t sinsize = sizeof(csin);
@@ -234,11 +235,10 @@ namespace ft {
 			closesocket(clientSocket);
 			return NULL;
 		}
-		std::stringstream ss;
-		ss << INFO << "A client " << csin << " fd:" << clientSocket << " logged in." << C_RESET << std::endl;
-		logAndPrint(ss.str());
 		client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
 		clients.insert(std::pair<int, ClientIRC*>(clientSocket, client));
+		ss << INFO << "A client " << csin << " " << *client << " logged in." << C_RESET << std::endl;
+		logAndPrint(ss.str());
 
 		pfds.push_back(pollfd());
 		// pfds.back().events = POLLIN | POLLPRI;

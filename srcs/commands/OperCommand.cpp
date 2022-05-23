@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 17:08:49 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 17:25:06 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	OperCommand::OperCommand() : ClientCommand("OPER") {}
+	OperCommand::OperCommand() : ClientCommand("OPER", true, false) {}
 
 	OperCommand::~OperCommand() {}
 

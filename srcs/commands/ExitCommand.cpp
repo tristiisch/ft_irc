@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 14:36:52 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 17:17:38 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	ExitCommand::ExitCommand() : ClientCommand("EXIT") {}
+	ExitCommand::ExitCommand() : ClientCommand("EXIT", true, true) {}
 
 	ExitCommand::~ExitCommand() {}
 
