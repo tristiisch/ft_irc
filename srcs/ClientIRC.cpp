@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 17:59:53 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 21:13:41 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,10 @@ namespace ft {
 
 	const in_addr& ClientIRC::getAddress() const {
 		return this->sockAddr.sin_addr;
+	}
+
+	const char* ClientIRC::getHost() const {
+		return inet_ntoa(this->getAddress());
 	}
 
 	const SOCKADDR_IN& ClientIRC::getSockAddr() const {

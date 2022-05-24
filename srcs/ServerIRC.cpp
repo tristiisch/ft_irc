@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 17:30:01 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 20:58:39 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,6 +285,10 @@ namespace ft {
 	}
 
 	void ServerIRC::deleteClient(ClientIRC *client) {
+		for (std::vector<ChannelIRC*>::const_iterator it = this->getChannels().begin(); it != this->getChannels().end(); ++it) {
+			ChannelIRC *channel = *it;
+			channel->clearUser(client);
+		}
 		if (!pfds.empty()) {
 			for (std::vector<pollfd>::iterator it = pfds.begin() + 1; it != pfds.end(); ++it) {
 				if (it->fd == client->getPoll().fd) {

@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/20 19:09:34 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 21:13:41 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ namespace ft {
 		}
 		client->setRegistered(true);
 		client->setUsername(args[2]);
-		client->recieveMessage(RPL_WELCOME(args[3], args[0], std::string("127.0.0.1")));
-		client->recieveMessage(RPL_YOURHOST(client->getNick()));
+		client->recieveMessage(RPL_WELCOME(args[3], args[0], client->getHost()));
+		client->recieveMessage(RPL_YOURHOST(client->getNick(), client->getHost()));
 		return true;
 	}
 }

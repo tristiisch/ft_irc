@@ -48,6 +48,7 @@ namespace ft {
 			int		removeUser(ClientIRC *const &to_remove);
 			int		removeOperator(ClientIRC *const &to_remove);
 			int		unbanUser(ClientIRC *const &to_unban);
+			void	clearUser(ClientIRC *const &to_clear);
 
 			void	sendMessageToAll(ClientIRC *const &sender, std::string const &message);
 

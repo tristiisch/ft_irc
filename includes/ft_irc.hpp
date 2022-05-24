@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 19:44:48 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/23 20:46:29 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct in_addr IN_ADDR;
 
 
 #define RPL_WELCOME(nick, username, host)				"001 " + nick + " Welcome to the Internet Relay Network " +  nick + "!" + username + "@" + host
-#define	RPL_YOURHOST(nick)						 		"002 " + nick + " Your host is 127.0.0.1, running version 1.0"
+#define	RPL_YOURHOST(nick, host)						"002 " + nick + " Your host is " + host + ", running version 1.0"
 #define	RPL_CREATED(nick)								"003 " + nick + " This server was created 05/18/22"
 #define RPL_MYINFO(nick)								"004 " + nick + " irc@localhost 1.0 mode test mode test2"
 #define RPL_AWAY(nick, msg)								"301 " + nick + " :" + msg
