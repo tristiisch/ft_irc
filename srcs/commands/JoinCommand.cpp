@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/24 18:59:34 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/24 19:56:00 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,15 @@ namespace ft {
 			}
 			ChannelIRC *channel = server->getChannel(*it);
 			if (!channel) {
-				channel = new ChannelIRC(it->c_str());
+				channel = new ChannelIRC(it->c_str(), client);
 				server->addChannel(channel);
 			}
-			int ret = channel->addUser(client);
-			if (ret < 0) {
-				ErrorManagement(ret, client, (*it));
-				continue;
+			else{
+				int ret = channel->addUser(client);
+				if (ret < 0) {
+					ErrorManagement(ret, client, (*it));
+					continue;
+				}
 			}
 			client->recieveMessage(":" + client->getNick() + " " + RPL_JOIN(*it));
 			channel->sendMessageToAll(client, RPL_JOIN(*it));
