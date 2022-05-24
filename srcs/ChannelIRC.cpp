@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/23 21:01:42 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/24 15:49:52 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ namespace ft
 		}
 		this->_client_list.push_back(to_add);
 		this->_size++;
+		this->channelRecap(to_add);
 		return true;
 	}
 
@@ -152,6 +153,12 @@ namespace ft
 		std::vector<ClientIRC *>::iterator ite = ClientIterator(to_unban, _ban_list);
 		this->_ban_list.erase(ite);
 		return true;
+	}
+
+	void	ChannelIRC::channelRecap(ClientIRC *const &newbie)
+	{
+		for (std::vector<ClientIRC *>:: iterator ite = this->_ope_list.begin() ; ite != this->_ope_list.end() ; ite++)
+			(*ite)->sendMessage(newbie, std::string("MODE " + this->_name + " +o " + (*ite)->getNick()));
 	}
 
 	void	ChannelIRC::sendMessageToAll(ClientIRC *const &sender, std::string const &message)

@@ -50,11 +50,12 @@ namespace ft {
 			int		unbanUser(ClientIRC *const &to_unban);
 			void	clearUser(ClientIRC *const &to_clear);
 
+			void	channelRecap(ClientIRC *const &newbie);
 			void	sendMessageToAll(ClientIRC *const &sender, std::string const &message);
 
 	};
 
-	std::vector<ClientIRC *>::iterator ClientIterator
+	std::vector<ClientIRC *>::iterator ClientIterators
 		(ClientIRC *const &to_find, std::vector<ClientIRC *> &to_check);
 
 	bool			clientExists(ClientIRC *const &to_add, std::vector<ClientIRC *> &to_check);
