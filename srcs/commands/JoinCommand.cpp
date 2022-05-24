@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/24 16:59:53 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/24 18:59:34 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ namespace ft {
 		channels = split(args[0], ",");
 		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it) {
 			std::cout << C_BLUE << "Client " << *client << " want to JOIN channel '" << *it << "'" << C_RESET << std::endl;
-			if ((*it)[0] != '#')
+			if ((*it)[0] != '#') {
 				client->recieveMessage(ERR_NOSUCHCHANNEL(*it));
+				continue;
+			}
 			ChannelIRC *channel = server->getChannel(*it);
 			if (!channel) {
 				channel = new ChannelIRC(it->c_str());
