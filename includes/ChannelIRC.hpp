@@ -55,7 +55,7 @@ namespace ft {
 
 	};
 
-	std::vector<ClientIRC *>::iterator ClientIterators
+	std::vector<ClientIRC *>::iterator ClientIterator
 		(ClientIRC *const &to_find, std::vector<ClientIRC *> &to_check);
 
 	bool			clientExists(ClientIRC *const &to_add, std::vector<ClientIRC *> &to_check);

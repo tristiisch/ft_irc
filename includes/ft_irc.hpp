@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 20:46:29 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/24 17:10:49 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct in_addr IN_ADDR;
 #define RPL_AWAY(nick, msg)								"301 " + nick + " :" + msg
 #define RPL_UNIQOPIS(nick, channel)						"325 * " + channel + " " + nick
 #define RPL_NAMREPLY(nick, channel, target)				"353 " + nick + " = " + channel + " : " + target
+#define RPL_NAMREPLY_OP(nick, channel, target)			"353 " + nick + " = " + channel + " : @" + target
 #define RPL_YOUREOPER(nick)								"381 " + nick + " :You are now an IRC operator"
 #define ERR_NOSUCHCHANNEL(channel)						"403 " + channel + " :no such channel"
 #define ERR_CANNOTSENDTOCHAN(channel)					"404 " + channel + " :Cannot send to channel"
@@ -97,7 +98,7 @@ typedef struct in_addr IN_ADDR;
 #define ERR_NONICKNAMEGIVEN								"431  :No nickname given"
 #define ERR_NICKNAMEINUSE(nick)							"433 " + nick + " :Nickname is already in use"
 #define ERR_USERNOTINCHANNEL(nick, channel)				"441 " + nick + " " + channel + " :they aren't on that channel"	
-#define ERR_NOTONCHANNEL(channel)						"442  " + channel + " :You're not on that channel"
+#define ERR_NOTONCHANNEL(channel)						"442 " + channel + " :You're not on that channel"
 #define ERR_NEEDMOREPARAMS(command)						"461 " + command + " :Not enough parameters"
 #define ERR_ALREADYREGISTRED							"462  :Unauthorized command (already registered)"
 #define ERR_PASSWDMISMATCH(nick)						"464 " + nick + " :Password incorrect"
@@ -112,7 +113,6 @@ typedef struct in_addr IN_ADDR;
 #define ERR_USERSDONTMATCH								"502 * :Cannot change mode for other users"
 #define RPL_JOIN(channel)								"JOIN " + channel
 #define RPL_NICK(newNick, nick, username, host)			":" + nick + "!" + username + "@" + host + " NICK " + newNick
-#define RPL_PART(channel, msg, nick, username, host)	":" + nick + "!" + username + "@" + host + " PART " + channel + " :" + msg
 #ifndef DEBUG_MODE
 # define DEBUG_MODE 0
 #endif
