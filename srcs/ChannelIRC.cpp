@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/24 16:59:55 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/24 19:12:50 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,21 @@ namespace ft
 		std::cout << "Channel \"" << this->_name << "\" created." << std::endl;
 	}
 
+	ChannelIRC::ChannelIRC(const char *name, ClientIRC *const &first_client)
+	:	_name(name),
+		_client_list(),
+		_ban_list(),
+		_ope_list(),
+		_size(1),
+		_max_size(42)
+	{
+		std::cout << "Channel \"" << this->_name << "\" created." << std::endl;
+		this->addUser(first_client);
+		this->addOperator(first_client);
+		std::cout << "The " << this->_name << "channel was created by the client n. " << first_client->getId() << std::endl;
+	}
+
+	
 	ChannelIRC::ChannelIRC(const char *name, int const &max_size)
 	:	_name(name),
 		_client_list(),

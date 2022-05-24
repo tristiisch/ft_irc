@@ -30,6 +30,7 @@ namespace ft {
 		public :
 			ChannelIRC();
 			ChannelIRC(const char *name);
+			ChannelIRC(const char *name, ClientIRC *const &first_client);
 			ChannelIRC(const char *name, int const &max_size);
 			~ChannelIRC();
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/24 17:10:49 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/24 19:25:37 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ typedef struct in_addr IN_ADDR;
 
 
 #define RPL_WELCOME(nick, username, host)				"001 " + nick + " Welcome to the Internet Relay Network " +  nick + "!" + username + "@" + host
-#define	RPL_YOURHOST(nick, host)						"002 " + nick + " Your host is " + host + ", running version 1.0"
 #define	RPL_CREATED(nick)								"003 " + nick + " This server was created 05/18/22"
 #define RPL_MYINFO(nick)								"004 " + nick + " irc@localhost 1.0 mode test mode test2"
 #define RPL_AWAY(nick, msg)								"301 " + nick + " :" + msg
@@ -100,7 +99,7 @@ typedef struct in_addr IN_ADDR;
 #define ERR_USERNOTINCHANNEL(nick, channel)				"441 " + nick + " " + channel + " :they aren't on that channel"	
 #define ERR_NOTONCHANNEL(channel)						"442 " + channel + " :You're not on that channel"
 #define ERR_NEEDMOREPARAMS(command)						"461 " + command + " :Not enough parameters"
-#define ERR_ALREADYREGISTRED							"462  :Unauthorized command (already registered)"
+#define ERR_ALREADYREGISTRED							"462 * :Unauthorized command (already registered)"
 #define ERR_PASSWDMISMATCH(nick)						"464 " + nick + " :Password incorrect"
 #define ERR_CHANNELISFULL(channel)						"471 " + channel + " :Cannot join channel"
 #define ERR_UNKNOWNMODE(char, channel)					"472 " + char + " :is unknown mode char to me for " + channel
