@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/24 15:49:52 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/24 16:59:55 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ namespace ft
 		}
 		this->_client_list.push_back(to_add);
 		this->_size++;
-		this->channelRecap(to_add);
 		return true;
 	}
 
@@ -157,8 +156,14 @@ namespace ft
 
 	void	ChannelIRC::channelRecap(ClientIRC *const &newbie)
 	{
-		for (std::vector<ClientIRC *>:: iterator ite = this->_ope_list.begin() ; ite != this->_ope_list.end() ; ite++)
-			(*ite)->sendMessage(newbie, std::string("MODE " + this->_name + " +o " + (*ite)->getNick()));
+		for (std::vector<ClientIRC*>::const_iterator it = this->getClientList().begin(); it != this->getClientList().end(); ++it) {
+			ClientIRC *target = *it;
+			if (clientExists(target, _ope_list)) {
+				target->sendMessage(newbie, RPL_NAMREPLY_OP(newbie->getNick(), this->getName(), target->getNick()));
+			} else {
+				target->sendMessage(newbie, RPL_NAMREPLY(newbie->getNick(), this->getName(), target->getNick()));
+			}
+		}
 	}
 
 	void	ChannelIRC::sendMessageToAll(ClientIRC *const &sender, std::string const &message)
