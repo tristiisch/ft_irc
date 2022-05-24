@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 20:58:39 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/24 19:55:17 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,9 @@ namespace ft {
 					}
 					if (it->revents & POLLIN) {
 						// std::cout << C_BLUE << "Socket " << it->fd << " > POLLIN receive." << C_RESET << std::endl;
-						readClient(this->clients[it->fd], it->fd);
+						int ret = readClient(this->clients[it->fd], it->fd);
+						if (!ret)
+							break;
 					}
 					if (it->revents & POLLPRI) {
 						std::cout << C_BLUE << "Socket " << it->fd << " > POLLRI receive." << C_RESET << std::endl;
@@ -266,7 +268,7 @@ namespace ft {
 		}
 		receiveMsg = (char*) std::calloc(512, 1);
 		receiveByte = recv(socket, receiveMsg, 512, 0);
-		if (receiveByte == 0) {
+		if (!receiveByte) {
 			free(receiveMsg);
 			return false;
 		}
