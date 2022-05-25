@@ -6,93 +6,86 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:18:25 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 06:04:25 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 15:00:09 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <stdlib.h> /* pour exit */
+#include <stdlib.h> 
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <string.h> /* pour memset */
-#include <netinet/in.h> /* pour struct sockaddr_in */
-#include <arpa/inet.h> /* pour htons et inet_aton */
+#include <string.h> 
+#include <netinet/in.h> 
+#include <arpa/inet.h> 
 #include <unistd.h>
+#include <string>
 #define LG_MESSAGE 256
 
 int main() {
 	int descripteurSocket;
 	struct sockaddr_in pointDeRencontreDistant;
 	socklen_t longueurAdresse;
-	char messageEnvoi[LG_MESSAGE]; /* le message de la couche Application ! */
-	char messageRecu[LG_MESSAGE]; /* le message de la couche Application ! */
-	int ecrits, lus; /* nb d’octets ecrits et lus */
+	char messageRecu[LG_MESSAGE];
+	int ecrits, lus;
 
-	// Crée un socket de communication
-	descripteurSocket = socket(PF_INET, SOCK_STREAM, 0); // 0 indique que l’on utilisera le protocole par défaut associé à SOCK_STREAM soit TCP
+	descripteurSocket = socket(PF_INET, SOCK_STREAM, 0); 
 
-	// Teste la valeur renvoyée par l’appel système socket()
-	if (descripteurSocket < 0) /* échec ? */
-	{
-		perror("socket"); // Affiche le message d’erreur
-		exit(-1); // On sort en indiquant un code erreur
+	if (descripteurSocket < 0) {
+		perror("socket"); 
+		exit(-1); 
 	}
 	printf("Socket créée avec succès ! (%d)\n", descripteurSocket);
-	// Obtient la longueur en octets de la structure sockaddr_in
+	
 	longueurAdresse = sizeof(pointDeRencontreDistant);
-	// Initialise à 0 la structure sockaddr_in
+	
 	memset(&pointDeRencontreDistant, 0x00, longueurAdresse);
-	// Renseigne la structure sockaddr_in avec les informations du serveur distant
+	
 	pointDeRencontreDistant.sin_family = PF_INET;
-	// On choisit le numéro de port d’écoute du serveur
-	pointDeRencontreDistant.sin_port = htons(6667); // = 5000
-	// On choisit l’adresse IPv4 du serveur
-	inet_aton("127.0.0.1", &pointDeRencontreDistant.sin_addr); // à modifier selon ses besoins
-	// Débute la connexion vers le processus serveur distant
+	
+	pointDeRencontreDistant.sin_port = htons(6667); 
+	
+	inet_aton("127.0.0.1", &pointDeRencontreDistant.sin_addr); 
+	
 	if (connect(descripteurSocket, (struct sockaddr *)&pointDeRencontreDistant, longueurAdresse) == -1) {
-		perror("connect"); // Affiche le message d’erreur
-		close(descripteurSocket); // On ferme la ressource avant de quitter
-		exit(-2); // On sort en indiquant un code erreur
+		perror("connect"); 
+		close(descripteurSocket); 
+		exit(-2); 
 	}
 	printf("Connexion au serveur réussie avec succès !\n");
-	//--- Début de l’étape n°4 :
-	// Initialise à 0 les messages
-	memset(messageEnvoi, 0x00, LG_MESSAGE*sizeof(char));
+	
+	
 	memset(messageRecu, 0x00, LG_MESSAGE*sizeof(char));
-	// Envoie un message au serveur
-	sprintf(messageEnvoi, "Hello server !\r\n");
-	ecrits = send(descripteurSocket, messageEnvoi, strlen(messageEnvoi), 0); // message à TAILLE variable
+
+	std::string cmd = "PASS password\r\n";
+	ecrits = send(descripteurSocket, cmd.c_str(), cmd.length(), 0); 
 	switch(ecrits)
 	{
-		case -1 : /* une erreur ! */
+		case -1 :
 			perror("write");
 			close(descripteurSocket);
 			exit(-3);
-		case 0 : /* la socket est fermée */
-			fprintf(stderr, "La socket a été fermée par le serveur !\n\n");
+		case 0 :
+			fprintf(stderr, "La socket a été fermée par le serveur !\n");
 			close(descripteurSocket);
 			return 0;
-		default: /* envoi de n octets */
-			printf("Message '%s' envoyé avec succès (%d octets)\n\n", messageEnvoi, ecrits);
+		default: 
+			printf("Message '%s' envoyé avec succès (%d octets)\n", cmd.c_str(), ecrits);
 	}
-	/* Reception des données du serveur */
-	lus = read(descripteurSocket, messageRecu, LG_MESSAGE*sizeof(char)); /* attend un message
-	de TAILLE fixe */
+
+	lus = read(descripteurSocket, messageRecu, LG_MESSAGE*sizeof(char));
 	switch(lus)
 	{
-		case -1 : /* une erreur ! */
+		case -1 : 
 			perror("read");
 			close(descripteurSocket);
 			exit(-4);
-		case 0 : /* la socket est fermée */
+		case 0 : 
 			fprintf(stderr, "La socket a été fermée par le serveur !\n\n");
 			close(descripteurSocket);
 			return 0;
-		default: /* réception de n octets */
+		default: 
 			printf("Message reçu du serveur : %s (%d octets)\n\n", messageRecu, lus);
 	}
-	//--- Fin de l’étape n°4 !
-	// On ferme la ressource avant de quitter
 	close(descripteurSocket);
 	return 0;
 }
