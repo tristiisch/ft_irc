@@ -46,13 +46,14 @@ function launchClients {
 	# 	exit 1
 	# fi
 	make client
-	for (( i = 1; 5 >= i; i++ ))
+	for (( i = 1; 20 >= i; i++ ))
 	do
 		printf '\r[⬜] Test client n°%s ...\n' "$i"
 		./client &> /dev/null
 		printf '\r[🟩] Test client n°%s ... done\n' "$i"
 	done
 
+	sleep 5
 	if command -v valgrind &>/dev/null ; then
 		PID=$(pidof valgrind.bin)
 	else
@@ -77,7 +78,8 @@ function memory_check {
 	fi
 }
 
-compile debug -i CXXFLAGS='-Wall -Wextra -std=c++98 -g3 -fsanitize=address'
+compile debug
+# compile debug CXXFLAGS='-Wall -Wextra -std=c++98 -g3 -fsanitize=address'
 
 OK=1
 # printf '[⬜] Testing bad arguments ...'
@@ -101,7 +103,7 @@ else
 	printf '\r[🟧] Testing bad arguments ... done\n'
 fi
 
-compile clean debug CXXFLAGS='-Wall -Wextra -std=c++98 -g3'
+# compile clean debug CXXFLAGS='-Wall -Wextra -std=c++98 -g3'
 
 
 printf '[⬜] Test %s (max 120 sec) ...\n' "$GOOD_ARGS"

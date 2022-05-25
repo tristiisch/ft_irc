@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelIRC.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:45:36 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/24 19:12:50 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 18:41:42 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ namespace ft
 		return true;
 	}
 
-	void	ChannelIRC::channelRecap(ClientIRC *const &newbie)
+	void	ChannelIRC::userJoin(ClientIRC *const &newbie)
 	{
 		for (std::vector<ClientIRC*>::const_iterator it = this->getClientList().begin(); it != this->getClientList().end(); ++it) {
 			ClientIRC *target = *it;

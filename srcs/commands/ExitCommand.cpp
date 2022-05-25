@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 17:17:38 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 18:55:33 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 namespace ft {
 
-	ExitCommand::ExitCommand() : ClientCommand("EXIT", true, true) {}
+	ExitCommand::ExitCommand() : ClientCommand("EXIT", 0, "\\!/ Kill the server", "", true, true) {}
 
 	ExitCommand::~ExitCommand() {}
 
 	bool ExitCommand::execute(CommandContext &cmd) const {
 		ServerIRC *server = cmd.getServer();
+		ClientIRC *client = cmd.getClient();
 		
 		server->stop();
+		client->recieveMessage("006 " + client->getNick() + " Bye bye !");
 		return true;
 	}
 }

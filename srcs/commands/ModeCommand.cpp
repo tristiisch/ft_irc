@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:33:40 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/23 18:34:50 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 19:43:57 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	ModeCommand::ModeCommand() : ClientCommand("MODE") {}
+	ModeCommand::ModeCommand() : ClientCommand("MODE", 2, "Change user mode in channel", "<channel> <+|-> <o|b> <nickname>") {}
 
 	ModeCommand::~ModeCommand() {}
 
@@ -24,10 +24,7 @@ namespace ft {
 		ClientIRC 	*target;
 		std::vector<std::string> args = cmd.getArgs();
 		int ret = 0;
-		if (args.size() < 2){
-			client->recieveMessage(ERR_NEEDMOREPARAMS(std::string("MODE")));
-			return false;
-		}
+
 		std::cout << "An Mode command is used by " << client->getNick() << std::endl;
 		if (client->isOperator() == false){
 			client->recieveMessage(ERR_NOPRIVILEGES);
@@ -57,7 +54,7 @@ namespace ft {
 				if (!args[1].compare("+o")){
 					ret = channel->addOperator(target);
 					if (ret < 0){
-						ErrorManagement(ret, target, args[0]);
+						this->errorManagement(ret, target, args[0]);
 						return false;
 					}
 					else{
@@ -108,7 +105,7 @@ namespace ft {
 	}
 
 	
-	void	ModeCommand::ErrorManagement(int ret, ClientIRC *const &client, std::string const &arg) const
+	void	ModeCommand::errorManagement(int ret, ClientIRC *const &client, std::string const &arg) const
 	{
 		if (ret == ALREADY_OPERATOR)
 			return;

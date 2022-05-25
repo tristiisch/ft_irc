@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 21:08:34 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/18 02:53:20 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 19:45:50 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 	
 namespace ft
 {
-	NoticeCommand::NoticeCommand() : ClientCommand("NOTICE") {}
+	NoticeCommand::NoticeCommand() : ClientCommand("NOTICE", 2, "?????", "", true, false) {}
 
 	NoticeCommand::~NoticeCommand() {}
 
@@ -22,12 +22,15 @@ namespace ft
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
+		std::stringstream ss;
 
 		if (args[0][0] == '#')
 		{
-			std::cout << C_BLUE << "Client " << *client << " want to send the message " 
-										<< "'" <<args[1] << "'" << " in the channel " << args[0] <<  C_RESET << std::endl;
-			ChannelIRC* channel  = server->getChannel(args[0]);
+			ChannelIRC* channel = server->getChannel(args[0]);
+
+			ss << INFO << "Client " << *client << " want to send the message " << "'" << args[1] << "'" << " in the channel " << args[0] << C_RESET << std::endl;
+			logAndPrint(ss.str());
+
 			if (channel != NULL)
 				channel->sendMessageToAll(client, cmd.getFullCmd());
 			else
@@ -35,17 +38,17 @@ namespace ft
 		}
 		else
 		{
-			std::cout << C_BLUE << "Client " << *client << " want to send the message " 
-										<< "'" <<args[1] << "'" << " to " << args[0] <<  C_RESET << std::endl;
-			std::map<int , ClientIRC *>::const_iterator user  = server->getClients().begin();
-			while(user != server->getClients().end())
+
+			ss << INFO << "Client " << *client << " want to send the message " << "'" << args[1] << "'" << " to " << args[0] << C_RESET << std::endl;
+			logAndPrint(ss.str());
+
+			for (std::map<int , ClientIRC *>::const_iterator it = server->getClients().begin(); it != server->getClients().end(); ++it)
 			{
-				if (user->second->getNick() == args[0])
+				if (it->second->getNick() == args[0])
 				{	
-					client->sendMessage(user->second, cmd.getFullCmd());
+					client->sendMessage(it->second, cmd.getFullCmd());
 					return true;
 				}
-				user++;
 			}
 			client->recieveMessage(ERR_NOSUCHNICK(args[0]));
 		}

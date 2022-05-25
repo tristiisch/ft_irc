@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/25 18:22:30 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 19:38:10 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	UserCommand::UserCommand() : ClientCommand("USER") {}
+	UserCommand::UserCommand() : ClientCommand("USER", 4, "Login into server", "<nickname> 0 * <realname>") {}
 
 	UserCommand::~UserCommand() {}
 
@@ -22,11 +22,6 @@ namespace ft {
 		ClientIRC *client = cmd.getClient();
 		std::vector<std::string> args = cmd.getArgs();
 
-		if (args.size() != 4)
-		{
-			client->recieveMessage(ERR_NEEDMOREPARAMS(this->name));
-			return false;
-		}
 		if (client->isRegistered())
 		{
 			client->recieveMessage(ERR_ALREADYREGISTRED);

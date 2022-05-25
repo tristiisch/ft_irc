@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCommand.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:33:03 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/23 12:58:42 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 18:42:02 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ namespace ft {
 			~ModeCommand();
 
 			bool execute(CommandContext &cmd) const;
-			void	ErrorManagement(int ret, ClientIRC *const &client, std::string const &arg) const;
+			void	errorManagement(int ret, ClientIRC *const &client, std::string const &arg) const;
 	};
 }

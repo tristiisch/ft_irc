@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 18:13:43 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 19:15:44 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ namespace ft {
 		commands.push_back(new PartCommand());
 		commands.push_back(new ExitCommand());
 		commands.push_back(new OperCommand());
-		commands.push_back(new HelpCommand());
 		commands.push_back(new ModeCommand());
 	}
 
@@ -112,6 +111,11 @@ namespace ft {
 					return false;
 				}
 				CommandContext commandContext(this->server, client, fullCmd, cmd, argsArray);
+
+				if ((size_t) command->getMinArg() > commandContext.getArgs().size()) {
+					client->recieveMessage(ERR_NEEDMOREPARAMS(command->getName()));
+					return false;
+				}
 				return command->execute(commandContext);
 			}
 		}

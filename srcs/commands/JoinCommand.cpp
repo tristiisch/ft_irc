@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 18:10:54 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 19:40:38 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 namespace ft {
 
-	JoinCommand::JoinCommand() : ClientCommand("JOIN", true, false) {}
+	JoinCommand::JoinCommand() : ClientCommand("JOIN", 1, "Join a channel and create it if not exist", "<channel>", true, false) {}
 
 	JoinCommand::~JoinCommand() {}
 
@@ -26,11 +26,6 @@ namespace ft {
 		std::vector<std::string> channels;
 		std::stringstream ss;
 
-		if (args.empty())
-		{
-			client->recieveMessage(ERR_NEEDMOREPARAMS(std::string("JOIN")));
-			return false;
-		}
 		channels = split(args[0], ",");
 		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it) {
 			ss << INFO << C_BLUE << "Client " << *client << " want to JOIN channel '" << *it << "'" << C_RESET << std::endl;
@@ -45,22 +40,21 @@ namespace ft {
 			if (!channel) {
 				channel = new ChannelIRC(it->c_str(), client);
 				server->addChannel(channel);
-			}
-			else{
+			} else {
 				int ret = channel->addUser(client);
 				if (ret < 0) {
-					ErrorManagement(ret, client, (*it));
+					this->errorManagement(ret, client, (*it));
 					continue;
 				}
 			}
 			client->recieveMessage(":" + client->getNick() + " " + RPL_JOIN(*it));
 			channel->sendMessageToAll(client, RPL_JOIN(*it));
-			channel->channelRecap(client);
+			channel->userJoin(client);
 		}
 		return true;
 	}
 
-	void	JoinCommand::ErrorManagement(int ret, ClientIRC *const &client, std::string const &arg) const
+	void	JoinCommand::errorManagement(int ret, ClientIRC *const &client, std::string const &arg) const
 	{
 		if (ret == CHANNEL_FULL)
 			client->recieveMessage(ERR_CHANNELISFULL(arg));

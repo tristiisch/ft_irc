@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:53:17 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 17:20:42 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 18:31:14 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,8 @@ int main(const int ac, const char *av[]) {
 	if (!server.start())
 		return 1;
 
-	// int i = 3;
-	// while (i--) {
 	server.execute();
-	// }
-	if (DEBUG_MODE) {
-		std::stringstream ss;
-		ss << DEBUG << C_RED << "Task execute has ending." << C_RESET << std::endl;
-		ft::logAndPrint(ss.str());
-	}
+
 	if (server.isEnabled())
 		server.stop();
 	return 0;

@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 20:35:09 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/24 17:08:41 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 19:38:42 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	PartCommand::PartCommand() : ClientCommand("PART") {}
+	PartCommand::PartCommand() : ClientCommand("PART", 1, "Leave a channel", "<channel> :<msg>", true, false) {}
 
 	PartCommand::~PartCommand() {}
 
@@ -22,13 +22,8 @@ namespace ft {
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
-		std::vector<std::string> channels;
+		std::vector<std::string> channels = split(args[0], ",");
 
-		if (args.empty()) {
-			client->recieveMessage(ERR_NEEDMOREPARAMS(this->name));
-			return false;
-		}
-		channels = split(args[0], ",");
 		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it) {
 			std::cout << C_BLUE << "Client " << *client << " want to PART channel '" << *it << "'" << C_RESET << std::endl;
 
