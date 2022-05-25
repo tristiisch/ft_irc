@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerIRC.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 20:58:39 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 17:23:36 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 namespace ft {
 
-	ServerIRC::ServerIRC() : enabled(false), clientIdCounter(1) {
+	ServerIRC::ServerIRC() : enabled(false), isTryingToStop(false), clientIdCounter(1) {
 		this->commandManager = new CommandManager(this);
 	}
 
@@ -79,7 +79,8 @@ namespace ft {
 			return false;
 		}
 
-		enable = 1;
+		enable = 1; // En trop ?
+		
 		ret = setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
 		if (ft::checkError(ret, "Error while use setsockopt SO_REUSEADDR", (char*) NULL)) {
 			stop();
@@ -157,7 +158,7 @@ namespace ft {
 			logAndPrint(ss.str());
 			ss.clear();
 		}
-		while (this->enabled && !pfds.empty() && (ret = poll(&pfds[0], pfds.size(), 1 * 1000) != -1)) {
+		while (!this->isTryingToStop && !pfds.empty() && (ret = poll(&pfds[0], pfds.size(), 1 * 1000) != -1)) {
 			if (pfds[0].revents & POLLIN)
 				acceptClient(); // serverSocket receive connection
 			else if (pfds.size() > 1) {
@@ -166,7 +167,7 @@ namespace ft {
 					if (it == pfds.begin()) {
 						continue;
 					}
-					if (!this->isEnabled()) {
+					if (this->isTryingToStop) {
 						std::cout << C_BLUE << "popopo STOP HERE" << C_RESET << std::endl;
 						break;
 					}
@@ -190,6 +191,7 @@ namespace ft {
 					if (it->revents & POLLIN) {
 						// std::cout << C_BLUE << "Socket " << it->fd << " > POLLIN receive." << C_RESET << std::endl;
 						readClient(this->clients[it->fd], it->fd);
+						break;
 					}
 					if (it->revents & POLLPRI) {
 						std::cout << C_BLUE << "Socket " << it->fd << " > POLLRI receive." << C_RESET << std::endl;
@@ -336,6 +338,15 @@ namespace ft {
 
 	const ServerConfig& ServerIRC::getConfig() const {
 		return this->config;
+	}
+
+
+	bool ServerIRC::TryingToStop() const{
+		return this->isTryingToStop;
+	}
+	
+	void ServerIRC::setTryingToStop(){
+		this->isTryingToStop = true;
 	}
 
 	bool ServerIRC::setConfig(const ServerConfig& config) {

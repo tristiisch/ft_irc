@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:53:17 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 16:16:49 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 17:20:42 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void close_handler(int signal) {
 	std::stringstream ss;
 	ss << INFO << C_RED << "Try to force kill the server..." << C_RESET << std::endl;
 	ft::logAndPrint(ss.str());
-	server.stop();
+	server.setTryingToStop();
 }
 
 int main(const int ac, const char *av[]) {
