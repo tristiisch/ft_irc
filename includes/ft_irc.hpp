@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/24 19:25:37 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 18:19:02 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct in_addr IN_ADDR;
 # define C_RED "\033[31m"
 # define C_GREEN "\033[32m"
 # define C_YELLOW "\033[33m"
-# define C_BLUE "\033[1;34m"
+# define C_BLUE "\033[34m"
 # define C_CYAN "\033[36m"
 # define C_RESET "\033[0m"
 

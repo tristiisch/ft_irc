@@ -6,11 +6,12 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/24 19:56:00 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 18:10:54 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/commands/JoinCommand.hpp"
+#include <sstream>
 
 namespace ft {
 
@@ -23,6 +24,7 @@ namespace ft {
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
 		std::vector<std::string> channels;
+		std::stringstream ss;
 
 		if (args.empty())
 		{
@@ -31,7 +33,10 @@ namespace ft {
 		}
 		channels = split(args[0], ",");
 		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it) {
-			std::cout << C_BLUE << "Client " << *client << " want to JOIN channel '" << *it << "'" << C_RESET << std::endl;
+			ss << INFO << C_BLUE << "Client " << *client << " want to JOIN channel '" << *it << "'" << C_RESET << std::endl;
+			logAndPrint(ss.str());
+			ss.clear();
+	
 			if ((*it)[0] != '#') {
 				client->recieveMessage(ERR_NOSUCHCHANNEL(*it));
 				continue;

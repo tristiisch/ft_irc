@@ -6,11 +6,12 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:25:31 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/23 17:09:10 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 18:14:41 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/commands/PrivateMsgCommand.hpp"
+#include <sstream>
 
 namespace ft
 {
@@ -37,9 +38,12 @@ namespace ft
 		}
 		else
 		{
-			std::cout << C_BLUE << "Client " << *client << " want to send the message "
-										<< "'" <<args[1] << "'" << " to " << args[0] << C_RESET << std::endl;
 			ClientIRC *target  = server->getClientByNick(args[0]);
+			std::stringstream ss;
+
+			ss << INFO << C_BLUE << "Client " << *client << " want to send the message " << "'" <<args[1] << "'" << " to " << args[0] << C_RESET << std::endl;
+			logAndPrint(ss.str());
+			ss.clear();
 			if (!target) {
 				client->recieveMessage(ERR_NOSUCHNICK(args[0]));
 				return false;

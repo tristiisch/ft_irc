@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 00:40:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 21:11:55 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 18:12:32 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,16 @@ namespace ft
 		std::vector<std::string> args = cmd.getArgs();
 		std::vector<std::string> channels_args = split(args[0], ",");
 		std::vector<std::string> users_args= split(args[1], ",");
+		std::stringstream ss;
+
 		if (args.size() < 2) {
 			client->recieveMessage(ERR_NEEDMOREPARAMS(std::string("KICK")));
 			return false;
 		}
 		
-		std::cout << C_BLUE << "Client " << *client << " want to Kick '" << args[1]
-											<< "'" << " from the channel" <<args[0] <<  C_RESET << std::endl;
+		ss << INFO << C_BLUE << "Client " << *client << " want to Kick '" << args[1] << "'" << " from the channel" << args[0] << C_RESET << std::endl;
+		logAndPrint(ss.str());
+		ss.clear();
 		
 		std::vector<std::string>::iterator users = users_args.begin();
 		std::vector<std::string>::iterator channels = channels_args.begin();
@@ -55,7 +58,9 @@ namespace ft
 					}
 					else if (clientExists(target, channel->getClientList()) == false)
 					{
-						std::cout << "The User " << target->getNick() << " does not exist in this channel." << std::endl;
+						ss << INFO << "The User " << target->getNick() << " does not exist in channel " << channel->getName() << "." << std::endl;
+						logAndPrint(ss.str());
+						ss.clear();
 						client->recieveMessage(ERR_USERNOTINCHANNEL(*users, channel->getName()));
 						channels++;
 						continue;

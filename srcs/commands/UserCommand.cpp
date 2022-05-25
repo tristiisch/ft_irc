@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   UserCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/24 19:25:26 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 18:22:30 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace ft {
 	bool UserCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		std::vector<std::string> args = cmd.getArgs();
-		//std::cout << args[0] + " " + args[1] + " " + args[2] + " " + args[3] << std::endl;
+
 		if (args.size() != 4)
 		{
 			client->recieveMessage(ERR_NEEDMOREPARAMS(this->name));
