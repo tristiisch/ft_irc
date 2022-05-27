@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:31:41 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 19:35:16 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/27 12:38:13 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ namespace ft {
 	bool NickCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
+		std::string oldNick = client->getNick();
 		std::string newNick = cmd.getArg(0);
 		std::stringstream ss;
 
@@ -35,10 +36,16 @@ namespace ft {
 			client->recieveMessage(ERR_NICKNAMEINUSE(newNick));
 			return false;
 		}
-		client->recieveMessage(RPL_NICK(newNick, client->getNick(), client->getUsername(), client->getHost()));
-		ss << INFO << C_YELLOW << "Nick of " << *client << " is now '" << newNick << "'." << C_RESET << std::endl;
-		logAndPrint(ss.str());
 		client->setNick(newNick);
+		client->recieveMessage(RPL_NICK(newNick, client->getNick(), client->getUsername(), client->getHost()));
+
+		ss << INFO << C_YELLOW << "Nick of ";
+		if (oldNick.empty())
+			ss << *client;
+		else
+			ss << oldNick;
+		ss << " is now '" << newNick << "'." << C_RESET << std::endl;
+		logAndPrint(ss.str());
 		return true;
 	}
 

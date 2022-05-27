@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 18:21:56 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/27 12:45:21 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,11 +190,11 @@ namespace ft {
 					}
 				}
 			}
-			// if (DEBUG_MODE) {
-			// 	std::stringstream ss;
-			// 	ss << DEBUG << "next POOL | last ret : " << ret << " polls open : " << pfds.size() << " isEnabled : " << this->enabled << C_RESET << std::endl;
-			// 	logAndPrint(ss.str());
-			// }
+			if (DEBUG_MODE) {
+				std::stringstream ss;
+				ss << DEBUG << "next POOL | last ret : " << ret << " polls open : " << pollfds.size() << " isEnabled : " << this->enabled << C_RESET << std::endl;
+				logAndPrint(ss.str());
+			}
 		}
 		if (ret == -1) {
 			ft::checkError(ret, "Error while using POLL", &errno);
@@ -252,10 +252,10 @@ namespace ft {
 			free(receiveMsg);
 			return false;
 		}
-		if (receiveByte == -1 && errno == EAGAIN) {
-			free(receiveMsg);
-			return false;
-		}
+		// if (receiveByte == -1 && errno == EAGAIN) {
+		// 	free(receiveMsg);
+		// 	return false;
+		// }
 		if (ft::checkError(receiveByte, "Error while read socket", client)) {
 			free(receiveMsg);
 			deleteClient(client);

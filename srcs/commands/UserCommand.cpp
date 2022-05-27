@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/25 19:38:10 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/27 12:31:52 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ namespace ft {
 		}
 		client->setRegistered(true);
 		client->setUsername(args[2]);
-		client->recieveMessage(RPL_WELCOME(client->getNick(), args[0], client->getHost()));
+		client->recieveMessage(RPL_WELCOME(client->getNick(), client->getUsername(), client->getHost()));
 		return true;
 	}
 }

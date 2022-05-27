@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 21:13:41 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/27 12:17:58 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ namespace ft {
 	}
 
 	void ClientIRC::setNick(std::string& nick) {
-		this->nick = nick;
+		this->nick = nick.substr(0, 9);
 	}
 
 	void ClientIRC::setAuthorized(const bool& authorized) {
