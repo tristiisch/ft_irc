@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 20:33:40 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/25 19:43:57 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:53:28 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	ModeCommand::ModeCommand() : ClientCommand("MODE", 2, "Change user mode in channel", "<channel> <+|-> <o|b> <nickname>") {}
+	ModeCommand::ModeCommand() : ClientCommand("MODE", 2, "Change user mode in channel", "<channel> <+|-> <o|b> <nickname>", true, true, true) {}
 
 	ModeCommand::~ModeCommand() {}
 

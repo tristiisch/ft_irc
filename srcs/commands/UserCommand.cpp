@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   UserCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/28 15:44:21 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 17:24:20 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	UserCommand::UserCommand() : ClientCommand("USER", 4, "Login into server", "<nickname> 0 * <realname>") {}
+	UserCommand::UserCommand() : ClientCommand("USER", 4, "Login into server", "<nickname> 0 * <realname>", true, false, false) {}
 
 	UserCommand::~UserCommand() {}
 

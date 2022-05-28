@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:31:41 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 15:36:02 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 17:24:15 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	NickCommand::NickCommand() : ClientCommand("NICK", 1, "Change your nickname", "<nickname>") {}
+	NickCommand::NickCommand() : ClientCommand("NICK", 1, "Change your nickname", "<nickname>", false, false, false) {}
 
 	NickCommand::~NickCommand() {}
 

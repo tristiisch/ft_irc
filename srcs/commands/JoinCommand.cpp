@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 17:45:50 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 17:47:55 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 namespace ft {
 
-	JoinCommand::JoinCommand() : ClientCommand("JOIN", 1, "Join a channel and create it if not exist", "<channel>", true, false) {}
+	JoinCommand::JoinCommand() : ClientCommand("JOIN", 1, "Join a channel and create it if not exist", "<channel>", true, true, false) {}
 
 	JoinCommand::~JoinCommand() {}
 

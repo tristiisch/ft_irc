@@ -6,11 +6,12 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 16:35:51 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/27 12:17:58 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 15:49:12 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ClientIRC.hpp"
+#include <sstream>
 
 namespace ft {
 
@@ -117,14 +118,17 @@ namespace ft {
 
 	void	ClientIRC::recieveMessage(std::string const &message)
 	{
-		std::string msg_for_client = message + getDelimiter();
+		std::stringstream msg_for_client;
 
+		msg_for_client << message;
+		msg_for_client << getDelimiter();
 		if (DEBUG_MODE) {
 			std::stringstream ss;
 			ss << C_CYAN << "-> Server send to " << *this << " : '" << message << "'" << C_RESET << std::endl;
 			logAndPrint(ss.str());
 		}
-		send(this->clientSocket, msg_for_client.c_str(), msg_for_client.length(), 0);
+		std::string str = msg_for_client.str();
+		send(this->clientSocket, str.c_str(), str.length(), 0);
 	}
 
 	const bool& ClientIRC::isRegistered() const {

@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 19:31:22 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 15:07:36 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	HelpCommand::HelpCommand() : ClientCommand("HELP", 0, "This message", "") {}
+	HelpCommand::HelpCommand() : ClientCommand("HELP", 0, "This message", "", false, false, false) {}
 
 	HelpCommand::~HelpCommand() {}
 
@@ -29,7 +29,7 @@ namespace ft {
 		for (std::vector<ClientCommand*>::iterator it = commands.begin(); it != commands.end(); ++it) {
 			ClientCommand *clientCmd = *it;
 			ss << prefix << clientCmd->getName() << " " << clientCmd->getDescription();
-			if (clientCmd->getFormat().empty() == 0)
+			if (!clientCmd->getFormat().empty())
 				ss << " -> " << clientCmd->getName() << " " << clientCmd->getFormat();
 			ss << client->getDelimiter();
 		}

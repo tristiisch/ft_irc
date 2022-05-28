@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 18:57:33 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:51:58 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	CapCommand::CapCommand() : ClientCommand("CAP", 1, "Define the trame delimiter", "<LS|CRLF>") {}
+	CapCommand::CapCommand() : ClientCommand("CAP", 1, "Define the trame delimiter", "<LS|CRLF>", false, false, false) {}
 
 	CapCommand::~CapCommand() {}
 

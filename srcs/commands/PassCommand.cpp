@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:35:35 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 19:37:54 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:55:34 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	PassCommand::PassCommand() : ClientCommand("PASS", 1, "Enter the server password", "<password>") {
+	PassCommand::PassCommand() : ClientCommand("PASS", 1, "Enter the server password", "<password>", false, false, false) {
 		// std::cout << this->isNeededToBeOperator() << std::endl;
 	}
 

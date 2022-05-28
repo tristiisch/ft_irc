@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 19:15:44 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 17:02:01 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,26 @@ namespace ft {
 	}
 
 	void CommandManager::receiveCmd(ClientIRC *client, std::string bufferCmds) {
+		std::stringstream ss;
 		std::string str;
 		std::string delim = client->getDelimiter();
 		size_t pos = 0;
 
 		if (DEBUG_MODE) {
-			std::stringstream ss;
 			ss << C_BLUE << "<- " << *client << " send '" << bufferCmds << "'" << C_RESET << std::endl;
 			logAndPrint(ss.str());
+			ss.str("");
 		}
 		while ((pos = bufferCmds.find(delim)) != std::string::npos) {
 			str = bufferCmds.substr(0, pos);
 			executeCmd(client, str);
 			bufferCmds.erase(0, pos + delim.length());
 		}
-		if (!bufferCmds.empty())
-			executeCmd(client, bufferCmds);
+		if (!bufferCmds.empty()) {
+			ss << C_RED << "<- " << *client << " send '" << bufferCmds << "' without delimiter" << C_RESET << std::endl;
+			logAndPrint(ss.str());
+			// executeCmd(client, bufferCmds);
+		}
 	}
 
 	bool CommandManager::executeCmd(ClientIRC *client, std::string& fullCmd) {
@@ -104,6 +108,10 @@ namespace ft {
 					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he didn't enter the server password." << C_RESET << std::endl;
 					logAndPrint(ss.str());
 					return false;
+				} else if (command->isNeededToBeRegistered() && !client->isRegistered()) {
+					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he is not registered." << C_RESET << std::endl;
+					logAndPrint(ss.str());
+					return false;
 				} else if (command->isNeededToBeOperator() && !client->isOperator()) {
 					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he is not operator." << C_RESET << std::endl;
 					logAndPrint(ss.str());
@@ -119,7 +127,7 @@ namespace ft {
 				return command->execute(commandContext);
 			}
 		}
-		ss << INFO << "Unknown message receive from " << *client << ": '" C_YELLOW << fullCmd << C_BLUE << "'." << C_RESET << std::endl;
+		ss << INFO << "Unknown message receive from " << *client << ": '" C_YELLOW << fullCmd << C_GREEN << "'." << C_RESET << std::endl;
 		logAndPrint(ss.str());
 		return false;
 	}
