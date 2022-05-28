@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:35:35 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/13 04:24:13 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 19:37:54 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 namespace ft {
 
-	PassCommand::PassCommand() : ClientCommand("PASS") {}
+	PassCommand::PassCommand() : ClientCommand("PASS", 1, "Enter the server password", "<password>") {
+		// std::cout << this->isNeededToBeOperator() << std::endl;
+	}
 
 	PassCommand::~PassCommand() {}
 
@@ -22,17 +24,17 @@ namespace ft {
 		ClientIRC *client = cmd.getClient();
 		ServerIRC *server = cmd.getServer();
 		std::vector<std::string> args = cmd.getArgs();
-		std::string clientPassword;
-
-		if (args.size() >= 1)
-			clientPassword = args.at(0);
+		std::string clientPassword = args.at(0);
+		std::stringstream ss;
 
 		if (!server->isGoodPassword(clientPassword)) {
-			std::cout << C_RED << "Password '" << clientPassword << "' send by " << *client << " is not server password." << C_RESET << std::endl;
+			ss << INFO << C_RED << "Password '" << clientPassword << "' send by " << *client << " is not server password." << C_RESET << std::endl;
+			logAndPrint(ss.str());
 			return false;
 		}
 		client->setAuthorized(true);
-		std::cout << C_YELLOW << "Client " << *client << " has enter good server password." << C_RESET << std::endl;
+		ss << INFO << C_YELLOW << "Client " << *client << " has enter good server password." << C_RESET << std::endl;
+		logAndPrint(ss.str());
 		return true;
 	}
 }

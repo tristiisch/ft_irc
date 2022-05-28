@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerIRC.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 21:19:26 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 17:19:56 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 19:12:40 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,23 @@
 #include "ServerConfig.hpp"
 #include "ClientIRC.hpp"
 #include "ChannelIRC.hpp"
-// #include "commands/CommandManager.hpp"
 
 
 namespace ft {
 
 	class CommandManager;
-	// class ServerIRC;
+	
 	class ServerIRC {
 
 		private:
 			bool enabled;
-			bool isTryingToStop;
+			bool tryingToStop;
 			ServerConfig config;
 			SOCKET serverSocket;
 			std::map<int, ClientIRC*> clients;
 			std::vector<ChannelIRC*> channels;
-			int clientIdCounter; // Last Client Id
-			std::vector<pollfd> pfds;
+			int clientIdCounter;
+			std::vector<pollfd> pollfds;
 			CommandManager *commandManager;
 
 		public :
@@ -54,7 +53,7 @@ namespace ft {
 			const ServerConfig& getConfig() const;
 			bool isEnabled() const;
 			bool setConfig(const ServerConfig& config);
-			bool TryingToStop() const;
+			bool isTryingToStop() const;
 			void setTryingToStop();
 			int getNewClientId();
 			ClientIRC* getClientByNick(std::string& clientNickname) const;

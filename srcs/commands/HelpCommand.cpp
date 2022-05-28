@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 15:43:14 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 19:31:22 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	HelpCommand::HelpCommand() : ClientCommand("HELP") {}
+	HelpCommand::HelpCommand() : ClientCommand("HELP", 0, "This message", "") {}
 
 	HelpCommand::~HelpCommand() {}
 
@@ -25,10 +25,13 @@ namespace ft {
 		std::string prefix = "006 " + client->getNick() + " ";
 		std::stringstream ss;
 		
-		ss << prefix << "HELP - " << commands.size() << " commands" << client->getDelimiter();
+		ss << prefix << commands.size() << " commands" << client->getDelimiter();
 		for (std::vector<ClientCommand*>::iterator it = commands.begin(); it != commands.end(); ++it) {
 			ClientCommand *clientCmd = *it;
-			ss << prefix << clientCmd->getName() << client->getDelimiter();
+			ss << prefix << clientCmd->getName() << " " << clientCmd->getDescription();
+			if (clientCmd->getFormat().empty() == 0)
+				ss << " -> " << clientCmd->getName() << " " << clientCmd->getFormat();
+			ss << client->getDelimiter();
 		}
 		client->recieveMessage(ss.str());
 		return true;

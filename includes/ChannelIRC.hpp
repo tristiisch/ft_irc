@@ -51,7 +51,7 @@ namespace ft {
 			int		unbanUser(ClientIRC *const &to_unban);
 			void	clearUser(ClientIRC *const &to_clear);
 
-			void	channelRecap(ClientIRC *const &newbie);
+			void	userJoin(ClientIRC *const &newbie);
 			void	sendMessageToAll(ClientIRC *const &sender, std::string const &message);
 
 	};

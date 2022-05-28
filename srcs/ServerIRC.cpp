@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerIRC.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 17:23:36 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 13:26:20 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 namespace ft {
 
-	ServerIRC::ServerIRC() : enabled(false), isTryingToStop(false), clientIdCounter(1) {
+	ServerIRC::ServerIRC() : enabled(false), tryingToStop(false), clientIdCounter(1) {
 		this->commandManager = new CommandManager(this);
 	}
 
@@ -58,10 +58,10 @@ namespace ft {
 		sin.sin_family = PF_INET;
 		sin.sin_port = htons(config.getPort());
 
-		pfds.push_back(pollfd());
-		pfds.back().events = POLLIN;
-		pfds.back().fd = socket(PF_INET, SOCK_STREAM, 0);
-		serverSocket = pfds.back().fd;
+		pollfds.push_back(pollfd());
+		pollfds.back().events = POLLIN;
+		pollfds.back().fd = socket(PF_INET, SOCK_STREAM, 0);
+		serverSocket = pollfds.back().fd;
 		if (ft::checkError(serverSocket, "Error with socket creation", (char*) NULL))
 			return false;
 		this->enabled = true;
@@ -79,21 +79,19 @@ namespace ft {
 			return false;
 		}
 
-		enable = 1; // En trop ?
-		
-		ret = setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
+		/*ret = setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
 		if (ft::checkError(ret, "Error while use setsockopt SO_REUSEADDR", (char*) NULL)) {
 			stop();
 			return false;
-		}
-	
+		}*/
+
 		ret = bind(serverSocket, (SOCKADDR *)&sin, sizeof(sin));
 		if (ft::checkError(ret, "Error while binding port", &config.getPort())) {
 			stop();
 			return false;
 		}
 
-		ret = listen(serverSocket, 42); // 42 = length max of queue
+		ret = listen(serverSocket, 512);
 		if (ft::checkError(ret, "Error while listen port", &config.getPort())) {
 			stop();
 			return false;
@@ -105,10 +103,12 @@ namespace ft {
 	}
 
 	bool ServerIRC::stop() {
+		std::stringstream ss;
+
 		if (!this->enabled) {
-			std::stringstream ss;
 			ss << WARN << "Can't stop server IRC, it is not enabled." << C_RESET << std::endl;
 			logAndPrint(ss.str());
+			ss.str("");
 			return false;
 		}
 		this->enabled = false;
@@ -116,33 +116,23 @@ namespace ft {
 		if (!clients.empty()) {
 			for (std::map<int, ClientIRC*>::iterator it = clients.begin(); it != clients.end();) {
 				ClientIRC *client = it++->second;
-				// client->closeSocket(); -> heap-use-after-free
-				// delete client;
-				// clients.erase(it);
-
-				if (!client) {
+				/*if (!client) {
 					std::stringstream ss;
 					ss << WARN << "map<fd, ClientIRC*> clients contains uninitialized instance of client." << C_RESET << std::endl;
 					logAndPrint(ss.str());
 					// clients.erase(it);
 					continue;
-				}
+				}*/
 				deleteClient(client);
 			}
 			clients.clear();
 		}
 		closesocket(serverSocket);
 		channels.clear();
-		if (!pfds.empty()) {
-			/*for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) {
-				pfds.erase(it);
-				// delete *it;
-			}*/
-			pfds.clear();
-		}
-		std::stringstream ss;
+		pollfds.clear();
 		ss << INFO << C_RED << "ft_irc stopped" << C_RESET << std::endl;
 		logAndPrint(ss.str());
+		ss.str("");
 		return true;
 	}
 
@@ -153,75 +143,63 @@ namespace ft {
 		if (!isEnabled())
 			exit(0);
 
-		if (DEBUG_MODE) {
-			ss << INFO << "Poll start with " << pfds.size() << " poll open" << C_RESET << std::endl;
-			logAndPrint(ss.str());
-			ss.clear();
-		}
-		while (!this->isTryingToStop && !pfds.empty() && (ret = poll(&pfds[0], pfds.size(), 1 * 1000) != -1)) {
-			if (pfds[0].revents & POLLIN)
-				acceptClient(); // serverSocket receive connection
-			else if (pfds.size() > 1) {
-				// std::cout << C_GREEN << "Poll size " << pfds.size() << "." << C_RESET << std::endl;
-				for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end(); ++it) { // clientsSockets receive connection
-					if (it == pfds.begin()) {
+		// if (DEBUG_MODE) {
+		// 	ss << INFO << "Poll start with " << pollfds.size() << " poll open" << C_RESET << std::endl;
+		// 	logAndPrint(ss.str());
+		// 	ss.str("");
+		// }
+		while (!this->tryingToStop && !pollfds.empty() && (ret = poll(&pollfds[0], pollfds.size(), 1 * 1000) != -1)) {
+			if (pollfds[0].revents & POLLIN)
+				acceptClient();
+			else if (pollfds.size() > 1) {
+				for (std::vector<pollfd>::iterator it = pollfds.begin(); !this->tryingToStop && it != pollfds.end(); ++it) {
+					if (it == pollfds.begin())
 						continue;
-					}
-					if (this->isTryingToStop) {
-						std::cout << C_BLUE << "popopo STOP HERE" << C_RESET << std::endl;
-						break;
-					}
-					// std::cout << C_GREEN << "POLL FOR " << pfds.size() << "." << C_RESET << std::endl;
+
 					if (it->fd < 0) {
 						ss << INFO << "Pollfd " << it->fd << " negative." << C_RESET << std::endl;
 						logAndPrint(ss.str());
-						ss.clear();
+						ss.str("");
 						break;
 					}
 					if (clients.find(it->fd) == clients.end()) {
 						if (DEBUG_MODE) {
 							ss << DEBUG << "Pollfd " << it->fd << " not linked to fd." << C_RESET << std::endl;
 							logAndPrint(ss.str());
-							ss.clear();
+							ss.str("");
 						}
-						// deleteClient(this->clients[it->fd]);
-						// pfds.erase(it);
 						break;
 					}
-					if (it->revents & POLLIN) {
+					if (it->revents & (POLLERR | POLLHUP)) {
+						ss << INFO << C_RED << "Socket " << it->fd << " - " << *this->clients[it->fd] << " > close." << C_RESET << std::endl;
+						logAndPrint(ss.str());
+						ss.str("");
+						deleteClient(this->clients[it->fd]);
+						break;
+					} else if (it->revents & POLLIN) {
 						// std::cout << C_BLUE << "Socket " << it->fd << " > POLLIN receive." << C_RESET << std::endl;
 						readClient(this->clients[it->fd], it->fd);
 						break;
-					}
-					if (it->revents & POLLPRI) {
+					} else if (it->revents & POLLPRI) {
 						std::cout << C_BLUE << "Socket " << it->fd << " > POLLRI receive." << C_RESET << std::endl;
-					}
-					if (it->revents & POLLNVAL) {
+					} else if (it->revents & POLLNVAL) {
 						std::cout << C_BLUE << "Socket " << it->fd <<  " > Invalid request from" << C_RESET << std::endl;
-					}
-					if (it->revents & (POLLERR | POLLHUP)) {
-						std::cout << C_RED << "Socket " << it->fd << " - " << *this->clients[it->fd] << " > close." << C_RESET << std::endl;
-						deleteClient(this->clients[it->fd]);
-						// break;
 					}
 				}
 			}
 			// if (DEBUG_MODE) {
 			// 	std::stringstream ss;
-			// 	ss << DEBUG << "next POOL | last ret : " << ret << " polls open : " << pfds.size() << " isEnabled : " << this->enabled << C_RESET << std::endl;
+			// 	ss << DEBUG << "next POOL | last ret : " << ret << " polls open : " << pollfds.size() << " isEnabled : " << this->enabled << C_RESET << std::endl;
 			// 	logAndPrint(ss.str());
 			// }
 		}
 		if (ret == -1) {
-			// if (errno == EINTR) {
-			// 	exit(1);
-			// }
 			ft::checkError(ret, "Error while using POLL", &errno);
 		}
-		if (DEBUG_MODE) {
-			ss << DEBUG << "Poll end" << C_RESET << std::endl;
-			logAndPrint(ss.str());
-		}
+		// if (DEBUG_MODE) {
+		// 	ss << DEBUG << "Poll end" << C_RESET << std::endl;
+		// 	logAndPrint(ss.str());
+		// }
 	}
 
 	ClientIRC *ServerIRC::acceptClient() {
@@ -232,22 +210,21 @@ namespace ft {
 		socklen_t sinsize = sizeof(csin);
 		int ret;
 
-		clientSocket = accept(serverSocket, (SOCKADDR *)&csin, &sinsize); // This will block current thread
+		clientSocket = accept(serverSocket, (SOCKADDR *)&csin, &sinsize);
 		if (ft::checkError(clientSocket, "Error while accept connection", &csin)) {
 			closesocket(clientSocket);
 			return NULL;
 		}
 		client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
 		clients.insert(std::pair<int, ClientIRC*>(clientSocket, client));
-		ss << INFO << "A client " << csin << " " << *client << " logged in." << C_RESET << std::endl;
+		ss << INFO << "A client " << *client << " logged in." << C_RESET << std::endl;
 		logAndPrint(ss.str());
 
-		pfds.push_back(pollfd());
-		// pfds.back().events = POLLIN | POLLPRI;
-		pfds.back().events = POLLIN;
-		pfds.back().fd = clientSocket;
-		client->setPoll(pfds.back());
-		client->recieveMessage("Hello world!");
+		pollfds.push_back(pollfd());
+		pollfds.back().events = POLLIN | POLLPRI;
+		pollfds.back().fd = clientSocket;
+		client->setPoll(pollfds.back());
+		//client->recieveMessage("Hello world!");
 
 		ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
@@ -268,11 +245,12 @@ namespace ft {
 		}
 		receiveMsg = (char*) std::calloc(512, 1);
 		receiveByte = recv(socket, receiveMsg, 512, 0);
-		if (receiveByte == 0) {
+		if (!receiveByte) {
 			free(receiveMsg);
 			return false;
 		}
 		if (receiveByte == -1 && errno == EAGAIN) {
+			std::cout << WARN << "read fail EAGAIN " << socket << C_RESET << std::endl;
 			free(receiveMsg);
 			return false;
 		}
@@ -289,17 +267,18 @@ namespace ft {
 	void ServerIRC::deleteClient(ClientIRC *client) {
 		for (std::vector<ChannelIRC*>::const_iterator it = this->getChannels().begin(); it != this->getChannels().end(); ++it) {
 			ChannelIRC *channel = *it;
+			channel->sendMessageToAll(client, "PART " + channel->getName());
 			channel->clearUser(client);
 		}
-		if (!pfds.empty()) {
-			for (std::vector<pollfd>::iterator it = pfds.begin() + 1; it != pfds.end(); ++it) {
+		if (!pollfds.empty()) {
+			for (std::vector<pollfd>::iterator it = pollfds.begin() + 1; it != pollfds.end(); ++it) {
 				if (it->fd == client->getPoll().fd) {
-					if (DEBUG_MODE) {
-						std::stringstream ss;
-						ss << DEBUG << "Delete poll of client : " << it->fd << C_RESET << std::endl;
-						logAndPrint(ss.str());
-					}
-					pfds.erase(it);
+					// if (DEBUG_MODE) {
+					// 	std::stringstream ss;
+					// 	ss << DEBUG << "Delete pollfd : " << *client<< C_RESET << std::endl;
+					// 	logAndPrint(ss.str());
+					// }
+					pollfds.erase(it);
 					break;
 				}
 			}
@@ -341,12 +320,12 @@ namespace ft {
 	}
 
 
-	bool ServerIRC::TryingToStop() const{
-		return this->isTryingToStop;
+	bool ServerIRC::isTryingToStop() const{
+		return this->tryingToStop;
 	}
 	
 	void ServerIRC::setTryingToStop(){
-		this->isTryingToStop = true;
+		this->tryingToStop = true;
 	}
 
 	bool ServerIRC::setConfig(const ServerConfig& config) {

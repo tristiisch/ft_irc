@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/23 18:14:37 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/25 19:15:44 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ namespace ft {
 		commands.push_back(new PartCommand());
 		commands.push_back(new ExitCommand());
 		commands.push_back(new OperCommand());
-		commands.push_back(new HelpCommand());
 		commands.push_back(new ModeCommand());
 	}
 
@@ -86,6 +85,7 @@ namespace ft {
 		std::string cmd, args;
 		std::vector<std::string> argsArray;
 		size_t index = fullCmd.find(" ");
+		std::stringstream ss;
 
 		logCommand(client, fullCmd);
 		if (index != std::string::npos) {
@@ -101,22 +101,24 @@ namespace ft {
 
 			if (command->getName() == cmd) {
 				if (command->isNeededToBeAutorized() && !client->isAuthorized()) {
-					std::stringstream ss;
 					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he didn't enter the server password." << C_RESET << std::endl;
 					logAndPrint(ss.str());
 					return false;
 				} else if (command->isNeededToBeOperator() && !client->isOperator()) {
-					std::stringstream ss;
 					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he is not operator." << C_RESET << std::endl;
 					logAndPrint(ss.str());
 					client->recieveMessage(ERR_NOPRIVILEGES);
 					return false;
 				}
 				CommandContext commandContext(this->server, client, fullCmd, cmd, argsArray);
+
+				if ((size_t) command->getMinArg() > commandContext.getArgs().size()) {
+					client->recieveMessage(ERR_NEEDMOREPARAMS(command->getName()));
+					return false;
+				}
 				return command->execute(commandContext);
 			}
 		}
-		std::stringstream ss;
 		ss << INFO << "Unknown message receive from " << *client << ": '" C_YELLOW << fullCmd << C_BLUE << "'." << C_RESET << std::endl;
 		logAndPrint(ss.str());
 		return false;
