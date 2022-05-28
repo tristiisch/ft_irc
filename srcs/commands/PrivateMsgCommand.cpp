@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:25:31 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/25 18:58:32 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:55:41 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 namespace ft
 {
-	PrivateMsgCommand::PrivateMsgCommand() : ClientCommand("PRIVMSG", 2, "Send message to channels or clients", "<channel> :<msg>", true, false) {}
+	PrivateMsgCommand::PrivateMsgCommand() : ClientCommand("PRIVMSG", 2, "Send message to channels or clients", "<channel> :<msg>", true, true, false) {}
 
 	PrivateMsgCommand::~PrivateMsgCommand() {}
 

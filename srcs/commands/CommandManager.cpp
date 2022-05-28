@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 19:15:44 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 15:01:50 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,10 @@ namespace ft {
 			if (command->getName() == cmd) {
 				if (command->isNeededToBeAutorized() && !client->isAuthorized()) {
 					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he didn't enter the server password." << C_RESET << std::endl;
+					logAndPrint(ss.str());
+					return false;
+				} else if (command->isNeededToBeRegistered() && !client->isRegistered()) {
+					ss << INFO << C_RED << *client << " can't use command '" << C_BLUE << fullCmd << C_RESET << C_RED << "', he is not registered." << C_RESET << std::endl;
 					logAndPrint(ss.str());
 					return false;
 				} else if (command->isNeededToBeOperator() && !client->isOperator()) {

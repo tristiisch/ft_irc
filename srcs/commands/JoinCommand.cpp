@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 13:25:50 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:53:17 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 namespace ft {
 
-	JoinCommand::JoinCommand() : ClientCommand("JOIN", 1, "Join a channel and create it if not exist", "<channel>", true, false) {}
+	JoinCommand::JoinCommand() : ClientCommand("JOIN", 1, "Join a channel and create it if not exist", "<channel>", true, true, false) {}
 
 	JoinCommand::~JoinCommand() {}
 

@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 20:27:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 13:00:59 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 15:03:27 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 namespace ft {
 
-	ClientCommand::ClientCommand(std::string name) : name(name), minArg(0), needToBeAuthorized(false), needToBeOperator(false) {}
+	ClientCommand::ClientCommand(std::string name) : name(name), minArg(0), needToBeAuthorized(false), needToBeRegistered(true), needToBeOperator(false) {}
 
-	ClientCommand::ClientCommand(std::string name, int minArg) : name(name), minArg(minArg), needToBeAuthorized(false), needToBeOperator(false) {}
+	ClientCommand::ClientCommand(std::string name, int minArg) : name(name), minArg(minArg), needToBeAuthorized(false), needToBeRegistered(true), needToBeOperator(false) {}
 
 	ClientCommand::ClientCommand(std::string name, int minArg, std::string description, std::string format) : name(name), minArg(minArg), description(description),
-		format(format), needToBeAuthorized(false), needToBeOperator(false) {}
+		format(format), needToBeAuthorized(false), needToBeRegistered(true), needToBeOperator(false) {}
 
-	ClientCommand::ClientCommand(std::string name, int minArg, std::string description, std::string format, bool needToBeAuthorized, bool needToBeOperator) : name(name),
-		minArg(minArg), description(description), format(format), needToBeAuthorized(needToBeAuthorized), needToBeOperator(needToBeOperator) {}
+	ClientCommand::ClientCommand(std::string name, int minArg, std::string description, std::string format, bool needToBeAuthorized, bool needToBeRegistered, bool needToBeOperator) : name(name),
+		minArg(minArg), description(description), format(format), needToBeAuthorized(needToBeAuthorized), needToBeRegistered(needToBeRegistered), needToBeOperator(needToBeOperator) {}
 	
 	ClientCommand &ClientCommand::operator=(ClientCommand const &instance) {
 		this->name = instance.name;
@@ -56,5 +56,9 @@ namespace ft {
 
 	const bool& ClientCommand::isNeededToBeOperator() const {
 		return this->needToBeOperator;
+	}
+
+	const bool& ClientCommand::isNeededToBeRegistered() const {
+		return this->needToBeRegistered;
 	}
 }

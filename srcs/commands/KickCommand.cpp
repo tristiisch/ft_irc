@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 00:40:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 14:37:30 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:53:21 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 	
 namespace ft
 {
-	KickCommand::KickCommand() : ClientCommand("KICK", 2, "Kick a client from a channel", "<channel> <nickname>", true, false) {}
+	KickCommand::KickCommand() : ClientCommand("KICK", 2, "Kick a client from a channel", "<channel> <nickname>", true, true, false) {}
 
 	KickCommand::~KickCommand() {}
 
@@ -28,7 +28,7 @@ namespace ft
 		std::stringstream ss;
 
 		if (channels_args.empty() || users_args.empty()) {
-			client->recieveMessage(ERR_NEEDMOREPARAMS(std::string(this->name)));
+			client->recieveMessage(ERR_NEEDMOREPARAMS(this->name));
 			return false;
 		}
 		

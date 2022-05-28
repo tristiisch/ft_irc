@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 20:35:09 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 14:34:57 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:54:45 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	PartCommand::PartCommand() : ClientCommand("PART", 1, "Leave a channel", "<channel> :<msg>", true, false) {}
+	PartCommand::PartCommand() : ClientCommand("PART", 1, "Leave a channel", "<channel> :<msg>", true, true, false) {}
 
 	PartCommand::~PartCommand() {}
 

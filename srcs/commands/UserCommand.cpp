@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/27 12:31:52 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:56:17 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	UserCommand::UserCommand() : ClientCommand("USER", 4, "Login into server", "<nickname> 0 * <realname>") {}
+	UserCommand::UserCommand() : ClientCommand("USER", 4, "Login into server", "<nickname> 0 * <realname>", true, false, false) {}
 
 	UserCommand::~UserCommand() {}
 

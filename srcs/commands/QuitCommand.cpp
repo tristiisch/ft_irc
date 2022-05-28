@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 18:07:15 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:57:00 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	QuitCommand::QuitCommand() : ClientCommand("QUIT") {}
+	QuitCommand::QuitCommand() : ClientCommand("QUIT", 0, "Leave the server", ":[msg]", false, false, false) {}
 
 	QuitCommand::~QuitCommand() {}
 

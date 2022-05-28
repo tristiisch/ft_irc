@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 19:38:59 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:54:39 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	OperCommand::OperCommand() : ClientCommand("OPER", 2, "Add a server operator", "<nickname> <password>", true, false) {}
+	OperCommand::OperCommand() : ClientCommand("OPER", 2, "Add a server operator", "<nickname> <password>", true, true, false) {}
 
 	OperCommand::~OperCommand() {}
 
