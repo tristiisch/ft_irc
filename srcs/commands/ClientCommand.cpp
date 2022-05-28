@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 20:27:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 19:26:45 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 13:00:59 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 namespace ft {
 
-	ClientCommand::ClientCommand(std::string name) : name(name), needToBeAuthorized(false), needToBeOperator(false) {}
+	ClientCommand::ClientCommand(std::string name) : name(name), minArg(0), needToBeAuthorized(false), needToBeOperator(false) {}
 
 	ClientCommand::ClientCommand(std::string name, int minArg) : name(name), minArg(minArg), needToBeAuthorized(false), needToBeOperator(false) {}
 

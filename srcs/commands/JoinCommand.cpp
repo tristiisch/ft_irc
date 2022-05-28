@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 19:40:38 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 13:25:50 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace ft {
 		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it) {
 			ss << INFO << C_BLUE << "Client " << *client << " want to JOIN channel '" << *it << "'" << C_RESET << std::endl;
 			logAndPrint(ss.str());
-			ss.clear();
+			ss.str("");
 	
 			if ((*it)[0] != '#') {
 				client->recieveMessage(ERR_NOSUCHCHANNEL(*it));

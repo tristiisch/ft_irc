@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 21:08:34 by alganoun          #+#    #+#             */
-/*   Updated: 2022/05/25 19:45:50 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 13:28:34 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 	
 namespace ft
 {
-	NoticeCommand::NoticeCommand() : ClientCommand("NOTICE", 2, "?????", "", true, false) {}
+	NoticeCommand::NoticeCommand() : ClientCommand("NOTICE", 2, "Same as PRIVMSG without auto reply", "<channel> :<msg>", true, false) {}
 
 	NoticeCommand::~NoticeCommand() {}
 

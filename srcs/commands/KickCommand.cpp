@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 00:40:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 19:37:11 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 13:25:50 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ namespace ft
 		
 		ss << INFO << C_BLUE << "Client " << *client << " want to Kick '" << args[1] << "'" << " from the channel" << args[0] << C_RESET << std::endl;
 		logAndPrint(ss.str());
-		ss.clear();
+		ss.str("");
 		
 		for (std::vector<std::string>::iterator itUsers = users_args.begin(); itUsers != users_args.end(); ++itUsers)
 		{
@@ -57,7 +57,7 @@ namespace ft
 				if (!clientExists(target, channel->getClientList())) {
 					ss << INFO << "The User " << target->getNick() << " does not exist in channel " << channel->getName() << "." << std::endl;
 					logAndPrint(ss.str());
-					ss.clear();
+					ss.str("");
 					client->recieveMessage(ERR_USERNOTINCHANNEL(*itUsers, channel->getName()));
 					continue;
 				}

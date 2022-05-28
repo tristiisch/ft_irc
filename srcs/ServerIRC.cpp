@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/27 12:45:21 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 13:26:20 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ namespace ft {
 		if (!this->enabled) {
 			ss << WARN << "Can't stop server IRC, it is not enabled." << C_RESET << std::endl;
 			logAndPrint(ss.str());
-			ss.clear();
+			ss.str("");
 			return false;
 		}
 		this->enabled = false;
@@ -132,7 +132,7 @@ namespace ft {
 		pollfds.clear();
 		ss << INFO << C_RED << "ft_irc stopped" << C_RESET << std::endl;
 		logAndPrint(ss.str());
-		ss.clear();
+		ss.str("");
 		return true;
 	}
 
@@ -146,7 +146,7 @@ namespace ft {
 		// if (DEBUG_MODE) {
 		// 	ss << INFO << "Poll start with " << pollfds.size() << " poll open" << C_RESET << std::endl;
 		// 	logAndPrint(ss.str());
-		// 	ss.clear();
+		// 	ss.str("");
 		// }
 		while (!this->tryingToStop && !pollfds.empty() && (ret = poll(&pollfds[0], pollfds.size(), 1 * 1000) != -1)) {
 			if (pollfds[0].revents & POLLIN)
@@ -159,42 +159,39 @@ namespace ft {
 					if (it->fd < 0) {
 						ss << INFO << "Pollfd " << it->fd << " negative." << C_RESET << std::endl;
 						logAndPrint(ss.str());
-						ss.clear();
+						ss.str("");
 						break;
 					}
 					if (clients.find(it->fd) == clients.end()) {
 						if (DEBUG_MODE) {
 							ss << DEBUG << "Pollfd " << it->fd << " not linked to fd." << C_RESET << std::endl;
 							logAndPrint(ss.str());
-							ss.clear();
+							ss.str("");
 						}
 						break;
 					}
-					if (it->revents & POLLIN) {
+					if (it->revents & (POLLERR | POLLHUP)) {
+						ss << INFO << C_RED << "Socket " << it->fd << " - " << *this->clients[it->fd] << " > close." << C_RESET << std::endl;
+						logAndPrint(ss.str());
+						ss.str("");
+						deleteClient(this->clients[it->fd]);
+						break;
+					} else if (it->revents & POLLIN) {
 						// std::cout << C_BLUE << "Socket " << it->fd << " > POLLIN receive." << C_RESET << std::endl;
 						readClient(this->clients[it->fd], it->fd);
 						break;
-					}
-					if (it->revents & POLLPRI) {
+					} else if (it->revents & POLLPRI) {
 						std::cout << C_BLUE << "Socket " << it->fd << " > POLLRI receive." << C_RESET << std::endl;
-					}
-					if (it->revents & POLLNVAL) {
+					} else if (it->revents & POLLNVAL) {
 						std::cout << C_BLUE << "Socket " << it->fd <<  " > Invalid request from" << C_RESET << std::endl;
-					}
-					if (it->revents & (POLLERR | POLLHUP)) {
-						ss << INFO << C_RED << "Socket " << it->fd << " - " << *this->clients[it->fd] << " > close." << C_RESET << std::endl;;
-						logAndPrint(ss.str());
-						ss.clear();
-						deleteClient(this->clients[it->fd]);
-						break;
 					}
 				}
 			}
-			if (DEBUG_MODE) {
-				std::stringstream ss;
-				ss << DEBUG << "next POOL | last ret : " << ret << " polls open : " << pollfds.size() << " isEnabled : " << this->enabled << C_RESET << std::endl;
-				logAndPrint(ss.str());
-			}
+			// if (DEBUG_MODE) {
+			// 	std::stringstream ss;
+			// 	ss << DEBUG << "next POOL | last ret : " << ret << " polls open : " << pollfds.size() << " isEnabled : " << this->enabled << C_RESET << std::endl;
+			// 	logAndPrint(ss.str());
+			// }
 		}
 		if (ret == -1) {
 			ft::checkError(ret, "Error while using POLL", &errno);
@@ -220,14 +217,14 @@ namespace ft {
 		}
 		client = new ClientIRC(this->getNewClientId(), csin, clientSocket);
 		clients.insert(std::pair<int, ClientIRC*>(clientSocket, client));
-		ss << INFO << "A client " << csin << " " << *client << " logged in." << C_RESET << std::endl;
+		ss << INFO << "A client " << *client << " logged in." << C_RESET << std::endl;
 		logAndPrint(ss.str());
 
 		pollfds.push_back(pollfd());
 		pollfds.back().events = POLLIN | POLLPRI;
 		pollfds.back().fd = clientSocket;
 		client->setPoll(pollfds.back());
-		client->recieveMessage("Hello world!");
+		//client->recieveMessage("Hello world!");
 
 		ret = fcntl(clientSocket, F_SETFL, O_NONBLOCK);
 		if (ft::checkError(ret, "Error while use fcntl", (char*) NULL)) {
@@ -252,10 +249,11 @@ namespace ft {
 			free(receiveMsg);
 			return false;
 		}
-		// if (receiveByte == -1 && errno == EAGAIN) {
-		// 	free(receiveMsg);
-		// 	return false;
-		// }
+		if (receiveByte == -1 && errno == EAGAIN) {
+			std::cout << WARN << "read fail EAGAIN " << socket << C_RESET << std::endl;
+			free(receiveMsg);
+			return false;
+		}
 		if (ft::checkError(receiveByte, "Error while read socket", client)) {
 			free(receiveMsg);
 			deleteClient(client);
@@ -275,6 +273,11 @@ namespace ft {
 		if (!pollfds.empty()) {
 			for (std::vector<pollfd>::iterator it = pollfds.begin() + 1; it != pollfds.end(); ++it) {
 				if (it->fd == client->getPoll().fd) {
+					// if (DEBUG_MODE) {
+					// 	std::stringstream ss;
+					// 	ss << DEBUG << "Delete pollfd : " << *client<< C_RESET << std::endl;
+					// 	logAndPrint(ss.str());
+					// }
 					pollfds.erase(it);
 					break;
 				}

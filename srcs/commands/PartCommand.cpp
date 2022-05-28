@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 20:35:09 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 19:38:42 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:34:57 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,24 @@ namespace ft {
 
 		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it) {
 			std::cout << C_BLUE << "Client " << *client << " want to PART channel '" << *it << "'" << C_RESET << std::endl;
+			std::string str;
 
-			ChannelIRC *channel = server->getChannel(*it);
+			if ((*it).empty() || (*it)[0] == ':')
+				str = "*";
+			else
+				str = *it;
+
+			ChannelIRC *channel = server->getChannel(str);
 			if (!channel) {
-				client->recieveMessage(ERR_NOSUCHCHANNEL(*it));
+				client->recieveMessage(ERR_NOSUCHCHANNEL(str));
 				continue;
 			}
 			if (!ft::clientExists(client, channel->getClientList())) {
-				client->recieveMessage(ERR_NOTONCHANNEL(*it));
+				client->recieveMessage(ERR_NOTONCHANNEL(str));
 				continue;
 			}
 			client->sendMessage(client, cmd.getFullCmd());
-			// channel->sendMessageToAll(client, RPL_PART(channel->getName(), "", client->getNick(), client->getUsername(), client->getHost()));
 			channel->sendMessageToAll(client, cmd.getFullCmd());
-			/*if (clientExists(client, channel->getOpeList())) {
-				channel->removeOperator(client);
-			}
-			channel->removeUser(client);*/
 			channel->clearUser(client);
 		}
 		return true;
