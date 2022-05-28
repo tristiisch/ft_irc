@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 20:14:43 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/20 17:26:29 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 16:05:53 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ namespace ft {
 	}
 	std::string& CommandContext::getArg(size_t index) {
 		if (this->args.size() <= index)
-			throw new std::exception();
+			throw std::exception();
 		return this->args.at(index);
 	}
 	std::string CommandContext::getFromArg(size_t index) {
 		std::stringstream ss;
 
 		if (this->args.size() <= index)
-			throw new std::exception();
+			throw std::exception();
 		for (size_t i = index; i < this->args.size(); ++i) {
 			ss << this->args[i];
 			if (i + 1 != this->args.size()) {

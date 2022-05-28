@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 13:26:20 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 16:46:43 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,22 +113,15 @@ namespace ft {
 		}
 		this->enabled = false;
 
-		if (!clients.empty()) {
-			for (std::map<int, ClientIRC*>::iterator it = clients.begin(); it != clients.end();) {
-				ClientIRC *client = it++->second;
-				/*if (!client) {
-					std::stringstream ss;
-					ss << WARN << "map<fd, ClientIRC*> clients contains uninitialized instance of client." << C_RESET << std::endl;
-					logAndPrint(ss.str());
-					// clients.erase(it);
-					continue;
-				}*/
-				deleteClient(client);
-			}
-			clients.clear();
+		for (std::map<int, ClientIRC*>::iterator it = clients.begin(); it != clients.end();) {
+			ClientIRC *client = it++->second;
+			deleteClient(client);
 		}
+		clients.clear();
 		closesocket(serverSocket);
-		channels.clear();
+
+		for (std::vector<ChannelIRC*>::iterator it = channels.begin(); it != channels.end(); ++it)
+			delete *it;
 		pollfds.clear();
 		ss << INFO << C_RED << "ft_irc stopped" << C_RESET << std::endl;
 		logAndPrint(ss.str());

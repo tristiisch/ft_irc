@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 19:18:25 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 18:29:13 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 15:16:27 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@ int main() {
 	int descripteurSocket;
 	struct sockaddr_in pointDeRencontreDistant;
 	socklen_t longueurAdresse;
-	char messageRecu[LG_MESSAGE];
-	int ecrits, lus;
+	// char messageRecu[LG_MESSAGE];
+	int ecrits;
+	// int lus;
 
 	descripteurSocket = socket(PF_INET, SOCK_STREAM, 0); 
 
@@ -53,25 +54,6 @@ int main() {
 	}
 	printf("Connexion au serveur réussie avec succès !\n");
 	
-	
-	memset(messageRecu, 0x00, LG_MESSAGE*sizeof(char));
-
-
-	lus = read(descripteurSocket, messageRecu, LG_MESSAGE*sizeof(char));
-	switch(lus)
-	{
-		case -1 : 
-			perror("read");
-			close(descripteurSocket);
-			exit(-4);
-		case 0 : 
-			fprintf(stderr, "La socket a été fermée par le serveur !\n\n");
-			close(descripteurSocket);
-			return 0;
-		default: 
-			printf("Message reçu du serveur : %s (%d octets)\n\n", messageRecu, lus);
-	}
-
 	std::string cmd = "PASS password\r\n";
 	ecrits = send(descripteurSocket, cmd.c_str(), cmd.length(), 0); 
 	switch(ecrits)
@@ -87,6 +69,24 @@ int main() {
 		default: 
 			printf("Message '%s' envoyé avec succès (%d octets)\n", cmd.c_str(), ecrits);
 	}
+
+	/*memset(messageRecu, 0x00, LG_MESSAGE*sizeof(char));
+
+	lus = read(descripteurSocket, messageRecu, LG_MESSAGE*sizeof(char));
+	switch(lus)
+	{
+		case -1 : 
+			perror("read");
+			close(descripteurSocket);
+			exit(-4);
+		case 0 : 
+			fprintf(stderr, "La socket a été fermée par le serveur !\n\n");
+			close(descripteurSocket);
+			return 0;
+		default: 
+			printf("Message reçu du serveur : %s (%d octets)\n\n", messageRecu, lus);
+	}*/
+	sleep(1);
 	close(descripteurSocket);
 	return 0;
 }

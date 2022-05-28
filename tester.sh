@@ -46,14 +46,13 @@ function launchClients {
 	# 	exit 1
 	# fi
 	make client
-	for (( i = 1; 20 >= i; i++ ))
+	for (( i = 1; 10 >= i; i++ ))
 	do
 		printf '\r[⬜] Test client n°%s ...\n' "$i"
 		./client &> /dev/null
 		printf '\r[🟩] Test client n°%s ... done\n' "$i"
 	done
 
-	sleep 5
 	if command -v valgrind &>/dev/null ; then
 		PID=$(pidof valgrind.bin)
 	else

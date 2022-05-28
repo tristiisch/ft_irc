@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 00:14:58 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 15:01:50 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 15:30:54 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ namespace ft {
 				return command->execute(commandContext);
 			}
 		}
-		ss << INFO << "Unknown message receive from " << *client << ": '" C_YELLOW << fullCmd << C_BLUE << "'." << C_RESET << std::endl;
+		ss << INFO << "Unknown message receive from " << *client << ": '" C_YELLOW << fullCmd << C_GREEN << "'." << C_RESET << std::endl;
 		logAndPrint(ss.str());
 		return false;
 	}

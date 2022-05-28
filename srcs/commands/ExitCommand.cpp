@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 15:00:48 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 15:51:07 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ namespace ft {
 		ServerIRC *server = cmd.getServer();
 		ClientIRC *client = cmd.getClient();
 		
-		server->stop();
 		client->recieveMessage("006 " + client->getNick() + " Bye bye !");
+		server->stop();
 		return true;
 	}
 }
