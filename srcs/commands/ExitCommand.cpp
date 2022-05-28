@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ExitCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/25 18:55:33 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 15:51:30 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ namespace ft {
 		ServerIRC *server = cmd.getServer();
 		ClientIRC *client = cmd.getClient();
 		
-		server->stop();
 		client->recieveMessage("006 " + client->getNick() + " Bye bye !");
+		server->stop();
 		return true;
 	}
 }

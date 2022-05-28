@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 19:05:54 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 13:25:50 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 17:45:50 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ namespace ft {
 
 		channels = split(args[0], ",");
 		for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it) {
+			if ((*it).find_first_of(std::string(CHAN_FORBIDDEN_CHARSET)) != std::string::npos){
+			client->recieveMessage(ERR_ERRONEOUSCHANNELNAME(*it));
+			continue;
+			}
 			ss << INFO << C_BLUE << "Client " << *client << " want to JOIN channel '" << *it << "'" << C_RESET << std::endl;
 			logAndPrint(ss.str());
 			ss.str("");
