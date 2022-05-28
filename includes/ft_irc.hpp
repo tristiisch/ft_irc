@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/24 19:25:37 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 14:35:36 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct in_addr IN_ADDR;
 #define ERR_CANNOTSENDTOCHAN(channel)					"404 " + channel + " :Cannot send to channel"
 #define ERR_NOSUCHNICK(nick)							"406 " + nick + " :No such nick/channel"
 #define ERR_NONICKNAMEGIVEN								"431  :No nickname given"
+#define ERR_ERRONEUSNICKNAME(nick)						"432 " + nick + " :Erroneus Nickname"
 #define ERR_NICKNAMEINUSE(nick)							"433 " + nick + " :Nickname is already in use"
 #define ERR_USERNOTINCHANNEL(nick, channel)				"441 " + nick + " " + channel + " :they aren't on that channel"	
 #define ERR_NOTONCHANNEL(channel)						"442 " + channel + " :You're not on that channel"
