@@ -25,7 +25,6 @@ namespace ft {
 		std::vector<ClientIRC *> _ban_list;
 		std::vector<ClientIRC *> _ope_list;
 		int _size;
-		int _max_size;
 
 		public :
 			ChannelIRC();

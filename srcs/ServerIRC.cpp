@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 18:10:32 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 16:46:43 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 17:06:10 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,9 +236,10 @@ namespace ft {
 			logAndPrint(ss.str());
 			return false;
 		}
-		receiveMsg = (char*) std::calloc(512, 1);
-		receiveByte = recv(socket, receiveMsg, 512, 0);
-		if (!receiveByte) {
+		receiveMsg = (char*) std::calloc(1024, 1);
+		receiveByte = recv(socket, receiveMsg, 1024, 0);
+		
+		if (!receiveByte || receiveByte > 512) {
 			free(receiveMsg);
 			return false;
 		}
@@ -260,7 +261,10 @@ namespace ft {
 	void ServerIRC::deleteClient(ClientIRC *client) {
 		for (std::vector<ChannelIRC*>::const_iterator it = this->getChannels().begin(); it != this->getChannels().end(); ++it) {
 			ChannelIRC *channel = *it;
-			channel->sendMessageToAll(client, "PART " + channel->getName());
+			
+			if (clientExists(client, channel->getClientList())) {
+				channel->sendMessageToAll(client, "PART " + channel->getName());
+			}
 			channel->clearUser(client);
 		}
 		if (!pollfds.empty()) {
