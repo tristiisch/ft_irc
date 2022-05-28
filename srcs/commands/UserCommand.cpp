@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/28 14:56:17 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 17:24:20 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ namespace ft {
 	bool UserCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		std::vector<std::string> args = cmd.getArgs();
+
+		if (client->getNick().empty()){
+			return false;
+		}
 
 		if (client->isRegistered())
 		{

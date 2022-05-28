@@ -6,7 +6,7 @@
 /*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:31:41 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 14:53:57 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 17:24:15 by tglory           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ namespace ft {
 		if (newNick.empty()) {
 			ss << INFO << C_YELLOW << *client << " try to set a empty Nickname." << C_RESET << std::endl;
 			logAndPrint(ss.str());
+			client->recieveMessage(ERR_NONICKNAMEGIVEN);
+			return false;
+		}
+		else if (newNick.find_first_not_of(std::string(LETTERS) 
+										+ std::string(SPECIAL) 
+										+ std::string(NUMBERS)) != std::string::npos){
+			client->recieveMessage(ERR_ERRONEUSNICKNAME(newNick));
 			return false;
 		}
 		if (server->getClientByNick(newNick)) {
