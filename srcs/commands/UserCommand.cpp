@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   UserCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 16:44:28 by allanganoun       #+#    #+#             */
-/*   Updated: 2022/05/27 12:31:52 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 15:44:21 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ namespace ft {
 	bool UserCommand::execute(CommandContext &cmd) const {
 		ClientIRC *client = cmd.getClient();
 		std::vector<std::string> args = cmd.getArgs();
+
+		if (client->getNick().empty()){
+			return false;
+		}
 
 		if (client->isRegistered())
 		{
