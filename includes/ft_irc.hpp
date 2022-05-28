@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:43:20 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 17:45:12 by alganoun         ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 17:55:36 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct in_addr IN_ADDR;
 #define NO_SUCH_NICK									-5
 #define USER_BANNED										-6
 
-#define LETTERS											"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghjklmnopqrstuvwxyz"
+#define LETTERS											"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 #define	NUMBERS											"0123456789"
 #define	SPECIAL											";[]\\`_ ^{|}"
 #define CHAN_FORBIDDEN_CHARSET							" ,:"
@@ -97,8 +97,8 @@ typedef struct in_addr IN_ADDR;
 #define RPL_NAMREPLY(nick, channel, target)				"353 " + nick + " = " + channel + " : " + target
 #define RPL_NAMREPLY_OP(nick, channel, target)			"353 " + nick + " = " + channel + " : @" + target
 #define RPL_YOUREOPER(nick)								"381 " + nick + " :You are now an IRC operator"
-#define ERR_NOSUCHCHANNEL(channel)						"403 *" + channel + " :no such channel"
-#define ERR_ERRONEOUSCHANNELNAME(channel)				"403 *" + channel + " :Erroneus channel name"
+#define ERR_NOSUCHCHANNEL(channel)						"403 * " + channel + " :no such channel"
+#define ERR_ERRONEOUSCHANNELNAME(channel)				"403 * " + channel + " :Erroneus channel name"
 #define ERR_CANNOTSENDTOCHAN(channel)					"404 " + channel + " :Cannot send to channel"
 #define ERR_NOSUCHNICK(nick)							"406 " + nick + " :No such nick/channel"
 #define ERR_NONICKNAMEGIVEN								"431 * :No nickname given"

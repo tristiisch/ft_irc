@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NickCommand.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tglory <tglory@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: alganoun <alganoun@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 21:31:41 by tglory            #+#    #+#             */
-/*   Updated: 2022/05/28 17:24:15 by tglory           ###   ########lyon.fr   */
+/*   Updated: 2022/05/28 18:16:51 by alganoun         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,13 @@ namespace ft {
 			client->recieveMessage(ERR_NICKNAMEINUSE(newNick));
 			return false;
 		}
-		client->setNick(newNick);
 		client->recieveMessage(RPL_NICK(newNick, client->getNick(), client->getUsername(), client->getHost()));
-
+		for (std::vector<ChannelIRC*>::const_iterator it = server->getChannels().begin(); it != server->getChannels().end(); ++it) {
+			ChannelIRC *channel = *it;
+			if (clientExists(client, channel->getClientList()))
+				channel->sendMessageToAll(client, cmd.getFullCmd());
+		}
+		client->setNick(newNick);
 		ss << INFO << C_YELLOW << "Nick of ";
 		if (oldNick.empty())
 			ss << *client;
